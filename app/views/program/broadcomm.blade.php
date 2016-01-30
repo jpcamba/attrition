@@ -7,14 +7,14 @@
 @stop
 
 <!-- User Sidebar -->
-@include('college/_college-sidebar')
+@include('program/_program-sidebar')
 
 {{-- Page content --}}
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            College of Mass Communication <!--<small>Say something about this page</small>-->
+            BA Broadcast Communication <!--<small>Say something about this page</small>-->
         </h1>
     </div>
 </div>
@@ -27,66 +27,17 @@
                 Dropouts per batch
             </div>
             <div class="panel-body">
-                <div id="cmc-total-dropouts"></div>
+                <div id="program-total-dropouts"></div>
                 <center>
                     <h4>Average Number of Dropouts</h4>
                     <h1>
-                        <div id="cmc-ave-dropouts"></div>
+                        <div id="program-ave-dropouts"></div>
                     </h1>
                 </center>
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Dropouts per program
-            </div>
-            <div class="panel-body">
-                <div id="cmc-yearly-dropouts"></div>
-                <!--Dropdown for prompt-->
-                <form action="#" method="get">
-                  <div class="input-group pull-right" style="width:100px">
-                    <select class="form-control" required="required" id="cmc-year-dropdown" name="cmc-year-dropdown">
-                      <option value="2008" selected="selected">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option>
-                    </select>
-                  </div>
-                </form>
-                <!-- end of dropdown -->
-                <div id="cmc-yearly-dropouts-legend" class="legend"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                View attrition for a specific program
-            </div>
-            <div class="panel-body">
-                <!--Dropdown for prompt-->
-                <form action="#" method="get">
-    		      <div class="input-group" style="width:300px">
-    			    <select class="form-control" required="required" id="college-type-dropdown" name="college-type-dropdown">
-                        <option value="">BA Broadcast Communication</option>
-                        <option value="">BA Communication Research</option>
-                        <option value="">BA Film</option>
-                        <option value="">BA Journalism</option>
-                    </select>
-                  </div>
-                  <button type="button" class="btn btn-default">View Program</button>
-                </form>
-              <!-- end of dropdown -->
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <div class="row">
@@ -174,8 +125,8 @@
     			    <select class="form-control" required="required" id="housing-type-dropdown" name="housing-type-dropdown">
     				  <option value="dorm">UP Dormitory</option>
                       <option value="ownhouse">Own House</option>
-                      <option value="boardinghousecmc">Boarding House on cmc</option>
-                      <option value="boardinghouseout">Boarding House off cmc</option>
+                      <option value="boardinghouseprogram">Boarding House on program</option>
+                      <option value="boardinghouseout">Boarding House off program</option>
                       <option value="rented">Rented House</option>
                       <option value="relative">Relative's/Guardian's House</option>
                       <option value="others">Others</option>
@@ -399,7 +350,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
                 <center>
@@ -409,12 +360,22 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
                 <center>
                     <h4>Average Years to Graduate</h4>
                     <h1>4.5</h1>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <center>
+                    <h4>Average Years to Shift</h4>
+                    <h1>2</h1>
                 </center>
             </div>
         </div>
@@ -427,15 +388,15 @@
 @section('javascript')
 
 <script>
-    var max = 1000;
-    var min = 500;
+    var max = 500;
+    var min = 100;
 
     function getRandom() {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 
-    //cmc
+    //program
     var totaldata = [
      {year: '2008', value: getRandom()},
      {year: '2009', value: getRandom()},
@@ -448,7 +409,7 @@
 
     new Morris.Area({
      // ID of the element in which to draw the chart.
-     element: 'cmc-total-dropouts',
+     element: 'program-total-dropouts',
      // Chart data records -- each entry in this array corresponds to a point on the chart.
 
      data: totaldata,
@@ -468,55 +429,7 @@
         total += totaldata[x]['value'];
     }
     var avg = total / count;
-    $('#cmc-ave-dropouts').append(avg);
-
-    //program//employment
-    var cmcmap = {};
-    cmcmap['2008'] = {year: '2008', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2009'] = {year: '2009', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2010'] = {year: '2010', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2012'] = {year: '2012', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2013'] = {year: '2013', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2014'] = {year: '2014', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-    cmcmap['2015'] = {year: '2015', brodcom: getRandom(), comres: getRandom(),film: getRandom(), journ: getRandom()}; // add item
-
-    var cmcdata = [];
-    for (var key in cmcmap){
-     var value = cmcmap[key];
-     cmcdata.push(value);
-    }
-
-    //cmc2 dropdown javascript
-    $("#cmc-year-dropdown").change(function () {
-      var selectedYear = $("#cmc-year-dropdown").val();
-
-      var selectedYearData = [];
-      if (selectedYear in cmcmap){
-       var value = cmcmap[selectedYear];
-       selectedYearData.push(value);
-      }
-      else{
-          selectedYearData = cmcdata;
-      }
-
-      $( "#cmc-yearly-dropouts" ).empty(); //clear content of div so graph will be replaced
-      $('#cmc-yearly-dropouts-legend').empty();
-
-      var cmc2 = new Morris.Bar({
-       element: 'cmc-yearly-dropouts',
-       data: selectedYearData,
-       xkey: 'year',
-       ykeys: ['brodcom', 'comres', 'film', 'journ'],
-       labels: ['BA Broadcast Communication', 'BA Communication Research', 'BA Film', 'BA Journalism'],
-       hideHover: 'auto'
-      // resize: true
-      });
-      //legend
-      cmc2.options.labels.forEach(function(label, i){
-      var legendItemE2 = $('<span></span>').text(label).css('color', cmc2.options.barColors[i])
-      $('#cmc-yearly-dropouts-legend').append(legendItemE2)
-      });
-    }).change();
+    $('#program-ave-dropouts').append(avg);
 
 
     //employment
@@ -608,14 +521,14 @@
 
     //housing
     var housingmap = {};
-    housingmap['2008'] = {year: '2008', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2009'] = {year: '2009', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2010'] = {year: '2010', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2011'] = {year: '2011', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2012'] = {year: '2012', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2013'] = {year: '2013', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2014'] = {year: '2014', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2015'] = {year: '2015', dorm: getRandom(), ownhouse: getRandom(), boardinghousecmc: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2008'] = {year: '2008', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2009'] = {year: '2009', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2010'] = {year: '2010', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2011'] = {year: '2011', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2012'] = {year: '2012', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2013'] = {year: '2013', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2014'] = {year: '2014', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2015'] = {year: '2015', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
 
     var housingdata = [];
     for (var key in housingmap){
@@ -629,16 +542,16 @@
       var selectedTypeData = [];
       var selectedTypeLabel = [];
       if( selectedType == "all" ){
-          selectedTypeData = ['dorm', 'ownhouse', 'boardinghousecmc',  'boardinghouseout', 'rented', 'relative', 'others'];
-          selectedTypeLabel = ['UP Dormitory', 'Own House', 'Boarding House on cmc', 'Boarding House off cmc', 'Rented House', 'Relatives/Guardians House', 'Others'];
+          selectedTypeData = ['dorm', 'ownhouse', 'boardinghouseprogram',  'boardinghouseout', 'rented', 'relative', 'others'];
+          selectedTypeLabel = ['UP Dormitory', 'Own House', 'Boarding House on program', 'Boarding House off program', 'Rented House', 'Relatives/Guardians House', 'Others'];
       }
       else{
           selectedTypeData.push(selectedType);
           switch(selectedType){
               case 'dorm': selectedTypeLabel.push('UP Dormitory'); break;
               case 'ownhouse': selectedTypeLabel.push('Own House'); break;
-              case 'boardinghousecmc': selectedTypeLabel.push('Boarding House on cmc'); break;
-              case 'boardinghouseout': selectedTypeLabel.push('Boarding House off cmc'); break;
+              case 'boardinghouseprogram': selectedTypeLabel.push('Boarding House on program'); break;
+              case 'boardinghouseout': selectedTypeLabel.push('Boarding House off program'); break;
               case 'rented': selectedTypeLabel.push('Rented House'); break;
               case 'relative': selectedTypeLabel.push('Relatives/Guardians House'); break;
               case 'others': selectedTypeLabel.push('Others'); break;
@@ -684,8 +597,8 @@
        element: 'housing-yearly-dropouts',
        data: selectedYearData,
        xkey: 'year',
-       ykeys: ['dorm', 'ownhouse', 'boardinghousecmc',  'boardinghouseout', 'rented', 'relative', 'others'],
-       labels: ['UP Dormitory', 'Own House', 'Boarding House on cmc', 'Boarding House off cmc', 'Rented House', 'Relatives/Guardians House', 'Others'],
+       ykeys: ['dorm', 'ownhouse', 'boardinghouseprogram',  'boardinghouseout', 'rented', 'relative', 'others'],
+       labels: ['UP Dormitory', 'Own House', 'Boarding House on program', 'Boarding House off program', 'Rented House', 'Relatives/Guardians House', 'Others'],
        hideHover: 'auto'
       // resize: true
       });
