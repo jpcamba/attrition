@@ -16,6 +16,22 @@ class HomeController extends \BaseController {
 		return View::make('dashboard');
 	}
 
+	public function showCampus() {
+		return View::make('campus.campus');
+	}
+
+	public function showCollege() {
+		return View::make('college.college');
+	}
+
+	public function showSpecificCollege() {
+		return View::make('college.cmc');
+	}
+
+	public function showSpecificProgram() {
+		return View::make('program.program');
+	}
+
 	//Dashboard Elements
 	public function showElUiElements() {
 		return View::make('elements/ui-elements');

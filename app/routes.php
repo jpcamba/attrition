@@ -13,6 +13,14 @@
 
 Route::get('/', 'HomeController@showDashboard');
 
+Route::get('/campus', 'HomeController@showCampus');
+
+Route::get('/college', 'HomeController@showCollege');
+
+Route::get('/college/cmc', 'HomeController@showSpecificCollege');
+
+Route::get('/program/broadcomm', 'HomeController@showSpecificProgram');
+
 Route::group(array('prefix' => 'elements'), function () {
 	Route::get('ui-elements', 'HomeController@showElUiElements');
 	Route::get('chart', 'HomeController@showElChart');

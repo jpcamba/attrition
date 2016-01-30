@@ -7,14 +7,14 @@
 @stop
 
 <!-- User Sidebar -->
-@include('campus/_campus-sidebar')
+@include('program/_program-sidebar')
 
 {{-- Page content --}}
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            Campus <!--<small>Say something about this page</small>-->
+            BA Broadcast Communication <!--<small>Say something about this page</small>-->
         </h1>
     </div>
 </div>
@@ -27,11 +27,11 @@
                 Dropouts per batch
             </div>
             <div class="panel-body">
-                <div id="campus-total-dropouts"></div>
+                <div id="program-total-dropouts"></div>
                 <center>
                     <h4>Average Number of Dropouts</h4>
                     <h1>
-                        <div id="campus-ave-dropouts"></div>
+                        <div id="program-ave-dropouts"></div>
                     </h1>
                 </center>
             </div>
@@ -125,8 +125,8 @@
     			    <select class="form-control" required="required" id="housing-type-dropdown" name="housing-type-dropdown">
     				  <option value="dorm">UP Dormitory</option>
                       <option value="ownhouse">Own House</option>
-                      <option value="boardinghousecampus">Boarding House on campus</option>
-                      <option value="boardinghouseout">Boarding House off campus</option>
+                      <option value="boardinghouseprogram">Boarding House on program</option>
+                      <option value="boardinghouseout">Boarding House off program</option>
                       <option value="rented">Rented House</option>
                       <option value="relative">Relative's/Guardian's House</option>
                       <option value="others">Others</option>
@@ -350,7 +350,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
                 <center>
@@ -360,12 +360,22 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-body">
                 <center>
                     <h4>Average Years to Graduate</h4>
                     <h1>4.5</h1>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <center>
+                    <h4>Average Years to Shift</h4>
+                    <h1>2</h1>
                 </center>
             </div>
         </div>
@@ -378,15 +388,15 @@
 @section('javascript')
 
 <script>
-    var max = 3000;
-    var min = 1000;
+    var max = 500;
+    var min = 100;
 
     function getRandom() {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 
-    //campus
+    //program
     var totaldata = [
      {year: '2008', value: getRandom()},
      {year: '2009', value: getRandom()},
@@ -399,7 +409,7 @@
 
     new Morris.Area({
      // ID of the element in which to draw the chart.
-     element: 'campus-total-dropouts',
+     element: 'program-total-dropouts',
      // Chart data records -- each entry in this array corresponds to a point on the chart.
 
      data: totaldata,
@@ -419,7 +429,7 @@
         total += totaldata[x]['value'];
     }
     var avg = total / count;
-    $('#campus-ave-dropouts').append(avg);
+    $('#program-ave-dropouts').append(avg);
 
 
     //employment
@@ -511,14 +521,14 @@
 
     //housing
     var housingmap = {};
-    housingmap['2008'] = {year: '2008', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2009'] = {year: '2009', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2010'] = {year: '2010', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2011'] = {year: '2011', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2012'] = {year: '2012', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2013'] = {year: '2013', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2014'] = {year: '2014', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
-    housingmap['2015'] = {year: '2015', dorm: getRandom(), ownhouse: getRandom(), boardinghousecampus: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2008'] = {year: '2008', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2009'] = {year: '2009', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2010'] = {year: '2010', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2011'] = {year: '2011', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2012'] = {year: '2012', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2013'] = {year: '2013', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2014'] = {year: '2014', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
+    housingmap['2015'] = {year: '2015', dorm: getRandom(), ownhouse: getRandom(), boardinghouseprogram: getRandom(),  boardinghouseout: getRandom(), rented: getRandom(), relative: getRandom(), others: getRandom()}; // add item
 
     var housingdata = [];
     for (var key in housingmap){
@@ -532,16 +542,16 @@
       var selectedTypeData = [];
       var selectedTypeLabel = [];
       if( selectedType == "all" ){
-          selectedTypeData = ['dorm', 'ownhouse', 'boardinghousecampus',  'boardinghouseout', 'rented', 'relative', 'others'];
-          selectedTypeLabel = ['UP Dormitory', 'Own House', 'Boarding House on campus', 'Boarding House off campus', 'Rented House', 'Relatives/Guardians House', 'Others'];
+          selectedTypeData = ['dorm', 'ownhouse', 'boardinghouseprogram',  'boardinghouseout', 'rented', 'relative', 'others'];
+          selectedTypeLabel = ['UP Dormitory', 'Own House', 'Boarding House on program', 'Boarding House off program', 'Rented House', 'Relatives/Guardians House', 'Others'];
       }
       else{
           selectedTypeData.push(selectedType);
           switch(selectedType){
               case 'dorm': selectedTypeLabel.push('UP Dormitory'); break;
               case 'ownhouse': selectedTypeLabel.push('Own House'); break;
-              case 'boardinghousecampus': selectedTypeLabel.push('Boarding House on campus'); break;
-              case 'boardinghouseout': selectedTypeLabel.push('Boarding House off campus'); break;
+              case 'boardinghouseprogram': selectedTypeLabel.push('Boarding House on program'); break;
+              case 'boardinghouseout': selectedTypeLabel.push('Boarding House off program'); break;
               case 'rented': selectedTypeLabel.push('Rented House'); break;
               case 'relative': selectedTypeLabel.push('Relatives/Guardians House'); break;
               case 'others': selectedTypeLabel.push('Others'); break;
@@ -587,8 +597,8 @@
        element: 'housing-yearly-dropouts',
        data: selectedYearData,
        xkey: 'year',
-       ykeys: ['dorm', 'ownhouse', 'boardinghousecampus',  'boardinghouseout', 'rented', 'relative', 'others'],
-       labels: ['UP Dormitory', 'Own House', 'Boarding House on campus', 'Boarding House off campus', 'Rented House', 'Relatives/Guardians House', 'Others'],
+       ykeys: ['dorm', 'ownhouse', 'boardinghouseprogram',  'boardinghouseout', 'rented', 'relative', 'others'],
+       labels: ['UP Dormitory', 'Own House', 'Boarding House on program', 'Boarding House off program', 'Rented House', 'Relatives/Guardians House', 'Others'],
        hideHover: 'auto'
       // resize: true
       });
