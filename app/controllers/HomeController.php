@@ -28,9 +28,15 @@ class HomeController extends \BaseController {
 		return View::make('college.cmc');
 	}
 
-	public function showSpecificProgram() {
+	public function showProgram() {
 		return View::make('program.program');
 	}
+
+	public function showSpecificProgram() {
+		return View::make('program.broadcomm');
+	}
+
+
 
 	//Dashboard Elements
 	public function showElUiElements() {

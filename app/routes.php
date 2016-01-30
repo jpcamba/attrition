@@ -19,6 +19,8 @@ Route::get('/college', 'HomeController@showCollege');
 
 Route::get('/college/cmc', 'HomeController@showSpecificCollege');
 
+Route::get('/program', 'HomeController@showProgram');
+
 Route::get('/program/broadcomm', 'HomeController@showSpecificProgram');
 
 Route::group(array('prefix' => 'elements'), function () {
