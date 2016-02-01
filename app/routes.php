@@ -11,18 +11,41 @@
 |
 */
 
-Route::get('/', 'HomeController@showDashboard');
+//Main Dashboard
+Route::get('/', 'HomeController@showCampus');
 
-Route::get('/campus', 'HomeController@showCampus');
+//Campus
+Route::group(array('prefix' => 'campus'), function () {	
+	Route::get('/', 'HomeController@showCampus');
+});
 
-Route::get('/college', 'HomeController@showCollege');
+//College
+Route::group(array('prefix' => 'college'), function () {	
+	Route::get('/', 'HomeController@showCollege');
+	Route::get('cmc', 'HomeController@showSpecificCollege');
+});
 
-Route::get('/college/cmc', 'HomeController@showSpecificCollege');
+//Program
+Route::group(array('prefix' => 'program'), function () {
+	Route::get('/', 'HomeController@showProgram');
+	Route::get('broadcomm', 'HomeController@showSpecificProgram');
+});
 
-Route::get('/program', 'HomeController@showProgram');
+//Prediction
+Route::group(array('prefix' => 'prediction'), function () {
+	Route::get('/', 'HomeController@showPrediction');
+});
 
-Route::get('/program/broadcomm', 'HomeController@showSpecificProgram');
+//Simulation
+Route::group(array('prefix' => 'simulation'), function () {
+	Route::get('employment', 'HomeController@showSimEmployment');
+	Route::get('housing', 'HomeController@showSimHousing');
+	Route::get('grades', 'HomeController@showSimGrades');
+	Route::get('stdiscount', 'HomeController@showSimStdiscount');
+	Route::get('units', 'HomeController@showSimUnits');
+});
 
+//Elements
 Route::group(array('prefix' => 'elements'), function () {
 	Route::get('ui-elements', 'HomeController@showElUiElements');
 	Route::get('chart', 'HomeController@showElChart');

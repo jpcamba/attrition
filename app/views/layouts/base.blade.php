@@ -23,7 +23,7 @@
     <div id="wrapper">
         <nav class="navbar navbar-default top-navbar" role="navigation" style="height: 50px;width: 1349px;">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/" style="padding-bottom: 0px; padding-top: 10px; padding-right: 0px; width: 400px; height: 50px; padding-left: 10px;"><strong>UP Undergraduate Attrition Study</strong></a>
+                <a class="navbar-brand" href="/" style="padding-bottom: 0px; padding-top: 10px; padding-right: 0px; width: 500px; height: 50px; padding-left: 10px;"><strong>UP Undergraduate Attrition Study</strong></a>
             </div>
         </nav>
         <!--/. NAV TOP  -->
@@ -64,6 +64,7 @@
     <script type="text/javascript" src="{{asset('assets/js/morris/raphael-2.1.0.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/js/morris/morris.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/js/easypiechart.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/js/easypiechart-data.js')}}"></script>
     <!-- Custom Js -->
     <script type="text/javascript" src="{{asset('assets/js/custom-scripts.js')}}"></script>
     <!-- DATA TABLE SCRIPTS -->

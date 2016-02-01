@@ -36,7 +36,30 @@ class HomeController extends \BaseController {
 		return View::make('program.broadcomm');
 	}
 
+	public function showPrediction() {
+		return View::make('prediction.prediction');
+	}
 
+	//Simulation Pages
+	public function showSimEmployment() {
+		return View::make('simulation.employment.employment');
+	}
+
+	public function showSimHousing() {
+		return View::make('simulation.housing.housing');
+	}
+
+	public function showSimGrades() {
+		return View::make('simulation.grades.grades');
+	}
+
+	public function showSimStdiscount() {
+		return View::make('simulation.stdiscount.stdiscount');
+	}
+
+	public function showSimUnits() {
+		return View::make('simulation.units.units');
+	}
 
 	//Dashboard Elements
 	public function showElUiElements() {
