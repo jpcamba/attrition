@@ -43,7 +43,7 @@
         <div id="page-wrapper" style="padding-top: 0px; top: 50px; margin-left: 260px;">
             <div id="page-inner" style="margin-top: 0px;">
 
-                <!--Insert individula page content-->
+                <!--Insert individual page content-->
                 @yield('content')
 
                 <footer><p>All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a></p></footer>

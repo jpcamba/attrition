@@ -12,15 +12,16 @@
 */
 
 //Main Dashboard
-Route::get('/', 'HomeController@showCampus');
+Route::get('/', 'CampusController@index');
 
 //Campus
-Route::group(array('prefix' => 'campus'), function () {	
+Route::resource('campus', 'CampusController');
+/*Route::group(array('prefix' => 'campus'), function () {
 	Route::get('/', 'HomeController@showCampus');
-});
+});*/
 
 //College
-Route::group(array('prefix' => 'college'), function () {	
+Route::group(array('prefix' => 'college'), function () {
 	Route::get('/', 'HomeController@showCollege');
 	Route::get('cmc', 'HomeController@showSpecificCollege');
 });
