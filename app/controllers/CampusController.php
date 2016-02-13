@@ -11,12 +11,21 @@ class CampusController extends \BaseController {
 	public function index()
 	{
 		//get array of sem and number of students
-		$aysemRaw = DB::select('select aysem, count (*) as studentcount
+	/*	$aysemRaw = DB::select('select aysem, count (*) as studentcount
 		from studentterms
 		where aysem::varchar(255) NOT LIKE \'%3\'
 		group by aysem
 		having count(*) > 300
-		order by aysem asc;');
+		order by aysem asc;');*/
+
+		$aysemRaw = DB::table('studentterms')
+					->select('aysem', DB::raw('COUNT (*) as studentcount'))
+					->whereRaw('char_length(aysem::varchar(255)) = 5 and aysem::varchar(255) NOT LIKE \'%3\'')
+					->groupBy('aysem')
+					->havingRaw('count(*) > 1')
+					->orderBy('aysem', 'asc')
+					->get();
+
 
 		//create array of year and number of students
 		$yearlyStudentsArray = array();
