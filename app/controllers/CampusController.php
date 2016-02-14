@@ -10,48 +10,44 @@ class CampusController extends \BaseController {
 	 */
 	public function index()
 	{
-		//get array of sem and number of students
-	/*	$aysemRaw = DB::select('select aysem, count (*) as studentcount
-		from studentterms
-		where aysem::varchar(255) NOT LIKE \'%3\'
-		group by aysem
-		having count(*) > 300
-		order by aysem asc;');*/
-
-		$aysemRaw = DB::table('studentterms')
-					->select('aysem', DB::raw('COUNT (*) as studentcount'))
-					->whereRaw('char_length(aysem::varchar(255)) = 5 and aysem::varchar(255) NOT LIKE \'%3\'')
-					->groupBy('aysem')
-					->havingRaw('count(*) > 1')
-					->orderBy('aysem', 'asc')
-					->get();
-
-
-		//create array of year and number of students
-		$yearlyStudentsArray = array();
-
-		$students = 0;
-		$prevYear = "";
-		$prevStudents = 0;
-		$testingyear = "";
-		$testingstuds = 0;
-
-		foreach($aysemRaw as $yearData){
-			$currentYear = substr($yearData->aysem, 0, 4);
-			$currentStudents = $yearData->studentcount;
-			if($prevYear === ""){
-				$prevYear = $currentYear;
-				$prevStudents = $currentStudents;
-			}
-			elseif($prevYear === $currentYear){
-				$students = $prevStudents + $currentStudents;
-				$yearlyStudentsArray[$currentYear] = $students;
-				$prevYear = "";
-			}
+		//get data regarding year (Average number of students per year, Sem difference per year)
+		$yearsArray = Year::all();
+		$yearlyStudentAverage = [];
+		$yearlySemDifference = [];
+		foreach($yearsArray as $yearData){
+			$yearlyStudentAverage[$yearData->year] = $yearData->getAveStudents();
+			$yearlySemDifference[$yearData->year] = $yearData->getSemDifference();
 		}
 
+		//get average number of years a student stays in the university
+		//$students = Student::all(); //ERROR :(
+		//$aveYearsOfStay = $students->avg($this->getYearsinUniv());
+
+
+		/*$studentsRaw = DB::table('students')->get();
+		$numberOfStudents =  count($studentsRaw);
+		$numOfYears = 0;
+		foreach($studentsRaw as $student){
+			$studentRecord = Student::where('studentid', $student->studentid)->first();
+			$numOfYears = $numOfYears + $studentRecord->getYearsinUniv();
+		}
+		$aveYearsOfStay = $numOfYears/$numberOfStudents;*/
+
+		/*$students = Student::all();
+		$numberOfStudents =  count($students);
+		$numOfYears = 0;
+		foreach($students as $student){
+			$numOfYears = $numOfYears + $student->getYearsinUniv();
+		}
+		$aveYearsOfStay = $numOfYears/$numberOfStudents;*/
+
+
 		//return page
-		return View::make('campus.campus', array('yearlyStudentsArray' => $yearlyStudentsArray));
+		return View::make('campus.campus',
+		['yearlyStudentAverage' => $yearlyStudentAverage,
+		'yearlySemDifference' => $yearlySemDifference,
+		//'aveYearsOfStay' => $aveYearsOfStay
+		]);
 
 	}
 

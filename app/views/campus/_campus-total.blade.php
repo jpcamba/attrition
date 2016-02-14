@@ -1,21 +1,19 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                Dropouts per batch
+            <div class="panel-heading"> Overall
             </div>
             <div class="panel-body">
                 <div id="campus-total-dropouts"></div>
                 <center>
-                <!--    <h4>Average Number of Dropouts</h4>
-                    <h1>
-                        <div id="campus-ave-dropouts"></div>
-                    </h1> -->
-
-                    <h4>Number of Students</h4>
-                    <h1>
-                        <div id="campus-number-students"></div>
-                    </h1>
+                    <h4>Average number of students per year</h4>
+                    <div id="campus-number-students"></div>
+                    </br></br>
+                    <h4>Difference between semesters per year</h4>
+                    <div id="campus-sem-difference"></div>
+                    </br></br>
+                <!--    <h4>Average number of years a student spends in the university</h4>
+                    {{-- $aveYearsOfStay --}} -->
                 </center>
             </div>
         </div>
