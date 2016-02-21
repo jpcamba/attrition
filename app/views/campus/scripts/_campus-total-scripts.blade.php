@@ -29,7 +29,7 @@
      hideHover: 'auto',
      resize: true,
      goals: [0]
-    });
+ });
 
 
 </script>

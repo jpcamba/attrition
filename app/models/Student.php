@@ -11,8 +11,8 @@ class Student extends Eloquent {
     }
 
     public function getYearsinUniv(){
-        $records = $this->studentterms;
-        $years = (count($records))/3;
+        $records = $this->studentterms()->count();
+        $years = ($records)/3;
         return $years;
     }
 

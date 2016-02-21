@@ -3,8 +3,18 @@
 class Studentterm extends Eloquent {
     protected $table = 'studentterms';
 
-    public function student()
-        {
-            return $this->belongsTo('Student', 'studentid');
-        }
+    public function student(){
+        return $this->belongsTo('Student', 'studentid');
+    }
+
+    public function year(){
+        return $this->belongsTo('Year', 'year');
+    }
+
+    /*public static function getByPrimaryKeys($studentid, $aysem, $programid) {
+        return Widget::where('studentid', '=', $studentid)
+            ->where('aysem', '=', $aysem)
+            ->where('programid', '=', $programid)
+            ->first();
+    }*/
 }
