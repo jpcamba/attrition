@@ -11,7 +11,8 @@ class CampusController extends \BaseController {
 	public function index()
 	{
 		//get data regarding year (Average number of students per year, Sem difference per year)
-		$yearsArray = Year::all();
+		$yearsArray = Year::where('year','>', 1998)->get();
+		//$yearsArray = Year::all();
 		$yearlyStudentAverage = [];
 		$yearlySemDifference = [];
 		foreach($yearsArray as $yearData){
@@ -19,34 +20,25 @@ class CampusController extends \BaseController {
 			$yearlySemDifference[$yearData->year] = $yearData->getSemDifference();
 		}
 
-		//get average number of years a student stays in the university
-		//$students = Student::all(); //ERROR :(
-		//$aveYearsOfStay = $students->avg($this->getYearsinUniv());
-
-
-		/*$studentsRaw = DB::table('students')->get();
-		$numberOfStudents =  count($studentsRaw);
-		$numOfYears = 0;
-		foreach($studentsRaw as $student){
-			$studentRecord = Student::where('studentid', $student->studentid)->first();
-			$numOfYears = $numOfYears + $studentRecord->getYearsinUniv();
-		}
-		$aveYearsOfStay = $numOfYears/$numberOfStudents;*/
-
-		/*$students = Student::all();
-		$numberOfStudents =  count($students);
-		$numOfYears = 0;
-		foreach($students as $student){
-			$numOfYears = $numOfYears + $student->getYearsinUniv();
-		}
-		$aveYearsOfStay = $numOfYears/$numberOfStudents;*/
-
+		/*get average number of years a student stays in the university
+			1. get number of students with studentterms
+			2. get number of years of each student by dividing number of terms by 3
+			3. get average of step 2 (accdng to a site, sum/count is faster than avg command)
+		*/
+		$numberOfYearsPerStudent = Studentterm::select(DB::raw('COUNT(*)/3 as numYears'))->groupBy('studentid')->get();
+		$numberOfStudents = count($numberOfYearsPerStudent);
+		//$totalYears = $numberOfYearsPerStudent->sum('numYears');
+		//$aveYearsOfStay = $totalYears/$numberOfStudents;
+		$totalYears = 0;
+		$aveYearsOfStay = $totalYears;
 
 		//return page
 		return View::make('campus.campus',
 		['yearlyStudentAverage' => $yearlyStudentAverage,
 		'yearlySemDifference' => $yearlySemDifference,
-		//'aveYearsOfStay' => $aveYearsOfStay
+		//'studenttermsArray' => $studenttermsArray
+		'aveYearsOfStay' => $aveYearsOfStay
+		//'students' => $students
 		]);
 
 	}

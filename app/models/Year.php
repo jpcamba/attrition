@@ -3,15 +3,23 @@
 class Year extends Eloquent {
 
     protected $table = 'years';
+    protected $primaryKey = 'year';
+
     public $studentsSem1Count = 0;
     public $studentsSem2Count = 0;
 
+    public function studentterms(){
+        return $this->hasMany('Studentterm', 'year');
+    }
+
     public function countSem1Students(){
-        $this->studentsSem1Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%1\''), array('thisYear' => $this->year))->count();
+        $this->studentsSem1Count = $this->studentterms()->where('aysem', strval($this->year).'1' )->count();
     }
 
     public function countSem2Students(){
-        $this->studentsSem2Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%2\''), array('thisYear' => $this->year))->count();
+        $this->studentsSem1Count = $this->studentterms()->where('aysem', strval($this->year).'2')->count();
+        //$this->studentsSem1Count = $this->studentterms()->where('aysem', '*2')->count();
+        //$this->studentsSem2Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%2\''), array('thisYear' => $this->year))->count();
     }
 
     public function getAveStudents() {
