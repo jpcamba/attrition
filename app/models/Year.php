@@ -13,13 +13,21 @@ class Year extends Eloquent {
     }
 
     public function countSem1Students(){
-        $this->studentsSem1Count = $this->studentterms()->where('aysem', strval($this->year).'1' )->count();
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->where('aysem', strval($this->year).'1' )->count();
     }
 
     public function countSem2Students(){
-        $this->studentsSem1Count = $this->studentterms()->where('aysem', strval($this->year).'2')->count();
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->where('aysem', strval($this->year).'2')->count();
         //$this->studentsSem1Count = $this->studentterms()->where('aysem', '*2')->count();
         //$this->studentsSem2Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%2\''), array('thisYear' => $this->year))->count();
+    }
+
+    public function countSem1ProgramStudents($programid){
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->where('programs.programid', '=', $programid)->where('aysem', strval($this->year).'1' )->count();
+    }
+
+    public function countSem2ProgramStudents($programid){
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->where('programs.programid', '=', $programid)->where('aysem', strval($this->year).'2' )->count();
     }
 
     public function getAveStudents() {
@@ -34,6 +42,14 @@ class Year extends Eloquent {
         $studentsSem2 = $this->studentsSem2Count;
 
         $aveStudents = ($studentsSem1 + $studentsSem2)/2;
+        return $aveStudents;
+    }
+
+    public function getAveProgramStudents($programid) {
+        $programStudentsSem1 = $this->countSem1ProgramStudents($programid);
+        $programStudentsSem2 = $this->countSem2ProgramStudents($programid);
+
+        $aveStudents = ($programStudentsSem1 + $programStudentsSem2)/2;
         return $aveStudents;
     }
 

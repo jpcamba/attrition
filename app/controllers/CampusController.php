@@ -25,13 +25,13 @@ class CampusController extends \BaseController {
 			2. get number of years of each student by dividing number of terms by 3
 			3. get average of step 2 (accdng to a site, sum/count is faster than avg command)
 		*/
-		$numberOfYearsPerStudent = DB::table('studentterms')->select(DB::raw('COUNT(*)/3 as numYears'))->groupBy('studentid')->get();
+		$numberOfYearsPerStudent = DB::table('studentterms')->join('programs', 'programs.programid', '=', 'studentterms.programid')->select(DB::raw('COUNT(*)/3 as numYears'))->whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->groupBy('studentid')->get();
 		$numberOfStudents = count($numberOfYearsPerStudent);
 		$totalYears = 0;
 		foreach($numberOfYearsPerStudent as $key => $val){
 			$totalYears = $totalYears + $val->numyears;
 		}
-		$aveYearsOfStay = round($totalYears/$numberOfStudents,2);
+		$aveYearsOfStay = round($totalYears/$numberOfStudents, 2);
 
 		//return page
 		return View::make('campus.campus',
