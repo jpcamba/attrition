@@ -16,6 +16,17 @@ Route::get('/', 'CampusController@index');
 
 //Campus
 Route::resource('campus', 'CampusController');
+Route::group(array('prefix' => 'campus'), function () {
+	Route::get('/', 'CampusController@index');
+});
+
+//Program
+Route::resource('program', 'ProgramController');
+Route::group(array('prefix' => 'program'), function () {
+	Route::get('/', 'ProgramController@index');
+	Route::get('broadcomm', 'HomeController@showSpecificProgram');
+});
+
 /*Route::group(array('prefix' => 'campus'), function () {
 	Route::get('/', 'HomeController@showCampus');
 });*/
@@ -26,11 +37,8 @@ Route::group(array('prefix' => 'college'), function () {
 	Route::get('cmc', 'HomeController@showSpecificCollege');
 });
 
-//Program
-Route::group(array('prefix' => 'program'), function () {
-	Route::get('/', 'HomeController@showProgram');
-	Route::get('broadcomm', 'HomeController@showSpecificProgram');
-});
+
+
 
 //Prediction
 Route::group(array('prefix' => 'prediction'), function () {

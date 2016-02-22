@@ -11,6 +11,10 @@ class Studentterm extends Eloquent {
         return $this->belongsTo('Year', 'year');
     }
 
+    public function program(){
+        return $this->belongsTo('Program', 'programid');
+    }
+
     /*public static function getByPrimaryKeys($studentid, $aysem, $programid) {
         return Widget::where('studentid', '=', $studentid)
             ->where('aysem', '=', $aysem)
