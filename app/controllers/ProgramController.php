@@ -27,6 +27,32 @@ class ProgramController extends \BaseController {
 
 	}
 
+	public function showSpecificProgram(){
+		$programIDInput = Input::get('program-dropdown');
+		$program = Program::find($programIDInput);
+
+		//ave students per year and ave difference
+		$yearsArray = Year::all();
+		$yearlyStudentAverage = [];
+		$yearlySemDifference = [];
+		foreach($yearsArray as $yearData){
+			$aveStudents = $yearData->getAveProgramStudents($programIDInput);
+			if($aveStudents > 1){
+				$yearlyStudentAverage[$yearData->year] = $aveStudents;
+			}
+			$semDiff = $yearData->getProgramSemDifference($programIDInput);
+			if($semDiff > 1){
+				$yearlySemDifference[$yearData->year] = $semDiff;
+			}
+		}
+
+		return View::make('program.program-specific',
+		['program' => $program,
+		 'yearlyStudentAverage' => $yearlyStudentAverage,
+		 'yearlySemDifference' => $yearlySemDifference
+		]);
+	}
+
 
 	/**
 	 * Show the form for creating a new resource.

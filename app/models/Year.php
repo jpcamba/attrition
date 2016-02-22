@@ -68,6 +68,14 @@ class Year extends Eloquent {
         return $semDifference;
     }
 
+    public function getProgramSemDifference($programid) {
+        $studentsSem1 = $this->countSem1ProgramStudents($programid);
+        $studentsSem2 = $this->countSem2ProgramStudents($programid);
+
+        $semDifference = $studentsSem1 - $studentsSem2;
+        return $semDifference;
+    }
+
 
     /*//Alternative but not working
     public function getAveStudents(){

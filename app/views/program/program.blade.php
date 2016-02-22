@@ -33,7 +33,7 @@
                 </br>
                 <h4>Choose a program</h4>
                 <!--Dropdown for prompt-->
-                <form action="#" method="get">
+                {{ Form::open(array('action' => 'ProgramController@showSpecificProgram')) }}
                   <div class="input-group">
                     <select class="form-control" required="required" id="program-dropdown" name="program-dropdown">
                         @foreach($programlist as $program){
@@ -43,8 +43,8 @@
                     </select>
                   </div>
                   <br/>
-                  <button type="button" class="btn btn-default">View Program</button>
-                </form>
+                  <button type="submit" class="btn btn-default">View Program</button>
+                {{ Form::close() }}
                 <!-- end of dropdown -->
             </div>
         </div>
