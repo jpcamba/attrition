@@ -24,7 +24,7 @@ Route::group(array('prefix' => 'campus'), function () {
 Route::resource('program', 'ProgramController');
 Route::group(array('prefix' => 'program'), function () {
 	Route::get('/', 'ProgramController@index');
-	Route::get('broadcomm', 'HomeController@showSpecificProgram');
+	Route::post('/view_program', 'ProgramController@showSpecificProgram');
 });
 
 /*Route::group(array('prefix' => 'campus'), function () {
