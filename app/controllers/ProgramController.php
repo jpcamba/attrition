@@ -10,7 +10,7 @@ class ProgramController extends \BaseController {
 	 */
 	public function index()
 	{
-        $programlist = Program::whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->get();
+        $programlist = Program::where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->get();
 
 		//Averaage students per program
 		$programAveArray = [];

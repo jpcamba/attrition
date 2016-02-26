@@ -8,7 +8,7 @@
     }
 
     var programsAve = new Morris.Bar({
-     element: 'program-yearly-ave-number-students',
+     element: 'program-ave-number-students',
      data: averageData,
      xkey: 'program',
      ykeys: ['studentcount'],

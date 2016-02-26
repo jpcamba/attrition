@@ -11,7 +11,7 @@
     }
 
     new Morris.Area({
-     element: 'program-number-students',
+     element: 'program-yearly-number-students',
      data: averageData,
      xkey: 'year',
      ykeys: ['studentcount'],
@@ -21,7 +21,7 @@
     });
 
     new Morris.Line({
-     element: 'program-sem-difference',
+     element: 'program-yearly-sem-difference',
      data: semDifference,
      xkey: 'year',
      ykeys: ['studentdifference'],
