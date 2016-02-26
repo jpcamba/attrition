@@ -9,8 +9,12 @@ class Program extends Eloquent {
         return $this->hasMany('Studentterm', 'programid');
     }
 
+    public function colleges(){
+        return $this->belongsTo('College', 'unitid');
+    }
+
     public function getAveStudents(){
-        $years = Year::where('year','>', 1998)->get();
+        $years = Year::all();
         $numberOfStudents = 0;
         $zeroStudents = 0;
         foreach($years as $year){
@@ -22,5 +26,6 @@ class Program extends Eloquent {
         }
         return $totalAve = $numberOfStudents/(count($years)-$zeroStudents);
     }
+
 
 }

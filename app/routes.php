@@ -32,9 +32,10 @@ Route::group(array('prefix' => 'program'), function () {
 });*/
 
 //College
+Route::resource('college', 'CollegeController');
 Route::group(array('prefix' => 'college'), function () {
-	Route::get('/', 'HomeController@showCollege');
-	Route::get('cmc', 'HomeController@showSpecificCollege');
+	Route::get('/', 'CollegeController@index');
+	Route::post('/view_college', 'CollegeController@showSpecificCollege');
 });
 
 

@@ -13,11 +13,11 @@ class Year extends Eloquent {
     }
 
     public function countSem1Students(){
-        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->where('aysem', strval($this->year).'1' )->count();
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->where('aysem', strval($this->year).'1' )->count();
     }
 
     public function countSem2Students(){
-        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->whereIn('programs.degree', array('DM', 'BS', 'BA'))->where('programs.programid', '!=', 38)->where('aysem', strval($this->year).'2')->count();
+        return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->where('aysem', strval($this->year).'2')->count();
         //$this->studentsSem1Count = $this->studentterms()->where('aysem', '*2')->count();
         //$this->studentsSem2Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%2\''), array('thisYear' => $this->year))->count();
     }
