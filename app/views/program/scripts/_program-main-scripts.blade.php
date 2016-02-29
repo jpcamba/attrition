@@ -17,5 +17,10 @@
      resize: true
     });
 
+    /*programsAve.options.labels.forEach(function(label, i){
+      var legendItemE2 = $('<span></span>').text(label).css('color', programsAve.options.barColors[i])
+      $('#employment-yearly-dropouts-legend').append(legendItemE2)
+  });*/
+
 
 </script>
