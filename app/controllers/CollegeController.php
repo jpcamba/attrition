@@ -9,8 +9,6 @@ class CollegeController extends \BaseController {
 	 */
 	 public function index()
  	{
-        // $collegelist = College::join('programs', 'units.unitid', '=', 'programs.unitid')->join('studentterms', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->get();
-
 		$collegelist = College::whereHas('programs', function($q){
     						$q->whereNotIn('programid', array(62, 66, 38, 22));
 							$q->where('degreelevel', 'U');
@@ -18,7 +16,7 @@ class CollegeController extends \BaseController {
 
 
  		//Averaage students per program
- 		//$collegeAveArray = [];
+ 		$collegeAveArray = [];
  		foreach($collegelist as $college){
  			$collStudents = round($college->getAveStudents(), 2);
 			$collegeAveArray[$college->unitname] = $collStudents;
@@ -31,6 +29,30 @@ class CollegeController extends \BaseController {
  		]);
 
  	}
+
+	public function showSpecificCollege(){
+	    $collegeIDInput = Input::get('college-dropdown');
+	    $college = College::find($collegeIDInput);
+
+	    //ave students per year and ave difference
+	    $yearsArray = Year::all();
+	    $yearlyStudentAverage = [];
+	    $yearlySemDifference = [];
+	    foreach($yearsArray as $yearData){
+	        $aveStudents = $college->getYearlyAveStudents($yearData->year);
+	        if($aveStudents > 1){
+	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
+	        }
+	        $semDiff = $college->getYearlySemDifference($yearData->year);
+	        $yearlySemDifference[$yearData->year] = $semDiff;
+	    }
+
+	    return View::make('college.college-specific',
+	    ['college' => $college,
+	     'yearlyStudentAverage' => $yearlyStudentAverage,
+	     'yearlySemDifference' => $yearlySemDifference
+	    ]);
+	}
 
 
 	/**

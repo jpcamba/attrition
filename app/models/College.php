@@ -16,9 +16,51 @@ class College extends Eloquent {
     }
 
     public function getAveStudents(){
+        $years = Year::all();
+        $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->get();
+        $sumProgramsAve = 0;
+        $sumCollegeAve = 0;
+        foreach($years as $year){
+            foreach($programs as $program){
+                $currentProgramAve =  $year->getAveProgramStudents($program->programid);
+                $sumProgramsAve = $sumProgramsAve + $currentProgramAve;
+            }
+            $currentYearAve = $sumProgramsAve/(count($programs));
+            $sumCollegeAve = $sumCollegeAve + $currentYearAve;
+            $sumProgramsAve = 0;
+        }
+        $totalCollegeAve = $sumCollegeAve/(count($years));
+        return $totalCollegeAve;
+    }
 
-        $count = $this->studentterms()->count();
-        return $count;
+    public function getYearlyAveStudents($year){
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->whereHas('program', function($q){
+    						$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->where('degreelevel', 'U');
+						})->count();
+
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->whereHas('program', function($q){
+    						$q->whereNotIn('programid', array(62, 66, 38, 22));
+    						$q->where('degreelevel', 'U');
+    					})->count();
+
+        $aveStudents = ($studentsSem1 + $studentsSem2)/2;
+        return $aveStudents;
+    }
+
+    public function getYearlySemDifference($year){
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->whereHas('program', function($q){
+    						$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->where('degreelevel', 'U');
+						})->count();
+
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->whereHas('program', function($q){
+    						$q->whereNotIn('programid', array(62, 66, 38, 22));
+    						$q->where('degreelevel', 'U');
+    					})->count();
+
+        $semDifference = $studentsSem1 - $studentsSem2;
+        return $semDifference;
     }
 
 }

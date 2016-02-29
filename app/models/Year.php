@@ -18,8 +18,6 @@ class Year extends Eloquent {
 
     public function countSem2Students(){
         return $this->studentsSem1Count = $this->studentterms()->join('programs', 'programs.programid', '=', 'studentterms.programid')->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->where('aysem', strval($this->year).'2')->count();
-        //$this->studentsSem1Count = $this->studentterms()->where('aysem', '*2')->count();
-        //$this->studentsSem2Count = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear and aysem::varchar(255) LIKE \'%2\''), array('thisYear' => $this->year))->count();
     }
 
     public function countSem1ProgramStudents($programid){
@@ -76,19 +74,4 @@ class Year extends Eloquent {
         return $semDifference;
     }
 
-
-    /*//Alternative but not working
-    public function getAveStudents(){
-        $records = Studentterm::whereRaw(('substring(aysem::varchar(255) for 4) LIKE :thisYear'), array('thisYear' => $this->year))->get();
-        $studentsSem1 = 0;
-        $studentsSem2 = 0;
-        foreach($records as $sem){
-            if(substr($sem->aysem, -1) == '1'){
-                $studentsSem1 = $studentsSem1++;
-            }
-            else{
-                $studentsSem2 = $studentsSem2++;
-            }
-        }
-    }*/
 }

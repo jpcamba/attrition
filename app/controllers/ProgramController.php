@@ -41,9 +41,7 @@ class ProgramController extends \BaseController {
 				$yearlyStudentAverage[$yearData->year] = $aveStudents;
 			}
 			$semDiff = $yearData->getProgramSemDifference($programIDInput);
-			//if($semDiff > 1){
-				$yearlySemDifference[$yearData->year] = $semDiff;
-			//}
+			$yearlySemDifference[$yearData->year] = $semDiff;
 		}
 
 		return View::make('program.program-specific',
