@@ -15,6 +15,10 @@ class Studentterm extends Eloquent {
         return $this->belongsTo('Program', 'programid');
     }
 
+    public function studentdropouts() {
+        return $this->hasOne('Studentdropout', 'studentid');
+    }
+
     /*public static function getByPrimaryKeys($studentid, $aysem, $programid) {
         return Widget::where('studentid', '=', $studentid)
             ->where('aysem', '=', $aysem)
