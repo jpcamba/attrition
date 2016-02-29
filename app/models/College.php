@@ -18,7 +18,6 @@ class College extends Eloquent {
     public function getAveStudents(){
 
         $count = $this->studentterms()->count();
-        //echo "Unit name: " + $this->unitname + " Count: " + $count + "<br/>";
         return $count;
     }
 

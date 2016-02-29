@@ -21,10 +21,7 @@ class CollegeController extends \BaseController {
  		//$collegeAveArray = [];
  		foreach($collegelist as $college){
  			$collStudents = round($college->getAveStudents(), 2);
-			//var_dump( $college->getAveStudents());
-			//$collStudents = $college->getAveStudents();
-
- 			$collegeAveArray[$college->unitname] = $collStudents;
+			$collegeAveArray[$college->unitname] = $collStudents;
  		}
 
  		//return page
