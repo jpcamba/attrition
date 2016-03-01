@@ -1,5 +1,27 @@
 <script>
 //campus
+    //Total Attrition Rate
+    $('#campus-total-attrition').empty();
+    $('#campus-total-attrition').append({{json_encode($totalAttrition)}} + '%');
+
+    //Batch Attrition Rate
+    var batchAttritionRaw = {{json_encode($batchAttrition)}};
+    var batchAttrition = [];
+
+    for (var batchKey in batchAttritionRaw) {
+        batchAttrition.push({batch: batchKey, attritionrate: batchAttritionRaw[batchKey]});
+    }
+
+    new Morris.Line({
+        element: 'campus-batch-attrition',
+        data: batchAttrition,
+        xkey: 'batch',
+        ykeys: ['attritionrate'],
+        labels: ['Students'],
+        hideHover: 'auto',
+        resize: true
+    });
+
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
     var yearlySemDifference = {{ json_encode($yearlySemDifference) }};
     var averageData = [];

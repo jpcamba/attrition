@@ -33,15 +33,26 @@ class CampusController extends \BaseController {
 		}
 		$aveYearsOfStay = round($totalYears/$numberOfStudents, 2);
 
+		//Get total attrition rate
+		$totalAttrition = round(((Studentdropout::getTotalDropouts()->count() / Studentterm::getTotalStudents()->count()) * 100), 2);
+
+		//Get batch attrition
+		$batchAttrition = [];
+		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
+		foreach ($batches as $batch) {
+			$batchAttrition[$batch / 100000] = round(((Studentdropout::getBatchDropouts($batch)->count() / Studentterm::getBatchStudents($batch)->count()) * 100), 2);
+		}
+
 		//return page
 		return View::make('campus.campus',
 		['yearlyStudentAverage' => $yearlyStudentAverage,
 		'yearlySemDifference' => $yearlySemDifference,
 		//'studenttermsArray' => $studenttermsArray
-		'aveYearsOfStay' => $aveYearsOfStay
+		'aveYearsOfStay' => $aveYearsOfStay,
 		//'students' => $students
+		'totalAttrition' => $totalAttrition,
+		'batchAttrition' => $batchAttrition
 		]);
-
 	}
 
 
