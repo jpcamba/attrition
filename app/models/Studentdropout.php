@@ -6,7 +6,7 @@ class Studentdropout extends Eloquent {
     protected $primaryKey = 'id';
 
     public function studentterms() {
-        return $this->hasMany('Studentterm', 'studentid');
+        return $this->belongsTo('Studentterm', 'studentid');
     }
 
     public function programs() {
@@ -14,9 +14,9 @@ class Studentdropout extends Eloquent {
     }
 
     //Get total dropouts
-    public function scopeGetTotalDropouts($query) {
+    /*public function scopeGetTotalDropouts($query) {
     	return $query->select('studentid')->get();
-    }
+    }*/
 
     //Get batch students
     public function scopeGetBatchDropouts($query, $batch) {

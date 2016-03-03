@@ -1,8 +1,8 @@
 <script>
 //campus
     //Total Attrition Rate
-    $('#campus-total-attrition').empty();
-    $('#campus-total-attrition').append({{json_encode($totalAttrition)}} + '%');
+    $('#campus-average-attrition').empty();
+    $('#campus-average-attrition').append({{json_encode($aveAttrition)}} + '%');
 
     //Batch Attrition Rate
     var batchAttritionRaw = {{json_encode($batchAttrition)}};
