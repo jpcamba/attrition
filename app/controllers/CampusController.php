@@ -33,13 +33,18 @@ class CampusController extends \BaseController {
 		}
 		$aveYearsOfStay = round($totalYears/$numberOfStudents, 2);
 
+		$totalStudents = count(DB::table('studentterms')->select('studentid')->groupBy('studentid')->get());
+		$totalDropouts = count(DB::table('studentdropouts')->select('studentid')->groupBy('studentid')->get());
+		$totalAttrition = round((($totalDropouts / $totalStudents) * 100), 2);
+
 		//return page
 		return View::make('campus.campus',
 		['yearlyStudentAverage' => $yearlyStudentAverage,
 		'yearlySemDifference' => $yearlySemDifference,
 		//'studenttermsArray' => $studenttermsArray
-		'aveYearsOfStay' => $aveYearsOfStay
+		'aveYearsOfStay' => $aveYearsOfStay,
 		//'students' => $students
+		'totalAttrition' => $totalAttrition
 		]);
 
 	}

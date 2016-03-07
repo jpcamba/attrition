@@ -23,6 +23,10 @@
 <!-- Overall -->
 @include('college/_college-specific-graphs')
 
+<!-- Programs -->
+@include('college/_college-programs')
+
+
 
 
 @stop

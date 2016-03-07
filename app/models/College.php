@@ -6,6 +6,9 @@ class College extends Eloquent {
     protected $table = 'units';
     protected $primaryKey = 'unitid';
 
+    public $studentsSem1Count = 0;
+    public $studentsSem2Count = 0;
+
     public function programs(){
         return $this->hasMany('Program', 'unitid');
     }
@@ -22,7 +25,7 @@ class College extends Eloquent {
         $sumCollegeAve = 0;
         foreach($years as $year){
             foreach($programs as $program){
-                $currentProgramAve =  $year->getAveProgramStudents($program->programid);
+                $currentProgramAve = $program->getYearlyAveStudents($year->year);
                 $sumProgramsAve = $sumProgramsAve + $currentProgramAve;
             }
             $currentYearAve = $sumProgramsAve/(count($programs));
@@ -34,30 +37,34 @@ class College extends Eloquent {
     }
 
     public function getYearlyAveStudents($year){
-        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->whereHas('program', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
-							$q->where('degreelevel', 'U');
-						})->count();
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )
+        ->whereHas('program', function($q){
+            $q->whereNotIn('programid', array(62, 66, 38, 22));
+            $q->where('degreelevel', 'U');
+        })->count();
 
-        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->whereHas('program', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
-    						$q->where('degreelevel', 'U');
-    					})->count();
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )
+        ->whereHas('program', function($q){
+            $q->whereNotIn('programid', array(62, 66, 38, 22));
+            $q->where('degreelevel', 'U');
+        })->count();
 
         $aveStudents = ($studentsSem1 + $studentsSem2)/2;
         return $aveStudents;
     }
 
     public function getYearlySemDifference($year){
-        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->whereHas('program', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
-							$q->where('degreelevel', 'U');
-						})->count();
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )
+        ->whereHas('program', function($q){
+            $q->whereNotIn('programid', array(62, 66, 38, 22));
+            $q->where('degreelevel', 'U');
+        })->count();
 
-        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->whereHas('program', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
-    						$q->where('degreelevel', 'U');
-    					})->count();
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )
+        ->whereHas('program', function($q){
+            $q->whereNotIn('programid', array(62, 66, 38, 22));
+            $q->where('degreelevel', 'U');
+        })->count();
 
         $semDifference = $studentsSem1 - $studentsSem2;
         return $semDifference;

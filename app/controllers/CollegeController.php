@@ -33,11 +33,13 @@ class CollegeController extends \BaseController {
 	public function showSpecificCollege(){
 	    $collegeIDInput = Input::get('college-dropdown');
 	    $college = College::find($collegeIDInput);
+		$collegeprograms = $college->programs()->where('degreelevel', 'U')->whereNotIn('programid', array(62, 66, 38, 22))->get();
 
 	    //ave students per year and ave difference
 	    $yearsArray = Year::all();
 	    $yearlyStudentAverage = [];
 	    $yearlySemDifference = [];
+		$collegeProgramsAverage = [];
 	    foreach($yearsArray as $yearData){
 	        $aveStudents = $college->getYearlyAveStudents($yearData->year);
 	        if($aveStudents > 1){
@@ -47,10 +49,16 @@ class CollegeController extends \BaseController {
 	        $yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
+		foreach($collegeprograms as $collegeprogram){
+			$collegeProgramsAverage[$collegeprogram->programtitle] = round($collegeprogram->getAveStudents(), 2);
+		}
+
 	    return View::make('college.college-specific',
 	    ['college' => $college,
 	     'yearlyStudentAverage' => $yearlyStudentAverage,
-	     'yearlySemDifference' => $yearlySemDifference
+	     'yearlySemDifference' => $yearlySemDifference,
+		 'collegeprograms' => $collegeprograms,
+		 'collegeProgramsAverage' => $collegeProgramsAverage
 	    ]);
 	}
 

@@ -18,7 +18,7 @@ Route::get('/', 'CampusController@index');
 Route::resource('campus', 'CampusController');
 Route::group(array('prefix' => 'campus'), function () {
 	Route::get('/', 'CampusController@index');
-	Route::post('/view_college', 'CollegeController@showSpecificCollege');
+	//Route::post('/view_college', 'CollegeController@showSpecificCollege');
 });
 
 //Program

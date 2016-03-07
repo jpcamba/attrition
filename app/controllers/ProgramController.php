@@ -36,11 +36,11 @@ class ProgramController extends \BaseController {
 		$yearlyStudentAverage = [];
 		$yearlySemDifference = [];
 		foreach($yearsArray as $yearData){
-			$aveStudents = $yearData->getAveProgramStudents($programIDInput);
+			$aveStudents = $program->getYearlyAveStudents($yearData->year);
 			if($aveStudents > 1){
 				$yearlyStudentAverage[$yearData->year] = $aveStudents;
 			}
-			$semDiff = $yearData->getProgramSemDifference($programIDInput);
+			$semDiff = $program->getYearlySemDifference($yearData->year);
 			$yearlySemDifference[$yearData->year] = $semDiff;
 		}
 

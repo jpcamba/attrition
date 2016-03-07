@@ -1,5 +1,8 @@
 <script>
 //campus
+    $('#campus-total-attrition').empty();
+    $('#campus-total-attrition').append({{json_encode($totalAttrition)}} + '%');
+
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
     var yearlySemDifference = {{ json_encode($yearlySemDifference) }};
     var averageData = [];
