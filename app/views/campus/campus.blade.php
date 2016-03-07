@@ -24,17 +24,6 @@
 <!-- Overall -->
 @include('campus/_campus-total')
 
-
-
-
-<div class="row">
-    <div class="col-md-12">
-        <h3 class="page-header">
-            Trends of Factors
-        </h3>
-    </div>
-</div>
-
 <!-- end content section -->
 
 
