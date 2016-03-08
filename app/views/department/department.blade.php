@@ -7,43 +7,43 @@
 @stop
 
 <!-- User Sidebar -->
-@include('college/_college-sidebar')
+@include('department/_department-sidebar')
 
 {{-- Page content --}}
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            College <!--<small>Say something about this page</small>-->
+            Department <!--<small>Say something about this page</small>-->
         </h1>
     </div>
 </div>
 <!-- /. ROW  -->
 
 <!-- Overall -->
-@include('college/_college-main-graphs')
+@include('department/_department-main-graphs')
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                View attrition for a specific college
+                View attrition for a specific department
             </div>
             <div class="panel-body">
                 </br>
-                <h4>Choose a college</h4>
+                <h4>Choose a department</h4>
                 <!--Dropdown for prompt-->
-                {{ Form::open(array('action' => 'CollegeController@showSpecificCollege')) }}
+                {{ Form::open(array('action' => 'DepartmentController@showSpecificDepartment')) }}
                   <div class="input-group">
-                    <select class="form-control" required="required" id="college-dropdown" name="college-dropdown">
-                        @foreach($collegelist as $college){
-                            <option value={{ $college->unitid }}>{{ $college->unitname }}</option>
+                    <select class="form-control" required="required" id="department-dropdown" name="department-dropdown">
+                        @foreach($departmentlist as $department){
+                            <option value={{ $department->unitid }}>{{ $department->unitname }}</option>
                         }
                         @endforeach
                     </select>
                   </div>
                   <br/>
-                  <button type="submit" class="btn btn-default">View College</button>
+                  <button type="submit" class="btn btn-default">View Department</button>
                 {{ Form::close() }}
                 <!-- end of dropdown -->
             </div>
@@ -57,7 +57,7 @@
 @section('javascript')
 
 
-@include('college/scripts/_college-main-scripts')
+@include('department/scripts/_department-main-scripts')
 
 
 

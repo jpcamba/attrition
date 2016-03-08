@@ -9,8 +9,8 @@ class Program extends Eloquent {
         return $this->hasMany('Studentterm', 'programid');
     }
 
-    public function colleges(){
-        return $this->belongsTo('College', 'unitid');
+    public function department(){
+        return $this->belongsTo('Department', 'unitid');
     }
 
     public function getAveStudents(){

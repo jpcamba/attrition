@@ -1,5 +1,6 @@
 <script>
 //campus
+
     //Total Attrition Rate
     $('#campus-average-attrition').empty();
     $('#campus-average-attrition').append({{json_encode($aveAttrition)}} + '%');

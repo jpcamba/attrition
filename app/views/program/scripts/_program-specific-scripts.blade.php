@@ -17,7 +17,8 @@
      ykeys: ['studentcount'],
      labels: ['Students'],
      hideHover: 'auto',
-     resize: true
+     resize: true,
+     parseTime: false
     });
 
     new Morris.Line({
@@ -28,7 +29,8 @@
      labels: ['Students'],
      hideHover: 'auto',
      resize: true,
-     goals: [0]
+     goals: [0],
+     parseTime: false
  });
 
 

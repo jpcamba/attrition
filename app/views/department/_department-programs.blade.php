@@ -4,10 +4,10 @@
             <div class="panel-heading"> Programs
             </div>
             <div class="panel-body">
-                <div id="collegeprograms-total-dropouts"></div>
+                <div id="departmentprograms-total-dropouts"></div>
                 <center>
                     <h4>Average number of students per year for each program under the department</h4>
-                    <div id="collegeprograms-ave-number-students"></div>
+                    <div id="departmentprograms-ave-number-students"></div>
                 </center>
             </div>
         </div>
@@ -28,8 +28,8 @@
                 {{ Form::open(array('action' => 'ProgramController@showSpecificProgram')) }}
                   <div class="input-group">
                     <select class="form-control" required="required" id="program-dropdown" name="program-dropdown">
-                        @foreach($collegeprograms as $collegeprogram){
-                            <option value={{ $collegeprogram->programid }}>{{ $collegeprogram->programtitle }}</option>
+                        @foreach($departmentprograms as $departmentprogram){
+                            <option value={{ $departmentprogram->programid }}>{{ $departmentprogram->programtitle }}</option>
                         }
                         @endforeach
                     </select>

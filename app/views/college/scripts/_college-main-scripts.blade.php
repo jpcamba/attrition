@@ -14,8 +14,9 @@
      ykeys: ['studentcount'],
      labels: ['Students'],
      hideHover: 'auto',
-     resize: true
-    });
+     resize: true,
+     parseTime: false
+ });
 
 
 </script>

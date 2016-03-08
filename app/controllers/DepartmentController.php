@@ -1,6 +1,6 @@
 <?php
 
-class CollegeController extends \BaseController {
+class DepartmentController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -10,63 +10,55 @@ class CollegeController extends \BaseController {
 	 public function index()
  	{
 		$departmentlist = Department::whereHas('programs', function($q){
-							$q->whereNotIn('programid', array(62, 66, 38, 22));
+    						$q->whereNotIn('programid', array(62, 66, 38, 22));
 							$q->where('degreelevel', 'U');
 						})->get();
 
-		$collegelist = [];
-		foreach($departmentlist as $department){
-			array_push($collegelist, $department->college);
-		}
-		$collegelist = array_unique($collegelist);
 
  		//Averaage students per program
- 		$collegeAveArray = [];
- 		foreach($collegelist as $college){
- 			$collStudents = round($college->getAveStudents(), 2);
-			$collegeAveArray[$college->unitname] = $collStudents;
+ 		$departmentAveArray = [];
+ 		foreach($departmentlist as $department){
+ 			$collStudents = round($department->getAveStudents(), 2);
+			$departmentAveArray[$department->unitname] = $collStudents;
  		}
 
  		//return page
- 		return View::make('college.college',
- 		['collegelist' => $collegelist,
- 		 'collegeAveArray' => $collegeAveArray
+ 		return View::make('department.department',
+ 		['departmentlist' => $departmentlist,
+ 		 'departmentAveArray' => $departmentAveArray
  		]);
 
  	}
 
-	public function showSpecificCollege(){
-	    $collegeIDInput = Input::get('college-dropdown');
-	    $college = College::find($collegeIDInput);
-		$collegedepartments = $college->departments()->whereHas('programs', function($q){
-							$q->whereNotIn('programid', array(62, 66, 38, 22));
-							$q->where('degreelevel', 'U');
-						})->get();
+	public function showSpecificDepartment(){
+	    $departmentIDInput = Input::get('department-dropdown');
+	    $department = Department::find($departmentIDInput);
+		$departmentprograms = $department->programs()->where('degreelevel', 'U')->whereNotIn('programid', array(62, 66, 38, 22))->get();
 
 	    //ave students per year and ave difference
 	    $yearsArray = Year::all();
 	    $yearlyStudentAverage = [];
 	    $yearlySemDifference = [];
-		$collegeDepartmentsAverage = [];
+		$departmentProgramsAverage = [];
 	    foreach($yearsArray as $yearData){
-	        $aveStudents =  round($college->getYearlyAveStudents($yearData->year), 2);
+	        $aveStudents = round($department->getYearlyAveStudents($yearData->year), 2);
 	        if($aveStudents > 1){
 	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
 	        }
-	        $semDiff = $college->getYearlySemDifference($yearData->year);
+	        $semDiff = $department->getYearlySemDifference($yearData->year);
 	        $yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
-		foreach($collegedepartments as $collegedepartment){
-			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+		foreach($departmentprograms as $departmentprogram){
+			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
 		}
 
-	    return View::make('college.college-specific',
-	    ['college' => $college,
+	    return View::make('department.department-specific',
+	    ['department' => $department,
 	     'yearlyStudentAverage' => $yearlyStudentAverage,
 	     'yearlySemDifference' => $yearlySemDifference,
-		 'collegedepartments' => $collegedepartments,
-		 'collegeDepartmentsAverage' => $collegeDepartmentsAverage
+		 'departmentprograms' => $departmentprograms,
+		 'departmentProgramsAverage' => $departmentProgramsAverage
 	    ]);
 	}
 
