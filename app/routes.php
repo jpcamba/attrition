@@ -38,6 +38,13 @@ Route::group(array('prefix' => 'college'), function () {
 	Route::post('/view_college', 'CollegeController@showSpecificCollege');
 });
 
+//Department
+Route::resource('department', 'DepartmentController');
+Route::group(array('prefix' => 'department'), function () {
+	Route::get('/', 'DepartmentController@index');
+	Route::post('/view_department', 'DepartmentController@showSpecificDepartment');
+});
+
 
 
 

@@ -21,13 +21,13 @@ class CampusController extends \BaseController {
 		'yearlySemDifference' => $yearlySemDifference,
 		//'studenttermsArray' => $studenttermsArray
 		'aveYearsOfStay' => $aveYearsOfStay,
-		//'students' => $students
+		//'students' => $students,
 		'aveAttrition' => $aveAttrition,
 		'batchAttrition' => $batchAttrition
 		]);
 	}
 
-	//Get total attrition
+	//Get total average attrition
 	public function getAveAttrition() {
 		$sumAttrition = 0;
 		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];

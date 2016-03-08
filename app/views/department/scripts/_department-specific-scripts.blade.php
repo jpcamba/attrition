@@ -1,6 +1,6 @@
 <script>
-//college
-/*   //random colors for graphs
+//department
+    //random colors for graphs
     function randomColors() {
       // 30 random hues with step of 12 degrees
       var color = "#";
@@ -14,26 +14,26 @@
     for(var x = 0; x < 27; x++){
         var color = randomColors();
         randomColorsArray.push(color);
-    }*/
+    }
 
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
     var yearlySemDifference = {{ json_encode($yearlySemDifference) }};
-    var collegeDepartmentsAverage = {{ json_encode($collegeDepartmentsAverage) }};
+    var departmentProgramsAverage = {{ json_encode($departmentProgramsAverage) }};
     var averageData = [];
     var semDifference = [];
-    var collegeDepartments = [];
+    var departmentPrograms = [];
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
         semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
     }
 
-    for(var departmentKey in collegeDepartmentsAverage){
-        collegeDepartments.push({department: departmentKey, studentcount: collegeDepartmentsAverage[departmentKey]});
+    for(var programKey in departmentProgramsAverage){
+        departmentPrograms.push({program: programKey, studentcount: departmentProgramsAverage[programKey]});
     }
 
     new Morris.Area({
-     element: 'college-yearly-number-students',
+     element: 'department-yearly-number-students',
      data: averageData,
      xkey: 'year',
      ykeys: ['studentcount'],
@@ -44,7 +44,7 @@
     });
 
     new Morris.Line({
-     element: 'college-yearly-sem-difference',
+     element: 'department-yearly-sem-difference',
      data: semDifference,
      xkey: 'year',
      ykeys: ['studentdifference'],
@@ -56,14 +56,15 @@
     });
 
     new Morris.Bar({
-     element: 'collegedepartments-ave-number-students',
-     data: collegeDepartments,
-     xkey: 'department',
+     element: 'departmentprograms-ave-number-students',
+     data: departmentPrograms,
+     xkey: 'program',
      ykeys: ['studentcount'],
      labels: ['Students'],
      hideHover: 'auto',
      resize: true,
      parseTime: false
     });
+
 
 </script>
