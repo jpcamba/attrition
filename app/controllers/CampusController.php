@@ -14,6 +14,8 @@ class CampusController extends \BaseController {
 		$aveYearsOfStay = $this->getAverageYears();
 		$aveAttrition = $this->getAveAttrition();
 		$batchAttrition = $this->getBatchAttrition();
+		$aveDropouts = $this->getAveDropouts();
+		$batchDropouts = $this->getBatchDropouts();
 
 		//return page
 		return View::make('campus.campus',
@@ -21,25 +23,25 @@ class CampusController extends \BaseController {
 		'yearlySemDifference' => $yearlySemDifference,
 		//'studenttermsArray' => $studenttermsArray
 		'aveYearsOfStay' => $aveYearsOfStay,
-		//'students' => $students,
+		//'students' => $students
 		'aveAttrition' => $aveAttrition,
-		'batchAttrition' => $batchAttrition
+		'batchAttrition' => $batchAttrition,
+		'aveDropouts' => $aveDropouts,
+		'batchDropouts' => $batchDropouts
 		]);
 	}
 
-	//Get total average attrition
+	//Get average attrition
 	public function getAveAttrition() {
 		$sumAttrition = 0;
-		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
+		$batches = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009];
 		$batchAttrs = $this->getBatchAttrition();
 
 		foreach ($batches as $batch) {
-			$sumAttrition = $sumAttrition + count(Studentdropout::getBatchDropouts($batch));
+			$sumAttrition = $sumAttrition + $batchAttrs[$batch];
 		}
 
-		$totalStudents = count(DB::table('studentterms')->select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>', 200000000)->where('studentterms.studentid', '<', 201000000)->get());
-
-		$aveAttrition = round(($sumAttrition / $totalStudents) * 100, 2);
+		$aveAttrition = round($sumAttrition / 10, 2);
 		return $aveAttrition;
 	}
 
@@ -49,14 +51,39 @@ class CampusController extends \BaseController {
 		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
 
 		foreach ($batches as $batch) {
-			$batchEnd = $batch + 100000;
-			$allBatchDropouts = Studentdropout::getBatchDropouts($batch);
-			$allBatchStudents = DB::table('studentterms')->select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>', $batch)->where('studentterms.studentid', '<', $batchEnd)->get();
+			$allBatchDropouts = Studentdropout::getBatchDropoutsCount($batch);
+			$allBatchStudents = Studentterm::getBatchStudentsCount($batch);
 
-			$batchAttrition[$batch / 100000] = round((count($allBatchDropouts) / count($allBatchStudents)) * 100, 2);
+			$batchAttrition[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
 		}
 
 		return $batchAttrition;
+	}
+
+	//Get average number of dropouts
+	public function getAveDropouts() {
+		$sumDropouts = 0;
+		$batches = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009];
+		$batchDropouts = $this->getBatchDropouts();
+
+		foreach ($batches as $batch) {
+			$sumDropouts = $sumDropouts + $batchDropouts[$batch];
+		}
+
+		$aveAttrition = round($sumDropouts / 10, 0);
+		return $aveAttrition;
+	}
+
+	//Get batch number of dropouts
+	public function getBatchDropouts() {
+		$batchDropouts = [];
+		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
+
+		foreach ($batches as $batch) {
+			$batchDropouts[$batch / 100000] = Studentdropout::getBatchDropoutsCount($batch);
+		}
+
+		return $batchDropouts;		
 	}
 
 	//Get average number of students per year
@@ -91,7 +118,7 @@ class CampusController extends \BaseController {
 			2. get number of years of each student by dividing number of terms by 3
 			3. get average of step 2 (accdng to a site, sum/count is faster than avg command)
 		*/
-		$numberOfYearsPerStudent = DB::table('studentterms')->join('programs', 'programs.programid', '=', 'studentterms.programid')->select(DB::raw('COUNT(*)/3 as numYears'))->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->groupBy('studentid')->get();
+		$numberOfYearsPerStudent = Studentterm::getNumberofYears();
 		$numberOfStudents = count($numberOfYearsPerStudent);
 
 		$totalYears = 0;

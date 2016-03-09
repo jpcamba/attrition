@@ -1,7 +1,6 @@
 <script>
 //campus
-
-    //Total Attrition Rate
+    //Average Attrition Rate
     $('#campus-average-attrition').empty();
     $('#campus-average-attrition').append({{json_encode($aveAttrition)}} + '%');
 
@@ -18,7 +17,29 @@
         data: batchAttrition,
         xkey: 'batch',
         ykeys: ['attritionrate'],
-        labels: ['Students'],
+        labels: ['Attrition Rate'],
+        hideHover: 'auto',
+        resize: true
+    });
+
+    //Average Dropouts
+    $('#campus-average-dropouts').empty();
+    $('#campus-average-dropouts').append({{json_encode($aveDropouts)}});
+
+    //Batch Dropouts
+    var batchDropoutsRaw = {{json_encode($batchDropouts)}};
+    var batchDropouts = [];
+
+    for (var batchKey in batchDropoutsRaw) {
+        batchDropouts.push({batch: batchKey, dropouts: batchDropoutsRaw[batchKey]});
+    }
+
+    new Morris.Line({
+        element: 'campus-batch-dropouts',
+        data: batchDropouts,
+        xkey: 'batch',
+        ykeys: ['dropouts'],
+        labels: ['Dropouts'],
         hideHover: 'auto',
         resize: true
     });

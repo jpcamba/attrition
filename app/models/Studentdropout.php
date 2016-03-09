@@ -12,15 +12,21 @@ class Studentdropout extends Eloquent {
     public function programs() {
         return $this->belongsTo('Program', 'programid');
     }
-
-    //Get total dropouts
-    /*public function scopeGetTotalDropouts($query) {
-    	return $query->select('studentid')->get();
-    }*/
+    
+    //Get total students
+    public static function getTotalDropoutsCount() {
+        return Studentdropout::select('studentid')->count();
+    }
 
     //Get batch students
-    public function scopeGetBatchDropouts($query, $batch) {
+    public static function getBatchDropouts($batch) {
         $batchEnd = $batch + 100000;
-        return $query->select('studentid')->groupBy('studentid')->orderBy('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->groupBy('studentid')->orderBy('studentid')->get();
+    }
+
+    //Get count of batch students
+    public static function getBatchDropoutsCount($batch) {
+        $batchEnd = $batch + 100000;
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->count();
     }
 }
