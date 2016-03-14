@@ -1,3 +1,16 @@
+<!-- Disclaimer for Applied Physics -->
+@if($program->programid === 117)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    The first batch of BS Applied Physics students started in 2011. However, the data for this study is only up to 2013. The rates provided in this page were taken by observing batches 2011 and 2012 and whether they dropped out or shifted out within 1-2 years in the program.
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="row">
     <div class="col-md-6">
         <div class="panel panel-default">

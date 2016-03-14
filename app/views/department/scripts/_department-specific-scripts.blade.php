@@ -1,6 +1,5 @@
 <script>
 //department
-
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
     //var yearlySemDifference = {{-- json_encode($yearlySemDifference) --}};
     var departmentProgramsAverage = {{ json_encode($departmentProgramsAverage) }};

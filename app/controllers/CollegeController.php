@@ -25,12 +25,15 @@ class CollegeController extends \BaseController {
  		foreach($collegelist as $college){
  			$collStudents = round($college->getAveStudents(), 2);
 			$collegeAveArray[$college->unitname] = $collStudents;
+			$collAttrition = $college->getAveAttrition();
+			$collegeAveAttritionArray[$college->unitname] = $collAttrition;
  		}
 
  		//return page
  		return View::make('college.college',
  		['collegelist' => $collegelist,
- 		 'collegeAveArray' => $collegeAveArray
+ 		 'collegeAveArray' => $collegeAveArray,
+		 'collegeAveAttritionArray' => $collegeAveAttritionArray
  		]);
 
  	}
@@ -46,27 +49,36 @@ class CollegeController extends \BaseController {
 	    //ave students per year and ave difference
 	    $yearsArray = Year::all();
 	    $yearlyStudentAverage = [];
-	    $yearlySemDifference = [];
+	    //$yearlySemDifference = [];
 		$collegeDepartmentsAverage = [];
 	    foreach($yearsArray as $yearData){
 	        $aveStudents =  round($college->getYearlyAveStudents($yearData->year), 2);
 	        if($aveStudents > 1){
 	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
 	        }
-	        $semDiff = $college->getYearlySemDifference($yearData->year);
-	        $yearlySemDifference[$yearData->year] = $semDiff;
+	        //$semDiff = $college->getYearlySemDifference($yearData->year);
+	        //$yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
 			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
 		}
 
+		$aveAttrition = $college->getAveAttrition();
+		$batchAttrition = $college->getBatchAttrition();
+		$aveShiftRate = $college->getAveShiftRate();
+		$departmentsAttrition = $college->getDepartmentsAveBatchAttrition();
+
 	    return View::make('college.college-specific',
 	    ['college' => $college,
 	     'yearlyStudentAverage' => $yearlyStudentAverage,
-	     'yearlySemDifference' => $yearlySemDifference,
+	     //'yearlySemDifference' => $yearlySemDifference,
 		 'collegedepartments' => $collegedepartments,
-		 'collegeDepartmentsAverage' => $collegeDepartmentsAverage
+		 'collegeDepartmentsAverage' => $collegeDepartmentsAverage,
+		 'aveAttrition' => $aveAttrition,
+		 'batchAttrition' => $batchAttrition,
+		 'aveShiftRate' => $aveShiftRate,
+		 'departmentsAttrition' => $departmentsAttrition
 	    ]);
 	}
 
