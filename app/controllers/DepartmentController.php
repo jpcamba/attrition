@@ -17,15 +17,19 @@ class DepartmentController extends \BaseController {
 
  		//Averaage students per program
  		$departmentAveArray = [];
+		$departmentAveAttritionArray = [];
  		foreach($departmentlist as $department){
  			$collStudents = round($department->getAveStudents(), 2);
 			$departmentAveArray[$department->unitname] = $collStudents;
+			$deptAttrition = $department->getAveAttrition();
+			$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
  		}
 
  		//return page
  		return View::make('department.department',
  		['departmentlist' => $departmentlist,
- 		 'departmentAveArray' => $departmentAveArray
+ 		 'departmentAveArray' => $departmentAveArray,
+		 'departmentAveAttritionArray' => $departmentAveAttritionArray
  		]);
 
  	}
@@ -38,27 +42,36 @@ class DepartmentController extends \BaseController {
 	    //ave students per year and ave difference
 	    $yearsArray = Year::all();
 	    $yearlyStudentAverage = [];
-	    $yearlySemDifference = [];
+	    //$yearlySemDifference = [];
 		$departmentProgramsAverage = [];
 	    foreach($yearsArray as $yearData){
 	        $aveStudents = round($department->getYearlyAveStudents($yearData->year), 2);
 	        if($aveStudents > 1){
 	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
 	        }
-	        $semDiff = $department->getYearlySemDifference($yearData->year);
-	        $yearlySemDifference[$yearData->year] = $semDiff;
+	        //$semDiff = $department->getYearlySemDifference($yearData->year);
+	        //$yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
 		foreach($departmentprograms as $departmentprogram){
 			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
 		}
 
+		$aveAttrition = $department->getAveAttrition();
+		$batchAttrition = $department->getBatchAttrition();
+		$aveShiftRate = $department->getAveShiftRate();
+		$programsAttrition = $department->getProgramsAveBatchAttrition();
+
 	    return View::make('department.department-specific',
 	    ['department' => $department,
 	     'yearlyStudentAverage' => $yearlyStudentAverage,
-	     'yearlySemDifference' => $yearlySemDifference,
+	     //'yearlySemDifference' => $yearlySemDifference,
 		 'departmentprograms' => $departmentprograms,
-		 'departmentProgramsAverage' => $departmentProgramsAverage
+		 'departmentProgramsAverage' => $departmentProgramsAverage,
+		 'aveAttrition' => $aveAttrition,
+		 'batchAttrition' => $batchAttrition,
+		 'aveShiftRate' => $aveShiftRate,
+		 'programsAttrition' => $programsAttrition
 	    ]);
 	}
 
