@@ -10,6 +10,19 @@ class Student extends Eloquent {
         return $this->hasMany('Studentterm', 'studentid');
     }
 
+    public function studentshifts(){
+        return $this->hasMany('Studentshift', 'studentid');
+    }
+
+    public function studentdropout(){
+        return $this->hasOne('Studentdropout', 'studentid');
+    }
+
+    /*public function programs()
+    {
+        return $this->hasManyThrough('Program', 'Studentterm', 'studentid', 'programid');
+    }
+    */
     public function getYearsinUniv(){
         $records = $this->studentterms()->count();
         $years = ($records)/3;

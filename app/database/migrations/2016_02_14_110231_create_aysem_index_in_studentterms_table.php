@@ -30,6 +30,7 @@ class CreateAysemIndexInStudenttermsTable extends Migration {
 		Schema::table('studentterms', function(Blueprint $table)
 		{
 			//
+			$table->dropIndex('aysem_index');
 		});
 	}
 

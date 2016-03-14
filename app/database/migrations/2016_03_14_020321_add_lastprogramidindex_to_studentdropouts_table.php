@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddIndexToUnitsTable extends Migration {
+class AddLastprogramidindexToStudentdropoutsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,10 +12,10 @@ class AddIndexToUnitsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('units', function(Blueprint $table)
+		Schema::table('studentdropouts', function(Blueprint $table)
 		{
 			//
-			$table->index('parentunitid', 'parentunitid_index');
+			$table->index('lastprogramid', 'lastprogramid_index');
 		});
 	}
 
@@ -26,10 +26,10 @@ class AddIndexToUnitsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('units', function(Blueprint $table)
+		Schema::table('studentdropouts', function(Blueprint $table)
 		{
 			//
-			$table->dropIndex('parentunitid_index');
+			$table->dropIndex('lastprogramid_index');
 		});
 	}
 

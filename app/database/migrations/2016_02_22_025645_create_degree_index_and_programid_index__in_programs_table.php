@@ -17,7 +17,7 @@ class CreateDegreeIndexAndProgramidIndexInProgramsTable extends Migration {
 		Schema::table('programs', function(Blueprint $table)
 		{
 			//
-			//$table->index('degree', 'degree_index');
+			$table->index('degree', 'degree_index');
 		});
 	}
 
@@ -31,6 +31,7 @@ class CreateDegreeIndexAndProgramidIndexInProgramsTable extends Migration {
 		Schema::table('programs', function(Blueprint $table)
 		{
 			//
+			$table->dropIndex('degree_index');
 		});
 	}
 

@@ -30,6 +30,8 @@ class CreateStudentidIndexAndProgramidIndexInStudenttermsTable extends Migration
 		Schema::table('studentterms', function(Blueprint $table)
 		{
 			//
+			$table->dropIndex('studentid_index');
+			$table->dropIndex('programid_index');
 		});
 	}
 

@@ -13,6 +13,10 @@ class Studentdropout extends Eloquent {
         return $this->belongsTo('Program', 'programid');
     }
 
+    public function students() {
+        return $this->belongsTo('Student', 'studentid');
+    }
+
     //Get total dropouts
     /*public function scopeGetTotalDropouts($query) {
     	return $query->select('studentid')->get();
