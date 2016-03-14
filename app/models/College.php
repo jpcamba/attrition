@@ -104,4 +104,138 @@ class College extends Eloquent {
         return $semDifference;
     }
 
+    public function getAveAttrition(){
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $batchAttrs = $this->getBatchAttrition();
+        $sumAttrition = 0;
+        $noData = 0;
+		foreach ($batches as $batch) {
+            $attrData = $batchAttrs[$batch / 100000];
+            if($attrData != -1){
+                $sumAttrition = $sumAttrition + ($batchAttrs[$batch / 100000]/100);
+            }
+            else{
+                $noData++;
+            }
+		}
+		$aveAttrition = round(($sumAttrition / (count($batches) - $noData)) * 100, 2);
+		return $aveAttrition;
+    }
+
+    public function getBatchAttrition(){
+        $batchAttrition = [];
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+
+        foreach ($batches as $batch) {
+            $batchEnd = $batch + 100000;
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
+			$allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
+
+            if($allBatchStudents != 0){
+                $batchAttrition[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+            }
+            else{
+                $batchAttrition[$batch / 100000] = -1;
+            }
+		}
+
+		return $batchAttrition;
+    }
+
+    public function getAveShiftRate() {
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $batchShifts = $this->getBatchShiftRate();
+        $sumShiftRate = 0;
+        $noData = 0;
+		foreach ($batches as $batch) {
+            $attrData = $batchShifts[$batch / 100000];
+            if($attrData != -1){
+			     $sumShiftRate = $sumShiftRate +  ($batchShifts[$batch / 100000]/100);
+            }
+            else{
+                $noData++;
+            }
+		}
+
+		$aveShiftRate = round(($sumShiftRate / (count($batches) - $noData)) * 100, 2);
+		return $aveShiftRate;
+    }
+
+    public function getBatchShiftRate(){
+        $batchShiftRate = [];
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 22))->where('degreelevel', 'U')->lists('programid'); //include programid = 38 (doctor of medicine)
+
+        foreach ($batches as $batch) {
+            $batchEnd = $batch + 100000;
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
+            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->whereRaw('program1years < CAST(numyears AS numeric)')->groupBy('studentid')->get());
+			//$allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->groupBy('studentid')->get());
+
+            if($allBatchStudents != 0){
+                $batchShiftRate[$batch / 100000] = round(($allBatchShiftees / $allBatchStudents) * 100, 2);
+            }
+            else{
+                $batchShiftRate[$batch / 100000] = -1;
+            }
+		}
+
+		return $batchShiftRate;
+    }
+
+    public function getDepartmentsAveBatchAttrition(){
+        $departmentsAveAttrition = [];
+        $departments = $this->departments()->whereHas('programs', function($q){
+							$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->where('degreelevel', 'U');
+						})->get();
+
+        foreach($departments as $department){
+            $departmentsAveAttrition[$department->unitname] = $department->getAveAttrition();
+        }
+
+        return $departmentsAveAttrition;
+    }
+
 }

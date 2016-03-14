@@ -6,6 +6,9 @@
             <div class="panel-body">
                 <div id="departmentprograms-total-dropouts"></div>
                 <center>
+                    <h4>Average batch attrition for each program under the department</h4>
+                    <div id="departmentprograms-ave-batch-attrition"></div>
+                    <br/><br/>
                     <h4>Average number of students per year for each program under the department</h4>
                     <div id="departmentprograms-ave-number-students"></div>
                 </center>

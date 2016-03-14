@@ -205,6 +205,22 @@ class Program extends Eloquent {
 		return $batchAttrition;
 	}
 
+    public function getSpecificBatchAttrition($batch){ //format is year
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
+        $allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('lastprogramid', $this->programid)->count();
+
+        if($allBatchStudents === 0){
+            $batchAttrition = -1; //no students of this batch for this program
+        }
+        else{
+            $batchAttrition = round(($allBatchDropouts/$allBatchStudents)*100, 2);
+        }
+        return $batchAttrition;
+    }
+
     //Get total average shift rate
 	public function getAveShiftRate() {
         //To get batches of program whithin 2000-2009 + max(2011 for the case of applied physics)
@@ -229,8 +245,8 @@ class Program extends Eloquent {
 			$sumShiftRate = $sumShiftRate +  ($batchShifts[$batch / 100000]/100);
 		}
 
-		$aveAttrition = round(($sumShiftRate / (count($batches))) * 100, 2);
-		return $aveAttrition;
+		$aveShiftRate = round(($sumShiftRate / (count($batches))) * 100, 2);
+		return $aveShiftRate;
 	}
 
 	//Get batch shift rate
@@ -263,6 +279,22 @@ class Program extends Eloquent {
 
 		return $batchShiftRate;
 	}
+
+    public function getSpecificBatchShiftRate($batch){//format of batch is year ex. 2012
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
+        $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->groupBy('studentid')->get());
+
+        if($allBatchStudents === 0){
+            $batchShiftRate = -1; //no students of this batch for this program
+        }
+        else{
+            $batchShiftRate = round(($allBatchShiftees/$allBatchStudents)*100, 2);
+        }
+        return $batchShiftRate;
+    }
 
     public function getDivision(){
         $division = [];
