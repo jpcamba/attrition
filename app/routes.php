@@ -27,15 +27,17 @@ Route::group(array('prefix' => 'program'), function () {
 	Route::post('/view_program', 'ProgramController@showSpecificProgram');
 });
 
-/*Route::group(array('prefix' => 'campus'), function () {
-	Route::get('/', 'HomeController@showCampus');
-});*/
-
 //College
 Route::resource('college', 'CollegeController');
 Route::group(array('prefix' => 'college'), function () {
 	Route::get('/', 'CollegeController@index');
 	Route::post('/view_college', 'CollegeController@showSpecificCollege');
+});
+
+//Correlation
+Route::resource('correlation', 'CorrelationController');
+Route::group(array('prefix' => 'correlation'), function() {
+	Route::get('/', 'CorrelationController@index');
 });
 
 //Department
@@ -44,8 +46,6 @@ Route::group(array('prefix' => 'department'), function () {
 	Route::get('/', 'DepartmentController@index');
 	Route::post('/view_department', 'DepartmentController@showSpecificDepartment');
 });
-
-
 
 
 //Prediction
