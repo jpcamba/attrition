@@ -74,7 +74,8 @@
 
     new Morris.Donut({
       element: 'program-division',
-      data: divisionArray
+      data: divisionArray,
+      colors: ['#8FBFE0', '#0BC9CD', '#1D8A99']
     });
 
 </script>

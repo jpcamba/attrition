@@ -17,7 +17,8 @@
      ykeys: ['attritionrate'],
      labels: ['Attrition Rate'],
      hideHover: 'auto',
-     resize: true
+     resize: true,
+     barColors: ['#0BC9CD']
     });
 
     var programsAve = new Morris.Bar({

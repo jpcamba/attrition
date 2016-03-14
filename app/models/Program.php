@@ -31,7 +31,7 @@ class Program extends Eloquent {
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
-            $max = $this->revisionyear;
+            $max = 2013;
         }
         else{
             $max = 2013 - $this->numyears;
@@ -58,7 +58,7 @@ class Program extends Eloquent {
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
-            $max = $this->revisionyear;
+            $max = 2013;
         }
         else{
             $max = 2013 - $this->numyears;
@@ -82,9 +82,9 @@ class Program extends Eloquent {
     }
 
     public function getAveYearsOfStay(){
-        //By default, max batch will be 2009. If revision year is greater than 2009, max batch will be revision year.
+        //By default, max batch will be 2009. If revision year is greater than 2009, max batch will be revisionyear.
         if($this->revisionyear > 2009){
-            $max = 201200000;
+            $max = ($this->revisionyear)*100000;
         }
         else{
             $max = ((2013 - $this->numyears) + 1)*100000;
@@ -270,7 +270,7 @@ class Program extends Eloquent {
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
-            $max = $this->revisionyear;
+            $max = 2012;
         }
         else{
             $max = 2013 - $this->numyears;
