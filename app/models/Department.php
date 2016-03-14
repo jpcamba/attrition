@@ -80,7 +80,7 @@ class Department extends Eloquent {
             $q->where('degreelevel', 'U');
         })->count();
 
-        $semDifference = $studentsSem1 - $studentsSem2;
+        $semDifference = $studentsSem2 - $studentsSem1;
         return $semDifference;
     }
 

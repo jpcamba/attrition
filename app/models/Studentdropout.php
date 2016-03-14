@@ -12,7 +12,11 @@ class Studentdropout extends Eloquent {
     public function programs() {
         return $this->belongsTo('Program', 'programid');
     }
-    
+
+    public function students() {
+        return $this->belongsTo('Student', 'studentid');
+    }
+
     //Get total students
     public static function getTotalDropoutsCount() {
         return Studentdropout::select('studentid')->count();

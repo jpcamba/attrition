@@ -37,7 +37,7 @@ class Year extends Eloquent {
         $studentsSem1 = $this->countSem1Students();
         $studentsSem2 = $this->countSem2Students();
 
-        $semDifference = $studentsSem1 - $studentsSem2;
+        $semDifference = $studentsSem2 - $studentsSem1;
         return $semDifference;
     }
 

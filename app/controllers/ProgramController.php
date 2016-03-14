@@ -14,15 +14,18 @@ class ProgramController extends \BaseController {
 
 		//Averaage students per program
 		$programAveArray = [];
+		$programBatchAttrition = [];
 		foreach($programlist as $program){
 			$progStudents = round($program->getAveStudents(), 2);
 			$programAveArray[$program->programtitle] = $progStudents;
+			$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
 		}
 
 		//return page
 		return View::make('program.program',
 		['programlist' => $programlist,
-		 'programAveArray' => $programAveArray
+		 'programAveArray' => $programAveArray,
+		 'programBatchAttrition' => $programBatchAttrition
 		]);
 
 	}
@@ -44,11 +47,30 @@ class ProgramController extends \BaseController {
 			$yearlySemDifference[$yearData->year] = $semDiff;
 		}
 
+		$aveYearsOfStay = $program->getAveYearsOfStay();
+		$aveYearsBeforeDropout = $program->getAveYearsBeforeDropout();
+		$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
+		$aveAttrition = $program->getAveAttrition();
+		$batchAttrition = $program->getBatchAttrition();
+		$aveShiftRate = $program->getAveShiftRate();
+		$batchShiftRate = $program->getBatchShiftRate();
+		$division = $program->getDivision();
+
+
 		return View::make('program.program-specific',
 		['program' => $program,
+		 'aveYearsOfStay' => $aveYearsOfStay,
 		 'yearlyStudentAverage' => $yearlyStudentAverage,
-		 'yearlySemDifference' => $yearlySemDifference
+		 'yearlySemDifference' => $yearlySemDifference,
+		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
+		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
+		 'aveAttrition' => $aveAttrition,
+		 'batchAttrition' => $batchAttrition,
+		 'aveShiftRate' => $aveShiftRate,
+		 'batchShiftRate' => $batchShiftRate,
+		 'division' => $division
 		]);
+
 	}
 
 

@@ -1,11 +1,25 @@
 <script>
 //program
     var programAveArray = {{ json_encode($programAveArray) }};
+    var programBatchAttrition = {{ json_encode($programBatchAttrition) }};
     var averageData = [];
+    var attritionData = [];
 
     for(var programTitle in programAveArray){
         averageData.push({program: programTitle, studentcount: programAveArray[programTitle]});
+        attritionData.push({program: programTitle, attritionrate: programBatchAttrition[programTitle]});
     }
+
+    var programsAttrition = new Morris.Bar({
+     element: 'program-ave-batch-attrition',
+     data: attritionData,
+     xkey: 'program',
+     ykeys: ['attritionrate'],
+     labels: ['Attrition Rate'],
+     hideHover: 'auto',
+     resize: true,
+     barColors: ['#0BC9CD']
+    });
 
     var programsAve = new Morris.Bar({
      element: 'program-ave-number-students',

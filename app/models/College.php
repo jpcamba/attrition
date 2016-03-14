@@ -100,7 +100,7 @@ class College extends Eloquent {
             $studentsSem2 = $studentsSem2 + $deptStudentsSem2;
         }
 
-        $semDifference = $studentsSem1 - $studentsSem2;
+        $semDifference = $studentsSem2 - $studentsSem1;
         return $semDifference;
     }
 
