@@ -154,7 +154,6 @@ class Program extends Eloquent {
             $studentids = DB::table('studentterms')->select('studentid')->where('programid', $this->programid)->where('studentid', '>', $min)->where('studentid', '<', $max)->whereNotIn('studentid', $dropouts)->whereNotIn('studentid', $shiftees)->groupBy('studentid')->lists('studentid');
 
             $totalYears = 0;
-            $hoshidoscums = 0;
             foreach($studentids as $studentid){
                 //check if student shifted to Doctor of Medicine
                 //if he shifted to DoM and if his number of years in (intarmed + DoM) is greater than 4 then let his stay be 4
@@ -166,7 +165,6 @@ class Program extends Eloquent {
                         $domYears = 2;
                     }
                     if($dom->program1years == 1){  //Some students shift to DoM after 1 year of Intarmed
-                        $hoshidoscums++;
                         if($dom->program2years >= 3){
                             $domYears = 3;
                         }
@@ -179,7 +177,6 @@ class Program extends Eloquent {
                 }
                 $totalYears = $totalYears + $numYears;
             }
-            var_dump($hoshidoscums." Hoshido Scuuuuums!");
             $aveYearsOfStay = round($totalYears/count($studentids), 2);
         }
         else{
