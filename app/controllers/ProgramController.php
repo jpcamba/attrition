@@ -55,6 +55,7 @@ class ProgramController extends \BaseController {
 		$aveShiftRate = $program->getAveShiftRate();
 		$batchShiftRate = $program->getBatchShiftRate();
 		$division = $program->getDivision();
+		$numYears = $program->getNumYears();
 
 
 		return View::make('program.program-specific',
@@ -68,7 +69,8 @@ class ProgramController extends \BaseController {
 		 'batchAttrition' => $batchAttrition,
 		 'aveShiftRate' => $aveShiftRate,
 		 'batchShiftRate' => $batchShiftRate,
-		 'division' => $division
+		 'division' => $division,
+		 'numYears' => $numYears
 		]);
 
 	}

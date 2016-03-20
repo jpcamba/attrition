@@ -17,7 +17,7 @@
             <div class="panel-body">
                 <center>
                     <h4>Years Required</h4>
-                    <div id="program-required-years"><h2>{{ $program->numyears }}</h2></div>
+                    <div id="program-required-years"><h2>{{ $numYears }}</h2></div>
                 </center>
             </div>
         </div>
