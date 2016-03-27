@@ -16,9 +16,12 @@ class ProgramController extends \BaseController {
 		$programAveArray = [];
 		$programBatchAttrition = [];
 		foreach($programlist as $program){
-			$progStudents = round($program->getAveStudents(), 2);
-			$programAveArray[$program->programtitle] = $progStudents;
-			$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
+			//$progStudents = round($program->getAveStudents(), 2);
+			//$programAveArray[$program->programtitle] = $progStudents;
+			//$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
+
+			$programAveArray[$program->programtitle] = $program->ave_students;
+			$programBatchAttrition[$program->programtitle] = $program->ave_batch_attrition;
 		}
 
 		//return page
@@ -47,15 +50,28 @@ class ProgramController extends \BaseController {
 			$yearlySemDifference[$yearData->year] = $semDiff;
 		}
 
-		$aveYearsOfStay = $program->getAveYearsOfStay();
-		$aveYearsBeforeDropout = $program->getAveYearsBeforeDropout();
-		$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
-		$aveAttrition = $program->getAveAttrition();
+		//$aveYearsOfStay = $program->getAveYearsOfStay();
+		//$aveYearsBeforeDropout = $program->getAveYearsBeforeDropout();
+		//$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
+		//$aveAttrition = $program->getAveAttrition();
+		//$aveShiftRate = $program->getAveShiftRate();
+		$aveYearsOfStay = $program->years_stay;
+		$aveYearsBeforeDropout = $program->years_before_drop;
+		$aveYearsBeforeShifting = $program->years_before_shift;
+		$aveAttrition = $program->ave_batch_attrition;
+		$aveShiftRate = $program->ave_batch_shift;
+
 		$batchAttrition = $program->getBatchAttrition();
-		$aveShiftRate = $program->getAveShiftRate();
 		$batchShiftRate = $program->getBatchShiftRate();
 		$division = $program->getDivision();
 		$numYears = $program->getNumYears();
+
+		$employmentCount = $program->getEmploymentCount();
+		$gradeCount = $program->getGradeCount();
+		$shiftGradeCount = $program->getShiftGradeCount();
+		//$stbracketCount = $program->getSTBracketCount();
+		//$regionCount = $program->getRegionCount();
+		//$shiftBracketCount = $program->getShiftSTBracketCount();
 
 
 		return View::make('program.program-specific',
@@ -70,7 +86,13 @@ class ProgramController extends \BaseController {
 		 'aveShiftRate' => $aveShiftRate,
 		 'batchShiftRate' => $batchShiftRate,
 		 'division' => $division,
-		 'numYears' => $numYears
+		 'numYears' => $numYears,
+		 'employmentCount' => $employmentCount,
+		 'gradeCount' => $gradeCount,
+		 'shiftGradeCount' => $shiftGradeCount
+		 //'stbracketCount' => $stbracketCount,
+		 //'regionCount' => $regionCount,
+		 //'shiftBracketCount' => $shiftBracketCount
 		]);
 
 	}

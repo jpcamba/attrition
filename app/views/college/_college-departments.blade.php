@@ -6,7 +6,7 @@
             <div class="panel-body">
                 <div id="collegedepartments-total-dropouts"></div>
                 <center>
-                    <h4>Average batch attrition for each program under the department</h4>
+                    <h4>Average batch attrition for each department under the college</h4>
                     <div id="collegedepartments-ave-batch-attrition"></div>
                     <br/><br/>
                     <h4>Average number of students per year for each department under the college</h4>

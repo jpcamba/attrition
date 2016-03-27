@@ -13,8 +13,39 @@ class CorrelationController extends \BaseController {
 		$correlation['stbracket'] = $this->corrStbracket($attrition);
 		$correlation['region'] = $this->corrRegion($attrition);
 
+		//up manila
+		$campus = Campus::where('unitid', 2)->first();
+		//$employmentCount = $campus->getEmploymentCount();
+		//$gradeCount = $campus->getGradeCount();
+		//$stbracketCount = $campus->getSTBracketCount();
+		//$regionCount = $campus->getRegionCount();
 
-		return View::make('correlation.correlation', compact('correlation'));
+		/*//employment
+		$employmentCount['Employed'] = Unitfactor::where('type', 'Employed')->first()->value;
+		$employmentCount['Unemployed'] = Unitfactor::where('type', 'Unemployed')->first()->value;
+		//grade
+		$gradeCount['Passed'] = Unitfactor::where('type', 'Passed')->first()->value;
+		$gradeCount['Failed'] = Unitfactor::where('type', 'Failed')->first()->value;
+		//region
+		$regionCount['Luzon'] = Unitfactor::where('type', 'Luzon')->first()->value;
+		$regionCount['Visayas'] = Unitfactor::where('type', 'Visayas')->first()->value;
+		$regionCount['Mindanao'] = Unitfactor::where('type', 'Mindanao')->first()->value;
+		//stbracket
+		$stbracketCount['A'] = Unitfactor::where('type', 'A')->first()->value;
+		$stbracketCount['B'] = Unitfactor::where('type', 'B')->first()->value;
+		$stbracketCount['C'] = Unitfactor::where('type', 'C')->first()->value;
+		$stbracketCount['D'] = Unitfactor::where('type', 'D')->first()->value;
+		$stbracketCount['E1'] = Unitfactor::where('type', 'E1')->first()->value;
+		$stbracketCount['E2'] = Unitfactor::where('type', 'E2')->first()->value;*/
+
+
+		return View::make('correlation.correlation', compact(
+			'correlation' 
+			//'employmentCount',
+			//'gradeCount',
+			//'stbracketCount',
+			//'regionCount'
+		));
 	}
 
 	//Total Attrition Rate

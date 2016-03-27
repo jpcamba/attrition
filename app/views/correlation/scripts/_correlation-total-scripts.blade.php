@@ -13,4 +13,64 @@
   		colors: ['#8FBFE0', '#0BC9CD', '#1D8A99', '#7C77B9']
 	});
 
+    /*var employmentCount = {{-- json_encode($employmentCount) --}};
+    var gradeCount = {{-- json_encode($gradeCount) --}};
+    var stbracketCount = {{-- json_encode($stbracketCount) --}};
+    var regionCount = {{-- json_encode($regionCount) --}};
+    var employmentArray = [];
+    var gradeArray = [];
+    var regionArray = [];
+    var stbracketArray = [];*/
+
+    /*for(var employmentKey in employmentCount){
+        employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
+    }
+
+    for(var gradeKey in gradeCount){
+        gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
+    }
+
+    for(var stbracketKey in stbracketCount){
+        stbracketArray.push({label: stbracketKey, value: stbracketCount[stbracketKey]});
+    }
+
+    for(var regionKey in regionCount){
+        regionArray.push({label: regionKey, value: regionCount[regionKey]});
+    }
+
+    new Morris.Donut({
+     element: 'campus-employment',
+     data: employmentArray,
+     colors: ['#114B5F', '#028090']
+   });
+
+   new Morris.Donut({
+     element: 'campus-grade',
+     data: gradeArray,
+     colors: ['#114B5F', '#028090']
+   });
+
+   new Morris.Bar({
+    element: 'campus-stbracket',
+    data: stbracketArray,
+    xkey: 'label',
+    ykeys: ['value'],
+    labels: ['Students'],
+    hideHover: 'auto',
+    resize: true,
+    barColors: ['#07BEB8', '#3DCCC7', '#68D8D6', '#9CEAEF', '#C4FFF9']
+   });
+
+   new Morris.Bar({
+    element: 'campus-region',
+    data: regionArray,
+    xkey: 'label',
+    ykeys: ['value'],
+    labels: ['Students'],
+    hideHover: 'auto',
+    resize: true,
+    barColors: ['#07BEB8', '#3DCCC7', '#68D8D6']
+});*/
+
+
 </script>

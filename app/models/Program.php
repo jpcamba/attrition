@@ -5,6 +5,8 @@ class Program extends Eloquent {
     protected $table = 'programs';
     protected $primaryKey = 'programid';
 
+    public $timestamps = false;
+
     public function studentterms(){
         return $this->hasMany('Studentterm', 'programid');
     }
@@ -24,7 +26,9 @@ class Program extends Eloquent {
             }
             $numberOfStudents = $numberOfStudents + $studentCount;
         }
-        return $totalAve = $numberOfStudents/(count($years)-$zeroStudents);
+        $totalAve = $numberOfStudents/(count($years)-$zeroStudents);
+
+        return round($totalAve, 2);
     }
 
     public function getYearlyAveStudents($year){
@@ -230,14 +234,14 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $shiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', '=', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->get();
-            $domShiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereNotIn('studentid', $dropouts)->where('program1id', '=', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->get();
+            //$domShiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereNotIn('studentid', $dropouts)->where('program1id', '=', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->get();
 
-            foreach($domShiftees as $domShiftee) {
-                array_push($shiftees, $domShiftee);
-            }
+            //foreach($domShiftees as $domShiftee) {
+            //    array_push($shiftees, $domShiftee);
+            //}
         }
         else{
-            $shiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', '=', $this->programid)->where('program1years', '<', $this->numyears)->get();
+            $shiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', '=', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->get();
         }
 
         $sumYears = 0;
@@ -255,12 +259,8 @@ class Program extends Eloquent {
 
     public function getAveYearsBeforeDropout(){
         //Get list of dropouts who has this program as their last program before dropping out.
-        if($this->programid == 28){
-            $dropouts = DB::table('studentdropouts')->where('programid', $this->programid)->lists('studentid');
-        }
-        else{
-            $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
-        }
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
 
         $sumYears = 0;
         foreach($dropouts as $dropout){
@@ -419,17 +419,19 @@ class Program extends Eloquent {
             }
         }
 
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
 		foreach ($batches as $batch) {
 			$batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
 
             if($this->programid == 28){
-                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->groupBy('studentid')->get());
-                $domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-                $allBatchShiftees = $allBatchShiftees + $domShiftees;
+                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+                //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
+                //$allBatchShiftees = $allBatchShiftees + $domShiftees;
             }
             else{
-                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->groupBy('studentid')->get());
+                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
             }
 
 			$batchShiftRate[$batch / 100000] = round(($allBatchShiftees/$allBatchStudents)*100, 2);
@@ -444,13 +446,15 @@ class Program extends Eloquent {
 
         $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
 
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
         if($this->programid == 28){
-            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->groupBy('studentid')->get());
-            $domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-            $allBatchShiftees = $allBatchShiftees + $domShiftees;
+            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
+            //$allBatchShiftees = $allBatchShiftees + $domShiftees;
         }
         else{
-            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->groupBy('studentid')->get());
+            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
         }
 
         if($allBatchStudents == 0){
@@ -492,14 +496,16 @@ class Program extends Eloquent {
         $allStudents = count(Studentterm::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('programid', $this->programid)->groupBy('studentid')->get());
         $allDropouts = Studentdropout::where('lastprogramid', $this->programid)->where('studentid', '>', $min)->where('studentid', '<', $max)->count();
 
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
         if($this->programid == 28){
-            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->groupBy('studentid')->get());
-            $domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-            $allShiftees = $allShiftees + $domShiftees;
+            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
+            //$allShiftees = $allShiftees + $domShiftees;
             $normal = $allStudents - ($allDropouts + $allShiftees);
         }
         else{
-            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->groupBy('studentid')->get());
+            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
             $normal = $allStudents - ($allDropouts + $allShiftees);
         }
 
@@ -521,6 +527,559 @@ class Program extends Eloquent {
         else{
             return $this->numyears;
         }
+    }
+
+    public function getEmploymentCount(){
+        $employmentArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->get();
+        $dropoutCount = count($programDropouts);
+        $employed = 0;
+        $unemployed = 0;
+
+        foreach($programDropouts as $dropout){
+            $results = Studentterm::getOneEmployment($dropout->studentid);
+            $duplicate = 0;
+            foreach ($results as $result) {
+                if ($result->employment === 'F' || $result->employment === 'P'){
+                    if($duplicate === 0){
+                        $employed++;
+                        $duplicate++;
+                    }
+                }
+            }
+        }
+
+        $unemployed = $dropoutCount - $employed;
+        $employmentArray['Employed'] = round(($employed/$dropoutCount)*100, 2);
+        $employmentArray['Unemployed'] = round(($unemployed/$dropoutCount)*100, 2);
+
+        return $employmentArray;
+    }
+
+    public function getSpecificBatchEmploymentCount($batch){ //format is year
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $employmentArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
+        $dropoutCount = count($programDropouts);
+        $employed = 0;
+        $unemployed = 0;
+
+        foreach($programDropouts as $dropout){
+            $results = Studentterm::getOneEmployment($dropout->studentid);
+            $duplicate = 0;
+            foreach ($results as $result) {
+                if ($result->employment === 'F' || $result->employment === 'P'){
+                    if($duplicate === 0){
+                        $employed++;
+                        $duplicate++;
+                    }
+                }
+            }
+        }
+
+        $unemployed = $dropoutCount - $employed;
+        $employmentArray['Employed'] = round(($employed/$dropoutCount)*100, 2);
+        $employmentArray['Unemployed'] = round(($unemployed/$dropoutCount)*100, 2);
+        return $employmentArray;
+    }
+
+    public function getGradeCount(){
+        $gradeArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->get();
+        $dropoutCount = count($programDropouts);
+        $passed = 0;
+        $failed = 0;
+
+        foreach($programDropouts as $dropout){
+            $aveGWA = Studentterm::select('gwa')->where('studentid', $dropout->studentid)->where('programid', $this->programid)->where('gwa', '>', 0)->whereRaw('CAST(aysem AS TEXT) NOT LIKE \'%3\'')->avg('gwa');
+
+            if($aveGWA > 3.00){
+                $failed++;
+            }
+        }
+
+        $passed = $dropoutCount - $failed;
+        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        return $gradeArray;
+    }
+
+    public function getSpecificBatchGradeCount($batch){
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $gradeArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
+        $dropoutCount = count($programDropouts);
+        $passed = 0;
+        $failed = 0;
+
+        foreach($programDropouts as $dropout){
+            $aveGWA = Studentterm::select('gwa')->where('studentid', $dropout->studentid)->where('programid', $this->programid)->where('gwa', '>', 0)->whereRaw('CAST(aysem AS TEXT) NOT LIKE \'%3\'')->avg('gwa');
+
+            if($aveGWA > 3.00){
+                $failed++;
+            }
+        }
+
+        $passed = $dropoutCount - $failed;
+        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        return $gradeArray;
+    }
+
+    public function getSTBracketCount(){
+        $bracketArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->get();
+        $bracketA = 0;
+        $bracketB = 0;
+        $bracketC = 0;
+        $bracketD = 0;
+        $bracketE1 = 0;
+        $bracketE2 = 0;
+        $unstated = 0;
+
+        foreach($programDropouts as $dropout){
+            $results = Studentterm::select('stfapbracket')->where('studentid', $dropout->studentid)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
+            $results = array_unique($results);
+            foreach ($results as $result){
+                switch($result){
+                    case "A":
+                        $bracketA++;
+                        break;
+                    case "B":
+                        $bracketB++;
+                        break;
+                    case "C":
+                        $bracketC++;
+                        break;
+                    case "D":
+                        $bracketD++;
+                        break;
+                    case "E1":
+                        $bracketE1++;
+                        break;
+                    case "E2":
+                        $bracketE2++;
+                        break;
+                    default:
+                        $unstated++;
+                }
+            }
+        }
+
+        $bracketArray["A"] = $bracketA;
+        $bracketArray["B"] = $bracketB;
+        $bracketArray["C"] = $bracketC;
+        $bracketArray["D"] = $bracketD;
+        $bracketArray["E1"] = $bracketE1;
+        $bracketArray["E2"] = $bracketE2;
+        $bracketArray["Unstated"] = $unstated;
+        return $bracketArray;
+    }
+
+    public function getSpecificBatchSTBracketCount($batch){
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $bracketArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
+        $bracketA = 0;
+        $bracketB = 0;
+        $bracketC = 0;
+        $bracketD = 0;
+        $bracketE1 = 0;
+        $bracketE2 = 0;
+        $unstated = 0;
+
+        foreach($programDropouts as $dropout){
+            $results = Studentterm::select('stfapbracket')->where('studentid', $dropout->studentid)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
+            $results = array_unique($results);
+            foreach ($results as $result){
+                switch($result){
+                    case "A":
+                        $bracketA++;
+                        break;
+                    case "B":
+                        $bracketB++;
+                        break;
+                    case "C":
+                        $bracketC++;
+                        break;
+                    case "D":
+                        $bracketD++;
+                        break;
+                    case "E1":
+                        $bracketE1++;
+                        break;
+                    case "E2":
+                        $bracketE2++;
+                        break;
+                    default:
+                        $unstated++;
+                }
+            }
+        }
+
+        $bracketArray["A"] = $bracketA;
+        $bracketArray["B"] = $bracketB;
+        $bracketArray["C"] = $bracketC;
+        $bracketArray["D"] = $bracketD;
+        $bracketArray["E1"] = $bracketE1;
+        $bracketArray["E2"] = $bracketE2;
+        $bracketArray["Unstated"] = $unstated;
+        return $bracketArray;
+    }
+
+    public function getRegionCount(){
+        $regionArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->get();
+        $luzon = 0;
+        $visayas = 0;
+        $mindanao = 0;
+        $unstated = 0;
+
+        $luzonRegions = ['NCR', 'I', 'CAR', 'II', 'III', 'IV', 'V'];
+        $visayasRegions = ['VI', 'VII', 'VIII'];
+        $mindanaoRegions = ['IX', 'X', 'XI', 'XII', 'XIII', 'ARMM'];
+
+        foreach($programDropouts as $dropout){
+            $regionHolder = Studentaddress::getOneRegion($dropout->studentid);
+            if (count($regionHolder) > 0) {
+                if (in_array($regionHolder->regioncode, $luzonRegions)){
+                    $luzon++;
+                }
+                elseif(in_array($regionHolder->regioncode, $visayasRegions)){
+                    $visayas++;
+                }
+                elseif(in_array($regionHolder->regioncode, $mindanaoRegions)){
+                    $mindanao++;
+                }
+            }
+            else{
+                $unstated++;
+            }
+        }
+
+        $regionArray['Luzon'] = $luzon;
+        $regionArray['Visayas'] = $visayas;
+        $regionArray['Mindanao'] = $mindanao;
+        $regionArray['Unstated'] = $unstated;
+
+        return $regionArray;
+    }
+
+    public function getSpecificBatchRegionCount($batch){
+        $batch = $batch*100000;
+        $batchEnd = $batch + 100000;
+
+        $regionArray = [];
+        $programDropouts = Studentdropout::where('lastprogramid', $this->programid)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
+        $luzon = 0;
+        $visayas = 0;
+        $mindanao = 0;
+        $unstated = 0;
+
+        $luzonRegions = ['NCR', 'I', 'CAR', 'II', 'III', 'IV', 'V'];
+        $visayasRegions = ['VI', 'VII', 'VIII'];
+        $mindanaoRegions = ['IX', 'X', 'XI', 'XII', 'XIII', 'ARMM'];
+
+        foreach($programDropouts as $dropout){
+            $regionHolder = Studentaddress::getOneRegion($dropout->studentid);
+            if (count($regionHolder) > 0) {
+                if (in_array($regionHolder->regioncode, $luzonRegions)){
+                    $luzon++;
+                }
+                elseif(in_array($regionHolder->regioncode, $visayasRegions)){
+                    $visayas++;
+                }
+                elseif(in_array($regionHolder->regioncode, $mindanaoRegions)){
+                    $mindanao++;
+                }
+            }
+            else{
+                $unstated++;
+            }
+        }
+
+        $regionArray['Luzon'] = $luzon;
+        $regionArray['Visayas'] = $visayas;
+        $regionArray['Mindanao'] = $mindanao;
+        $regionArray['Unstated'] = $unstated;
+
+        return $regionArray;
+    }
+
+    public function getShiftGradeCount(){
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $min = min($batches);
+        $max = max($batches) + 100000;
+
+        $gradeArray = [];
+
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
+        if($this->programid == 28){
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
+
+            //foreach($domShiftees as $shiftee){
+            //    array_push($programShiftees, $shiftee);
+            //}
+
+        }
+        else{
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+        }
+
+        $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
+        $passed = 0;
+        $failed = 0;
+
+        foreach($programShiftees as $shifteeid){
+            $aveGWA = Studentterm::select('gwa')->where('studentid', $shifteeid)->where('programid', $this->programid)->where('gwa', '>', 0)->whereRaw('CAST(aysem AS TEXT) NOT LIKE \'%3\'')->avg('gwa');
+
+            if($aveGWA > 3.00){
+                $failed++;
+            }
+        }
+
+        if($shifteeCount != 0){
+            $passed = $shifteeCount - $failed;
+            $gradeArray['Passed'] = round(($passed/$shifteeCount)*100, 2);
+            $gradeArray['Failed'] = round(($failed/$shifteeCount)*100, 2);
+        }
+        else{
+            $gradeArray['No Shiftees'] = 0;
+        }
+
+        return $gradeArray;
+    }
+
+    public function getSpecificBatchShiftGradeCount($batch){
+        $min = $batch*100000;
+        $max = $batch + 100000;
+
+        $gradeArray = [];
+
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
+        if($this->programid == 28){
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
+            //foreach($domShiftees as $shiftee){
+            //    array_push($programShiftees, $shiftee);
+            //}
+
+        }
+        else{
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+        }
+
+        $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
+        $passed = 0;
+        $failed = 0;
+
+        foreach($programShiftees as $shifteeid){
+            $aveGWA = Studentterm::select('gwa')->where('studentid', $shifteeid)->where('programid', $this->programid)->where('gwa', '>', 0)->whereRaw('CAST(aysem AS TEXT) NOT LIKE \'%3\'')->avg('gwa');
+
+            if($aveGWA > 3.00){
+                $failed++;
+            }
+        }
+
+        if($shifteeCount != 0){
+            $passed = $shifteeCount - $failed;
+            $gradeArray['Passed'] = round(($passed/$shifteeCount)*100, 2);
+            $gradeArray['Failed'] = round(($failed/$shifteeCount)*100, 2);
+        }
+        else{
+            $gradeArray['No Shiftees'] = 0;;
+        }
+
+        return $gradeArray;
+    }
+
+    public function getShiftSTBracketCount(){
+        $bracketArray = [];
+
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $min = min($batches);
+        $max = max($batches) + 100000;
+
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
+        if($this->programid == 28){
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->where('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
+            //foreach($domShiftees as $shiftee){
+            //    array_push($programShiftees, $shiftee);
+            //}
+
+        }
+        else{
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+        }
+
+        $programShiftees = array_unique($programShiftees);
+
+        $bracketA = 0;
+        $bracketB = 0;
+        $bracketC = 0;
+        $bracketD = 0;
+        $bracketE1 = 0;
+        $bracketE2 = 0;
+        $unstated = 0;
+
+        foreach($programShiftees as $shiftee){
+            $results = Studentterm::select('stfapbracket')->where('studentid', $shiftee)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
+            $results = array_unique($results);
+            foreach ($results as $result){
+                switch($result){
+                    case "A":
+                        $bracketA++;
+                        break;
+                    case "B":
+                        $bracketB++;
+                        break;
+                    case "C":
+                        $bracketC++;
+                        break;
+                    case "D":
+                        $bracketD++;
+                        break;
+                    case "E1":
+                        $bracketE1++;
+                        break;
+                    case "E2":
+                        $bracketE2++;
+                        break;
+                    default:
+                        $unstated++;
+                }
+            }
+        }
+
+        $bracketArray["A"] = $bracketA;
+        $bracketArray["B"] = $bracketB;
+        $bracketArray["C"] = $bracketC;
+        $bracketArray["D"] = $bracketD;
+        $bracketArray["E1"] = $bracketE1;
+        $bracketArray["E2"] = $bracketE2;
+        $bracketArray["Unstated"] = $unstated;
+        return $bracketArray;
+    }
+
+    public function getShiftSpecificBatchSTBracketCount($batch){
+        $min = $batch*100000;
+        $max = $batch + 100000;
+
+        $bracketArray = [];
+
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
+        if($this->programid == 28){
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)>whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
+            //foreach($domShiftees as $shiftee){
+            //    array_push($programShiftees, $shiftee);
+            //}
+
+        }
+        else{
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)>whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+        }
+
+        $programShiftees = array_unique($programShiftees);
+
+        $bracketA = 0;
+        $bracketB = 0;
+        $bracketC = 0;
+        $bracketD = 0;
+        $bracketE1 = 0;
+        $bracketE2 = 0;
+        $unstated = 0;
+
+        foreach($programShiftees as $shiftee){
+            $results = Studentterm::select('stfapbracket')->where('studentid', $shiftee)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
+            foreach ($results as $result){
+                switch($result){
+                    case "A":
+                        $bracketA++;
+                        break;
+                    case "B":
+                        $bracketB++;
+                        break;
+                    case "C":
+                        $bracketC++;
+                        break;
+                    case "D":
+                        $bracketD++;
+                        break;
+                    case "E1":
+                        $bracketE1++;
+                        break;
+                    case "E2":
+                        $bracketE2++;
+                        break;
+                    default:
+                        $unstated++;
+                }
+            }
+        }
+
+        $bracketArray["A"] = $bracketA;
+        $bracketArray["B"] = $bracketB;
+        $bracketArray["C"] = $bracketC;
+        $bracketArray["D"] = $bracketD;
+        $bracketArray["E1"] = $bracketE1;
+        $bracketArray["E2"] = $bracketE2;
+        $bracketArray["Unstated"] = $unstated;
+        return $bracketArray;
     }
 
 

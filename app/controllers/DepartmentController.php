@@ -19,10 +19,13 @@ class DepartmentController extends \BaseController {
  		$departmentAveArray = [];
 		$departmentAveAttritionArray = [];
  		foreach($departmentlist as $department){
- 			$collStudents = round($department->getAveStudents(), 2);
-			$departmentAveArray[$department->unitname] = $collStudents;
-			$deptAttrition = $department->getAveAttrition();
-			$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
+ 			//$collStudents = round($department->getAveStudents(), 2);
+			//$departmentAveArray[$department->unitname] = $collStudents;
+			//$deptAttrition = $department->getAveAttrition();
+			//$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
+
+			$departmentAveArray[$department->unitname] = $department->ave_students;
+			$departmentAveAttritionArray[$department->unitname] = $department->ave_batch_attrition;
  		}
 
  		//return page
@@ -54,13 +57,26 @@ class DepartmentController extends \BaseController {
 	    }
 
 		foreach($departmentprograms as $departmentprogram){
-			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
+			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
+			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
 		}
 
-		$aveAttrition = $department->getAveAttrition();
+
 		$batchAttrition = $department->getBatchAttrition();
-		$aveShiftRate = $department->getAveShiftRate();
 		$programsAttrition = $department->getProgramsAveBatchAttrition();
+		//$aveAttrition = $department->getAveAttrition();
+		//$aveShiftRate = $department->getAveShiftRate();
+		$aveYearsBeforeDropout = $department->getAveYearsBeforeDropout();
+		$aveYearsBeforeShifting = $department->getAveYearsBeforeShifting();
+		$aveAttrition = $department->ave_batch_attrition;
+		$aveShiftRate = $department->ave_batch_shift;
+
+		$employmentCount = $department->getEmploymentCount();
+		$gradeCount = $department->getGradeCount();
+		$shiftGradeCount = $department->getShiftGradeCount();
+		//$stbracketCount = $department->getSTBracketCount();
+		//$regionCount = $department->getRegionCount();
+		//$shiftBracketCount = $department->getShiftSTBracketCount();
 
 	    return View::make('department.department-specific',
 	    ['department' => $department,
@@ -71,7 +87,15 @@ class DepartmentController extends \BaseController {
 		 'aveAttrition' => $aveAttrition,
 		 'batchAttrition' => $batchAttrition,
 		 'aveShiftRate' => $aveShiftRate,
-		 'programsAttrition' => $programsAttrition
+		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
+		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
+		 'programsAttrition' => $programsAttrition,
+		 'employmentCount' => $employmentCount,
+		 'gradeCount' => $gradeCount,
+		 'shiftGradeCount' => $shiftGradeCount
+		 //'stbracketCount' => $stbracketCount,
+		 //'regionCount' => $regionCount,
+		 //'shiftBracketCount' => $shiftBracketCount
 	    ]);
 	}
 

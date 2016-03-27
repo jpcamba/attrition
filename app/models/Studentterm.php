@@ -21,7 +21,9 @@ class Studentterm extends Eloquent {
 
     //Get number of years per student
     public static function getNumberOfYears() {
-        return Studentterm::join('programs', 'programs.programid', '=', 'studentterms.programid')->select(DB::raw('COUNT(*)/3 as numYears'))->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->groupBy('studentid')->get();
+        $dropouts = DB::table('studentdropouts')->lists('studentid');
+
+        return Studentterm::join('programs', 'programs.programid', '=', 'studentterms.programid')->select(DB::raw('COUNT(*)/3 as numYears'))->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->where('studentterms.studentid', '>=', 200000000)->where('studentterms.studentid', '<', 201000000)->get();
     }
 
     //Get count of all students

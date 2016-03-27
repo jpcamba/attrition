@@ -21,7 +21,7 @@
 </head>
 <body>
     <div id="wrapper">
-        <nav class="navbar navbar-default top-navbar" role="navigation" style="height: 50px;width: 1349px;">
+        <nav class="navbar navbar-default top-navbar" role="navigation" style="height: 50px;width: 100vw;">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/" style="padding-bottom: 0px; padding-top: 10px; padding-right: 0px; width: 500px; height: 50px; padding-left: 10px;"><strong>UP Undergraduate Attrition Study</strong></a>
             </div>
