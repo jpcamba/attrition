@@ -74,9 +74,9 @@ class DepartmentController extends \BaseController {
 		$employmentCount = $department->getEmploymentCount();
 		$gradeCount = $department->getGradeCount();
 		$shiftGradeCount = $department->getShiftGradeCount();
-		//$stbracketCount = $department->getSTBracketCount();
+		$stbracketCount = $department->getSTBracketCount();
 		//$regionCount = $department->getRegionCount();
-		//$shiftBracketCount = $department->getShiftSTBracketCount();
+		$shiftBracketCount = $department->getShiftSTBracketCount();
 
 	    return View::make('department.department-specific',
 	    ['department' => $department,
@@ -92,10 +92,10 @@ class DepartmentController extends \BaseController {
 		 'programsAttrition' => $programsAttrition,
 		 'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
-		 'shiftGradeCount' => $shiftGradeCount
-		 //'stbracketCount' => $stbracketCount,
+		 'shiftGradeCount' => $shiftGradeCount,
+		 'stbracketCount' => $stbracketCount,
 		 //'regionCount' => $regionCount,
-		 //'shiftBracketCount' => $shiftBracketCount
+		 'shiftBracketCount' => $shiftBracketCount
 	    ]);
 	}
 

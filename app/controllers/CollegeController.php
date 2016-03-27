@@ -80,9 +80,9 @@ class CollegeController extends \BaseController {
 		$employmentCount = $college->getEmploymentCount();
 		$gradeCount = $college->getGradeCount();
 		$shiftGradeCount = $college->getShiftGradeCount();
-		//$stbracketCount = $college->getSTBracketCount();
+		$stbracketCount = $college->getSTBracketCount();
 		//$regionCount = $college->getRegionCount();
-		//$shiftBracketCount = $college->getShiftSTBracketCount();
+		$shiftBracketCount = $college->getShiftSTBracketCount();
 
 	    return View::make('college.college-specific',
 	    ['college' => $college,
@@ -98,10 +98,10 @@ class CollegeController extends \BaseController {
 		 'departmentsAttrition' => $departmentsAttrition,
 		 'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
-		 'shiftGradeCount' => $shiftGradeCount
-		 //'stbracketCount' => $stbracketCount,
+		 'shiftGradeCount' => $shiftGradeCount,
+		 'stbracketCount' => $stbracketCount,
 		 //'regionCount' => $regionCount,
-		 //'shiftBracketCount' => $shiftBracketCount
+		 'shiftBracketCount' => $shiftBracketCount
 	    ]);
 	}
 

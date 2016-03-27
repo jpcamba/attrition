@@ -8,9 +8,9 @@
     var employmentCount = {{ json_encode($employmentCount) }};
     var gradeCount = {{ json_encode($gradeCount) }};
     var shiftGradeCount = {{ json_encode($shiftGradeCount) }};
-    //var stbracketCount = {{-- json_encode($stbracketCount) --}};
+    var stbracketCount = {{ json_encode($stbracketCount) }};
     //var regionCount = {{-- json_encode($regionCount) --}};
-    //var shiftBracketCount = {{-- json_encode($shiftBracketCount) --}};
+    var shiftBracketCount = {{ json_encode($shiftBracketCount) }};
 
     var averageData = [];
     //var semDifference = [];
@@ -21,8 +21,8 @@
     var gradeArray = [];
     var shiftGradeArray = [];
     //var regionArray = [];
-    //var stbracketArray = [];
-    //var shiftBracketArray = [];
+    var stbracketArray = [];
+    var shiftBracketArray = [];
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
@@ -50,17 +50,17 @@
         shiftGradeArray.push({label: shiftGradeKey, value: shiftGradeCount[shiftGradeKey]});
     }
 
-    /*for(var stbracketKey in stbracketCount){
+    for(var stbracketKey in stbracketCount){
         stbracketArray.push({label: stbracketKey, value: stbracketCount[stbracketKey]});
     }
 
-    for(var regionKey in regionCount){
+    /*for(var regionKey in regionCount){
         regionArray.push({label: regionKey, value: regionCount[regionKey]});
-    }
+    }*/
 
     for(var shiftBracketKey in shiftBracketCount){
         shiftBracketArray.push({label: shiftBracketKey, value: shiftBracketCount[shiftBracketKey]});
-    }*/
+    }
 
     new Morris.Bar({
      element: 'department-ave-batch-attrition',
@@ -124,6 +124,18 @@
       element: 'department-shiftgrade',
       data: shiftGradeArray,
       colors: ['#07BEB8', '#9CEAEF']
+    });
+
+    new Morris.Donut({
+      element: 'department-stbracket',
+      data: stbracketArray,
+      colors: ['#114B5F', '#028090', '#07BEB8', '#9CEAEF', '#0B5351', '508991']
+    });
+
+    new Morris.Donut({
+      element: 'department-shiftbracket',
+      data: shiftBracketArray,
+      colors: ['#09BC8A', '#4FB286', '#3C896D', '#546D64', '#4D685A', '#40C9A2']
     });
 
     /*new Morris.Bar({

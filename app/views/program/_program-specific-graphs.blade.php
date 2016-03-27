@@ -137,8 +137,19 @@
                             <div id="program-grade"></div>
                         </div>
                         <div class="col-md-4">
+                            <h4>Percentage of STFAP Brackets of Dropouts</h4>
+                            <div id="program-stbracket"></div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
                             <h4>Percentage of Shiftees with Failing GWAs</h4>
                             <div id="program-shiftgrade"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Percentage of STFAP Brackets of Shiftees</h4>
+                            <div id="program-shiftbracket"></div>
                         </div>
                     </div>
                 </center>

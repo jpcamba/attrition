@@ -388,13 +388,14 @@ class College extends Eloquent {
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+        $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+        $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+        $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+        $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+        $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+        $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
         return $bracketArray;
     }
 
@@ -442,13 +443,14 @@ class College extends Eloquent {
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+        $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+        $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+        $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+        $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+        $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+        $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
         return $bracketArray;
     }
 
@@ -657,6 +659,7 @@ class College extends Eloquent {
         $programShiftees = DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
 
         $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
 
         $bracketA = 0;
         $bracketB = 0;
@@ -690,18 +693,24 @@ class College extends Eloquent {
                         $bracketE2++;
                         break;
                     default:
-                        $unstated++;
                 }
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        if($shifteeCount != 0){
+            $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+            $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+            $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+            $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+            $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+            $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+            $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
+        }
+        else{
+            $bracketArray["No Shiftees"] = 0;
+        }
+
         return $bracketArray;
     }
 
@@ -717,6 +726,7 @@ class College extends Eloquent {
         $programShiftees = DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get();
 
         $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
 
         $bracketA = 0;
         $bracketB = 0;
@@ -754,13 +764,20 @@ class College extends Eloquent {
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        if($shifteeCount != 0){
+            $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+            $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+            $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+            $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+            $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+            $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+            $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
+        }
+        else{
+            $bracketArray["No Shiftees"] = 0;
+        }
+
         return $bracketArray;
     }
 
