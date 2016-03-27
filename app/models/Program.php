@@ -646,22 +646,22 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -699,22 +699,22 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -980,22 +980,22 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -1048,22 +1048,22 @@ class Program extends Eloquent {
             $results = Studentterm::select('stfapbracket')->where('studentid', $shiftee)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:

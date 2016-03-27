@@ -139,7 +139,7 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $results = Studentterm::getOneEmployment($dropout->studentid);
             foreach ($results as $result) {
-                if ($result->employment === 'F' || $result->employment === 'P'){
+                if ((strpos($result->employment, 'F') !== false) || (strpos($result->employment, 'P') !== false)){
                     $employed++;
                     break;
                 }
@@ -167,7 +167,7 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $results = Studentterm::getOneEmployment($dropout->studentid);
             foreach ($results as $result) {
-                if ($result->employment === 'F' || $result->employment === 'P'){
+                if ((strpos($result->employment, 'F') !== false) || (strpos($result->employment, 'P') !== false)){
                     $employed++;
                     break;
                 }
@@ -242,24 +242,26 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $results = Studentterm::select('stfapbracket')->where('studentid', $dropout->studentid)->whereIn('programid', $programids)->groupBy('stfapbracket')->lists('stfapbracket');
             $results = array_unique($results);
+            //var_dump('Dropout: '. $dropout->studentid);
+            //var_dump($results);
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -298,22 +300,22 @@ class Campus extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case "A":
+                    case (strpos($result, 'A') !== false):
                         $bracketA++;
                         break;
-                    case "B":
+                    case (strpos($result, 'B') !== false):
                         $bracketB++;
                         break;
-                    case "C":
+                    case (strpos($result, 'C') !== false):
                         $bracketC++;
                         break;
-                    case "D":
+                    case (strpos($result, 'D') !== false):
                         $bracketD++;
                         break;
-                    case "E1":
+                    case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case "E2":
+                    case (strpos($result, 'E2') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -348,13 +350,14 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $regionHolder = Studentaddress::getOneRegion($dropout->studentid);
             if (count($regionHolder) > 0) {
-                if (in_array($regionHolder->regioncode, $luzonRegions)){
+                $regionCode = preg_replace('/\s+/', '', $regionHolder->regioncode);
+                if (in_array($regionCode, $luzonRegions)){
                     $luzon++;
                 }
-                elseif(in_array($regionHolder->regioncode, $visayasRegions)){
+                elseif(in_array($regionCode, $visayasRegions)){
                     $visayas++;
                 }
-                elseif(in_array($regionHolder->regioncode, $mindanaoRegions)){
+                elseif(in_array($regionCode, $mindanaoRegions)){
                     $mindanao++;
                 }
             }
@@ -390,13 +393,14 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $regionHolder = Studentaddress::getOneRegion($dropout->studentid);
             if (count($regionHolder) > 0) {
-                if (in_array($regionHolder->regioncode, $luzonRegions)){
+                $regionCode = preg_replace('/\s+/', '', $regionHolder->regioncode);
+                if (in_array($regionCode, $luzonRegions)){
                     $luzon++;
                 }
-                elseif(in_array($regionHolder->regioncode, $visayasRegions)){
+                elseif(in_array($regionCode, $visayasRegions)){
                     $visayas++;
                 }
-                elseif(in_array($regionHolder->regioncode, $mindanaoRegions)){
+                elseif(in_array($regionCode, $mindanaoRegions)){
                     $mindanao++;
                 }
             }
