@@ -13,36 +13,43 @@
   		colors: ['#8FBFE0', '#0BC9CD', '#1D8A99', '#7C77B9']
 	});
 
-    /*var employmentCount = {{-- json_encode($employmentCount) --}};
-    var gradeCount = {{-- json_encode($gradeCount) --}};
-    var stbracketCount = {{-- json_encode($stbracketCount) --}};
-    var regionCount = {{-- json_encode($regionCount) --}};
+    var employmentCount = {{ json_encode($employmentCount) }};
+    var stbracketCount = {{ json_encode($stbracketCount) }};
+    //var gradeCount = {{-- json_encode($gradeCount) --}};
+    //var regionCount = {{-- json_encode($regionCount) --}};
     var employmentArray = [];
-    var gradeArray = [];
-    var regionArray = [];
-    var stbracketArray = [];*/
+    //var gradeArray = [];
+    //var regionArray = [];
+    var stbracketArray = [];
 
-    /*for(var employmentKey in employmentCount){
+    for(var employmentKey in employmentCount){
         employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
-    }
-
-    for(var gradeKey in gradeCount){
-        gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
     }
 
     for(var stbracketKey in stbracketCount){
         stbracketArray.push({label: stbracketKey, value: stbracketCount[stbracketKey]});
     }
 
-    for(var regionKey in regionCount){
-        regionArray.push({label: regionKey, value: regionCount[regionKey]});
-    }
-
     new Morris.Donut({
      element: 'campus-employment',
      data: employmentArray,
      colors: ['#114B5F', '#028090']
-   });
+    });
+
+    new Morris.Donut({
+      element: 'campus-stbracket',
+      data: stbracketArray,
+      colors: ['#114B5F', '#028090', '#07BEB8', '#9CEAEF', '#0B5351', '508991']
+    });
+
+
+    /*for(var gradeKey in gradeCount){
+        gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
+    }
+
+    for(var regionKey in regionCount){
+        regionArray.push({label: regionKey, value: regionCount[regionKey]});
+    }
 
    new Morris.Donut({
      element: 'campus-grade',

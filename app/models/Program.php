@@ -665,18 +665,18 @@ class Program extends Eloquent {
                         $bracketE2++;
                         break;
                     default:
-                        $unstated++;
                 }
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+        $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+        $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+        $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+        $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+        $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+        $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
         return $bracketArray;
     }
 
@@ -718,18 +718,18 @@ class Program extends Eloquent {
                         $bracketE2++;
                         break;
                     default:
-                        $unstated++;
                 }
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+        $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+        $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+        $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+        $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+        $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+        $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
         return $bracketArray;
     }
 
@@ -954,7 +954,7 @@ class Program extends Eloquent {
         $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
 
         if($this->programid == 28){
-            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->where('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
             //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
             //foreach($domShiftees as $shiftee){
             //    array_push($programShiftees, $shiftee);
@@ -962,10 +962,11 @@ class Program extends Eloquent {
 
         }
         else{
-            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
+            $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
         }
 
         $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
 
         $bracketA = 0;
         $bracketB = 0;
@@ -999,18 +1000,24 @@ class Program extends Eloquent {
                         $bracketE2++;
                         break;
                     default:
-                        $unstated++;
                 }
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        if($shifteeCount != 0){
+            $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+            $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+            $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+            $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+            $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+            $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+            $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
+        }
+        else{
+            $bracketArray["No Shiftees"] = 0;
+        }
+
         return $bracketArray;
     }
 
@@ -1035,6 +1042,7 @@ class Program extends Eloquent {
         }
 
         $programShiftees = array_unique($programShiftees);
+        $shifteeCount = count($programShiftees);
 
         $bracketA = 0;
         $bracketB = 0;
@@ -1067,18 +1075,24 @@ class Program extends Eloquent {
                         $bracketE2++;
                         break;
                     default:
-                        $unstated++;
                 }
             }
         }
 
-        $bracketArray["A"] = $bracketA;
-        $bracketArray["B"] = $bracketB;
-        $bracketArray["C"] = $bracketC;
-        $bracketArray["D"] = $bracketD;
-        $bracketArray["E1"] = $bracketE1;
-        $bracketArray["E2"] = $bracketE2;
-        $bracketArray["Unstated"] = $unstated;
+        if($shifteeCount != 0){
+            $tagged = $bracketA + $bracketB + $bracketC + $bracketD + $bracketE1 + $bracketE2;
+
+            $bracketArray["A"] = round(($bracketA/$tagged)*100, 2);
+            $bracketArray["B"] = round(($bracketB/$tagged)*100, 2);
+            $bracketArray["C"] = round(($bracketC/$tagged)*100, 2);
+            $bracketArray["D"] = round(($bracketD/$tagged)*100, 2);
+            $bracketArray["E1"] = round(($bracketE1/$tagged)*100, 2);
+            $bracketArray["E2"] = round(($bracketE2/$tagged)*100, 2);
+        }
+        else{
+            $bracketArray["No Shiftees"] = 0;
+        }
+
         return $bracketArray;
     }
 

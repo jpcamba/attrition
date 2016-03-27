@@ -69,9 +69,9 @@ class ProgramController extends \BaseController {
 		$employmentCount = $program->getEmploymentCount();
 		$gradeCount = $program->getGradeCount();
 		$shiftGradeCount = $program->getShiftGradeCount();
-		//$stbracketCount = $program->getSTBracketCount();
+		$stbracketCount = $program->getSTBracketCount();
 		//$regionCount = $program->getRegionCount();
-		//$shiftBracketCount = $program->getShiftSTBracketCount();
+		$shiftBracketCount = $program->getShiftSTBracketCount();
 
 
 		return View::make('program.program-specific',
@@ -89,10 +89,10 @@ class ProgramController extends \BaseController {
 		 'numYears' => $numYears,
 		 'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
-		 'shiftGradeCount' => $shiftGradeCount
-		 //'stbracketCount' => $stbracketCount,
+		 'shiftGradeCount' => $shiftGradeCount,
+		 'stbracketCount' => $stbracketCount,
 		 //'regionCount' => $regionCount,
-		 //'shiftBracketCount' => $shiftBracketCount
+		 'shiftBracketCount' => $shiftBracketCount
 		]);
 
 	}

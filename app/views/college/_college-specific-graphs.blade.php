@@ -40,7 +40,7 @@
             <div class="panel-body">
                 <center>
                     <h4>Years Before Shifting Out</h4>
-                    Average years before shifting to another department
+                    Average years before shifting to another college
                     <div id="college-ave-years_shiftout"><h1>{{ $aveYearsBeforeShifting }} </h1></div><br/>
                 </center>
             </div>
@@ -90,7 +90,7 @@
             <div class="panel-heading"> Factors
             </div>
             <div class="panel-body">
-                <div id="college-factors"></div>
+                <div id="deparment-factors"></div>
                 <center>
                     <div class="row">
                         <div class="col-md-4">
@@ -102,8 +102,19 @@
                             <div id="college-grade"></div>
                         </div>
                         <div class="col-md-4">
+                            <h4>Percentage of STFAP Brackets of Dropouts</h4>
+                            <div id="college-stbracket"></div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
                             <h4>Percentage of Shiftees with Failing GWAs</h4>
                             <div id="college-shiftgrade"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Percentage of STFAP Brackets of Shiftees</h4>
+                            <div id="college-shiftbracket"></div>
                         </div>
                     </div>
                 </center>

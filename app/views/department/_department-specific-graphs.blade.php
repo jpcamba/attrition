@@ -88,7 +88,7 @@
             <div class="panel-heading"> Factors
             </div>
             <div class="panel-body">
-                <div id="department-factors"></div>
+                <div id="deparment-factors"></div>
                 <center>
                     <div class="row">
                         <div class="col-md-4">
@@ -100,8 +100,19 @@
                             <div id="department-grade"></div>
                         </div>
                         <div class="col-md-4">
+                            <h4>Percentage of STFAP Brackets of Dropouts</h4>
+                            <div id="department-stbracket"></div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-md-6">
                             <h4>Percentage of Shiftees with Failing GWAs</h4>
                             <div id="department-shiftgrade"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Percentage of STFAP Brackets of Shiftees</h4>
+                            <div id="department-shiftbracket"></div>
                         </div>
                     </div>
                 </center>

@@ -20,30 +20,42 @@ class CorrelationController extends \BaseController {
 		//$stbracketCount = $campus->getSTBracketCount();
 		//$regionCount = $campus->getRegionCount();
 
-		/*//employment
+		//employment
+		$employmentCount = [];
 		$employmentCount['Employed'] = Unitfactor::where('type', 'Employed')->first()->value;
 		$employmentCount['Unemployed'] = Unitfactor::where('type', 'Unemployed')->first()->value;
-		//grade
+		//stbracket
+		$stbracketCount = [];
+		$A = Unitfactor::where('type', 'A')->first()->value;
+		$B = Unitfactor::where('type', 'B')->first()->value;
+		$C = Unitfactor::where('type', 'C')->first()->value;
+		$D = Unitfactor::where('type', 'D')->first()->value;
+		$E1 = Unitfactor::where('type', 'E1')->first()->value;
+		$E2 = Unitfactor::where('type', 'E2')->first()->value;
+
+		$total = $A +$B +$C +$D + $E1 + $E2;
+
+		$stbracketCount['A'] = round(($A/$total)*100, 2);
+		$stbracketCount['B'] = round(($B/$total)*100, 2);
+		$stbracketCount['C'] = round(($C/$total)*100, 2);
+		$stbracketCount['D'] = round(($D/$total)*100, 2);
+		$stbracketCount['E1'] = round(($E1/$total)*100, 2);
+		$stbracketCount['E2'] = round(($E2/$total)*100, 2);
+
+		/*///grade
 		$gradeCount['Passed'] = Unitfactor::where('type', 'Passed')->first()->value;
 		$gradeCount['Failed'] = Unitfactor::where('type', 'Failed')->first()->value;
 		//region
 		$regionCount['Luzon'] = Unitfactor::where('type', 'Luzon')->first()->value;
 		$regionCount['Visayas'] = Unitfactor::where('type', 'Visayas')->first()->value;
 		$regionCount['Mindanao'] = Unitfactor::where('type', 'Mindanao')->first()->value;
-		//stbracket
-		$stbracketCount['A'] = Unitfactor::where('type', 'A')->first()->value;
-		$stbracketCount['B'] = Unitfactor::where('type', 'B')->first()->value;
-		$stbracketCount['C'] = Unitfactor::where('type', 'C')->first()->value;
-		$stbracketCount['D'] = Unitfactor::where('type', 'D')->first()->value;
-		$stbracketCount['E1'] = Unitfactor::where('type', 'E1')->first()->value;
-		$stbracketCount['E2'] = Unitfactor::where('type', 'E2')->first()->value;*/
-
+		*/
 
 		return View::make('correlation.correlation', compact(
-			'correlation' 
-			//'employmentCount',
+			'correlation',
+			'employmentCount',
 			//'gradeCount',
-			//'stbracketCount',
+			'stbracketCount'
 			//'regionCount'
 		));
 	}
