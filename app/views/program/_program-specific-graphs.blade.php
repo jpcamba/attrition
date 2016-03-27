@@ -92,7 +92,7 @@
                     <h4>Average Batch Shift Rate</h4>
                     <div id="program-ave-shift"><h1>{{ $aveShiftRate }} %</h1></div>
                     </br></br>
-                    <h4>Attrition Shift Rate per Batch</h4>
+                    <h4>Shift Rate per Batch</h4>
                     <div id="program-ave-shift-batch"></div>
                 </center>
             </div>
@@ -113,6 +113,34 @@
                     </br></br>
                     <h4>Difference between semesters per year</h4>
                     <div id="program-yearly-sem-difference"></div>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"> Factors
+            </div>
+            <div class="panel-body">
+                <div id="program-factors"></div>
+                <center>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4>Percentage of Employed Dropouts</h4>
+                            <div id="program-employment"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Percentage of Dropouts with Failing GWAs</h4>
+                            <div id="program-grade"></div>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Percentage of Shiftees with Failing GWAs</h4>
+                            <div id="program-shiftgrade"></div>
+                        </div>
+                    </div>
                 </center>
             </div>
         </div>

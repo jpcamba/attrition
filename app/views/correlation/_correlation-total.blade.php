@@ -22,3 +22,39 @@
         </div>
     </div>
 </div>
+
+<!--
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"> Factors
+            </div>
+            <div class="panel-body">
+                <div id="campus-factors"></div>
+                <center>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Percentage of Employed Dropouts</h4>
+                            <div id="campus-employment"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Percentage of Dropouts with Failing GWAs</h4>
+                            <div id="campus-grade"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>STFAP Brackets of Dropouts</h4>
+                            <div id="campus-stbracket"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Regions of Dropouts</h4>
+                            <div id="campus-region"></div>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+-->

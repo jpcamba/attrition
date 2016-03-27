@@ -5,11 +5,24 @@
     var departmentProgramsAverage = {{ json_encode($departmentProgramsAverage) }};
     var batchAttrition = {{ json_encode($batchAttrition) }};
     var programsAttrition = {{ json_encode($programsAttrition) }};
+    var employmentCount = {{ json_encode($employmentCount) }};
+    var gradeCount = {{ json_encode($gradeCount) }};
+    var shiftGradeCount = {{ json_encode($shiftGradeCount) }};
+    //var stbracketCount = {{-- json_encode($stbracketCount) --}};
+    //var regionCount = {{-- json_encode($regionCount) --}};
+    //var shiftBracketCount = {{-- json_encode($shiftBracketCount) --}};
+
     var averageData = [];
     //var semDifference = [];
     var departmentPrograms = [];
     var batchAttritionArray = [];
     var programsAttritionArray = [];
+    var employmentArray = [];
+    var gradeArray = [];
+    var shiftGradeArray = [];
+    //var regionArray = [];
+    //var stbracketArray = [];
+    //var shiftBracketArray = [];
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
@@ -24,6 +37,30 @@
     for(var batchKey in batchAttrition){
         batchAttritionArray.push({batch: batchKey, attritionrate: batchAttrition[batchKey]});
     }
+
+    for(var employmentKey in employmentCount){
+        employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
+    }
+
+    for(var gradeKey in gradeCount){
+        gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
+    }
+
+    for(var shiftGradeKey in shiftGradeCount){
+        shiftGradeArray.push({label: shiftGradeKey, value: shiftGradeCount[shiftGradeKey]});
+    }
+
+    /*for(var stbracketKey in stbracketCount){
+        stbracketArray.push({label: stbracketKey, value: stbracketCount[stbracketKey]});
+    }
+
+    for(var regionKey in regionCount){
+        regionArray.push({label: regionKey, value: regionCount[regionKey]});
+    }
+
+    for(var shiftBracketKey in shiftBracketCount){
+        shiftBracketArray.push({label: shiftBracketKey, value: shiftBracketCount[shiftBracketKey]});
+    }*/
 
     new Morris.Bar({
      element: 'department-ave-batch-attrition',
@@ -70,6 +107,57 @@
      parseTime: false,
      barColors: ['#0BC9CD']
     });
+
+    new Morris.Donut({
+      element: 'department-employment',
+      data: employmentArray,
+      colors: ['#114B5F', '#028090']
+    });
+
+    new Morris.Donut({
+      element: 'department-grade',
+      data: gradeArray,
+      colors: ['#114B5F', '#028090']
+    });
+
+    new Morris.Donut({
+      element: 'department-shiftgrade',
+      data: shiftGradeArray,
+      colors: ['#07BEB8', '#9CEAEF']
+    });
+
+    /*new Morris.Bar({
+     element: 'department-stbracket',
+     data: stbracketArray,
+     xkey: 'label',
+     ykeys: ['value'],
+     labels: ['Students'],
+     hideHover: 'auto',
+     resize: true,
+     barColors: ['#07BEB8', '#3DCCC7', '#68D8D6', '#9CEAEF', '#C4FFF9']
+    });
+
+    new Morris.Bar({
+     element: 'department-region',
+     data: regionArray,
+     xkey: 'label',
+     ykeys: ['value'],
+     labels: ['Students'],
+     hideHover: 'auto',
+     resize: true,
+     barColors: ['#07BEB8', '#3DCCC7', '#68D8D6']
+    });
+
+    new Morris.Bar({
+     element: 'department-shiftbracket',
+     data: shiftBracketArray,
+     xkey: 'label',
+     ykeys: ['value'],
+     labels: ['Students'],
+     hideHover: 'auto',
+     resize: true,
+     barColors: ['#BEE9E8', '#62B6CB', '#1B4965', '#CAE9FF', '#5FA8D3']
+ });*/
 
     /*new Morris.Line({
      element: 'department-yearly-sem-difference',

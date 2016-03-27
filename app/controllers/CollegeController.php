@@ -1,4 +1,4 @@
-<?php
+//<?php
 
 class CollegeController extends \BaseController {
 
@@ -23,10 +23,13 @@ class CollegeController extends \BaseController {
  		//Averaage students per program
  		$collegeAveArray = [];
  		foreach($collegelist as $college){
- 			$collStudents = round($college->getAveStudents(), 2);
-			$collegeAveArray[$college->unitname] = $collStudents;
-			$collAttrition = $college->getAveAttrition();
-			$collegeAveAttritionArray[$college->unitname] = $collAttrition;
+ 			//$collStudents = round($college->getAveStudents(), 2);
+			//$collegeAveArray[$college->unitname] = $collStudents;
+			//$collAttrition = $college->getAveAttrition();
+			//$collegeAveAttritionArray[$college->unitname] = $collAttrition;
+
+			$collegeAveArray[$college->unitname] = $college->ave_students;
+			$collegeAveAttritionArray[$college->unitname] = $college->ave_batch_attrition;
  		}
 
  		//return page
@@ -61,13 +64,25 @@ class CollegeController extends \BaseController {
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
-			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
 		}
 
-		$aveAttrition = $college->getAveAttrition();
+		//$aveAttrition = $college->getAveAttrition();
+		//$aveShiftRate = $college->getAveShiftRate();
+		$aveYearsBeforeDropout = $college->getAveYearsBeforeDropout();
+		$aveYearsBeforeShifting = $college->getAveYearsBeforeShifting();
+		$aveAttrition = $college->ave_batch_attrition;
+		$aveShiftRate = $college->ave_batch_shift;
 		$batchAttrition = $college->getBatchAttrition();
-		$aveShiftRate = $college->getAveShiftRate();
 		$departmentsAttrition = $college->getDepartmentsAveBatchAttrition();
+
+		$employmentCount = $college->getEmploymentCount();
+		$gradeCount = $college->getGradeCount();
+		$shiftGradeCount = $college->getShiftGradeCount();
+		//$stbracketCount = $college->getSTBracketCount();
+		//$regionCount = $college->getRegionCount();
+		//$shiftBracketCount = $college->getShiftSTBracketCount();
 
 	    return View::make('college.college-specific',
 	    ['college' => $college,
@@ -78,7 +93,15 @@ class CollegeController extends \BaseController {
 		 'aveAttrition' => $aveAttrition,
 		 'batchAttrition' => $batchAttrition,
 		 'aveShiftRate' => $aveShiftRate,
-		 'departmentsAttrition' => $departmentsAttrition
+		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
+		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
+		 'departmentsAttrition' => $departmentsAttrition,
+		 'employmentCount' => $employmentCount,
+		 'gradeCount' => $gradeCount,
+		 'shiftGradeCount' => $shiftGradeCount
+		 //'stbracketCount' => $stbracketCount,
+		 //'regionCount' => $regionCount,
+		 //'shiftBracketCount' => $shiftBracketCount
 	    ]);
 	}
 
