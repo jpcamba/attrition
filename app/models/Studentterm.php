@@ -50,7 +50,7 @@ class Studentterm extends Eloquent {
 
     //Get average grade of student
     public static function getOneGrades($studentId) {
-        return Studentterm::select('gwa')->where('studentid', $studentId)->avg('gwa');
+        return Studentterm::select('gwa')->where('studentid', $studentId)->where('gwa', '>', 1.00)->avg('gwa');
     }
 
     //Get stbracket of student
