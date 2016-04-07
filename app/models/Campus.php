@@ -64,7 +64,7 @@ class Campus extends Eloquent {
 
 	//Get average number of students per year
 	public function getStudentAverage() {
-		$yearsArray = Year::where('year','>', 1998)->get();
+		$yearsArray = Year::where('year','>', 1999)->where('year', '<', 2014)->get();
 		//$yearsArray = Year::all();
 		$yearlyStudentAverage = [];
 
@@ -197,8 +197,8 @@ class Campus extends Eloquent {
         }
 
         $passed = $dropoutCount - $failed;
-        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
-        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        $gradeArray['1.00 - 3.00'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Below 3.00'] = round(($failed/$dropoutCount)*100, 2);
         return $gradeArray;
     }
 
@@ -222,8 +222,8 @@ class Campus extends Eloquent {
         }
 
         $passed = $dropoutCount - $failed;
-        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
-        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        $gradeArray['1.00 - 3.00'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Below 3.00'] = round(($failed/$dropoutCount)*100, 2);
         return $gradeArray;
     }
 
@@ -246,7 +246,7 @@ class Campus extends Eloquent {
             //var_dump($results);
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -261,7 +261,7 @@ class Campus extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -300,7 +300,7 @@ class Campus extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -315,7 +315,7 @@ class Campus extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:

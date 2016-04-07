@@ -16,11 +16,11 @@ class Program extends Eloquent {
     }
 
     public function getAveStudents(){
-        $years = Year::all();
+        $years = Studentterm::whereIn('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $numberOfStudents = 0;
         $zeroStudents = 0;
         foreach($years as $year){
-            $studentCount = $this->getYearlyAveStudents($year->year);
+            $studentCount = $this->getYearlyAveStudents($year);
             if($studentCount == 0){
                 $zeroStudents++;
             }
@@ -32,37 +32,14 @@ class Program extends Eloquent {
     }
 
     public function getYearlyAveStudents($year){
-        //To get batches of program whithin 2000-2009
-        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
-        if($this->revisionyear > 2009){
-            $max = 2013;
-        }
-        else{
-            if($this->programid == 28){
-                $max = 2013 - 4;
-            }
-            else{
-                $max = 2013 - $this->numyears;
-            }
-        }
 
-        $batches = [];
-        foreach($progYears as $progYear){
-            if(($progYear > 1999) && ($progYear < ($max + 1))){
-                array_push($batches, ($progYear*100000));
-            }
-        }
-
-        $min = min($batches);
-        $max = max($batches) + 100000;
-
-        $studentsSem1 = $this->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->where('aysem', strval($year).'1' )->count();
-        $studentsSem2 = $this->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->where('aysem', strval($year).'2' )->count();
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->count();
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->count();
 
         if($this->programid == 28){
             $domProgram = Program::where('programid', 38)->first();
-            $domSem1 = $domProgram->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'1' )->count();
-            $domSem2 = $domProgram->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'2' )->count();
+            $domSem1 = $domProgram->studentterms()->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'1' )->count();
+            $domSem2 = $domProgram->studentterms()->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'2' )->count();
 
             $studentsSem1 = $studentsSem1 + $domSem1;
             $studentsSem2 = $studentsSem2 + $domSem2;
@@ -73,37 +50,14 @@ class Program extends Eloquent {
     }
 
     public function getYearlySemDifference($year){
-        //To get batches of program whithin 2000-2009
-        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
-        if($this->revisionyear > 2009){
-            $max = 2013;
-        }
-        else{
-            if($this->programid == 28){
-                $max = 2013 - 4;
-            }
-            else{
-                $max = 2013 - $this->numyears;
-            }
-        }
 
-        $batches = [];
-        foreach($progYears as $progYear){
-            if(($progYear > 1999) && ($progYear < ($max + 1))){
-                array_push($batches, ($progYear*100000));
-            }
-        }
-
-        $min = min($batches);
-        $max = max($batches) + 100000;
-
-        $studentsSem1 = $this->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->where('aysem', strval($year).'1' )->count();
-        $studentsSem2 = $this->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->where('aysem', strval($year).'2' )->count();
+        $studentsSem1 = $this->studentterms()->where('aysem', strval($year).'1' )->count();
+        $studentsSem2 = $this->studentterms()->where('aysem', strval($year).'2' )->count();
 
         if($this->programid == 28){
             $domProgram = Program::where('programid', 38)->first();
-            $domSem1 = $domProgram->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'1' )->count();
-            $domSem2 = $domProgram->studentterms()->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'2' )->count();
+            $domSem1 = $domProgram->studentterms()->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'1' )->count();
+            $domSem2 = $domProgram->studentterms()->whereIn('yearlevel', array(3,4))->where('aysem', strval($year).'2' )->count();
 
             $studentsSem1 = $studentsSem1 + $domSem1;
             $studentsSem2 = $studentsSem2 + $domSem2;
@@ -601,8 +555,8 @@ class Program extends Eloquent {
         }
 
         $passed = $dropoutCount - $failed;
-        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
-        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        $gradeArray['1.00 - 3.00'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Below 3.00'] = round(($failed/$dropoutCount)*100, 2);
         return $gradeArray;
     }
 
@@ -625,8 +579,8 @@ class Program extends Eloquent {
         }
 
         $passed = $dropoutCount - $failed;
-        $gradeArray['Passed'] = round(($passed/$dropoutCount)*100, 2);
-        $gradeArray['Failed'] = round(($failed/$dropoutCount)*100, 2);
+        $gradeArray['1.00 - 3.00'] = round(($passed/$dropoutCount)*100, 2);
+        $gradeArray['Below 3.00'] = round(($failed/$dropoutCount)*100, 2);
         return $gradeArray;
     }
 
@@ -646,7 +600,7 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -661,7 +615,7 @@ class Program extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -699,7 +653,7 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -714,7 +668,7 @@ class Program extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -869,8 +823,8 @@ class Program extends Eloquent {
 
         if($shifteeCount != 0){
             $passed = $shifteeCount - $failed;
-            $gradeArray['Passed'] = round(($passed/$shifteeCount)*100, 2);
-            $gradeArray['Failed'] = round(($failed/$shifteeCount)*100, 2);
+            $gradeArray['1.00 - 3.00'] = round(($passed/$shifteeCount)*100, 2);
+            $gradeArray['Below 3.00'] = round(($failed/$shifteeCount)*100, 2);
         }
         else{
             $gradeArray['No Shiftees'] = 0;
@@ -914,8 +868,8 @@ class Program extends Eloquent {
 
         if($shifteeCount != 0){
             $passed = $shifteeCount - $failed;
-            $gradeArray['Passed'] = round(($passed/$shifteeCount)*100, 2);
-            $gradeArray['Failed'] = round(($failed/$shifteeCount)*100, 2);
+            $gradeArray['1.00 - 3.00'] = round(($passed/$shifteeCount)*100, 2);
+            $gradeArray['Below 3.00'] = round(($failed/$shifteeCount)*100, 2);
         }
         else{
             $gradeArray['No Shiftees'] = 0;;
@@ -981,7 +935,7 @@ class Program extends Eloquent {
             $results = array_unique($results);
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -996,7 +950,7 @@ class Program extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:
@@ -1056,7 +1010,7 @@ class Program extends Eloquent {
             $results = Studentterm::select('stfapbracket')->where('studentid', $shiftee)->where('programid', $this->programid)->groupBy('stfapbracket')->lists('stfapbracket');
             foreach ($results as $result){
                 switch($result){
-                    case (strpos($result, 'A') !== false):
+                    case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
                         $bracketA++;
                         break;
                     case (strpos($result, 'B') !== false):
@@ -1071,7 +1025,7 @@ class Program extends Eloquent {
                     case (strpos($result, 'E1') !== false):
                         $bracketE1++;
                         break;
-                    case (strpos($result, 'E2') !== false):
+                    case (strpos($result, 'E2') !== false || strpos($result, '1') !== false):
                         $bracketE2++;
                         break;
                     default:

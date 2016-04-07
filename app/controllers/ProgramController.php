@@ -38,16 +38,16 @@ class ProgramController extends \BaseController {
 		$program = Program::find($programIDInput);
 
 		//ave students per year and ave difference
-		$yearsArray = Year::all();
+		$yearsArray = Studentterm::where('programid', $program->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 		$yearlyStudentAverage = [];
 		$yearlySemDifference = [];
 		foreach($yearsArray as $yearData){
-			$aveStudents = $program->getYearlyAveStudents($yearData->year);
+			$aveStudents = $program->getYearlyAveStudents($yearData);
 			if($aveStudents > 1){
-				$yearlyStudentAverage[$yearData->year] = $aveStudents;
+				$yearlyStudentAverage[$yearData] = $aveStudents;
 			}
-			$semDiff = $program->getYearlySemDifference($yearData->year);
-			$yearlySemDifference[$yearData->year] = $semDiff;
+			$semDiff = $program->getYearlySemDifference($yearData);
+			$yearlySemDifference[$yearData] = $semDiff;
 		}
 
 		//$aveYearsOfStay = $program->getAveYearsOfStay();
