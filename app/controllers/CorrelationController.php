@@ -8,56 +8,56 @@ class CorrelationController extends \BaseController {
 	 */
 	public function index() {
 		$attrition = $this->rateAttrition();
-		$correlation['employment'] = $this->corrEmployment($attrition);
-		$correlation['grades'] = $this->corrGrades($attrition);
-		$correlation['stbracket'] = $this->corrStbracket($attrition);
-		$correlation['region'] = $this->corrRegion($attrition);
+		
+		/*$rawCorrelation['employment'] = $this->corrEmployment($attrition);
+		if ($rawCorrelation['employment'] < 0)
+			$correlation['employment'] = -$rawCorrelation['employment'];
+		else
+			$correlation['employment'] = $rawCorrelation['employment'];
 
-		//up manila
-		$campus = Campus::where('unitid', 2)->first();
-		//$employmentCount = $campus->getEmploymentCount();
-		//$gradeCount = $campus->getGradeCount();
-		//$stbracketCount = $campus->getSTBracketCount();
-		//$regionCount = $campus->getRegionCount();
+		$rawCorrelation['grades'] = $this->corrGrades($attrition);
+		if ($rawCorrelation['grades'] < 0)
+			$correlation['grades'] = -$rawCorrelation['grades'];
+		else
+			$correlation['grades'] =-$rawCorrelation['grades'];*/
 
-		//employment
-		$employmentCount = [];
-		$employmentCount['Employed'] = Unitfactor::where('type', 'Employed')->first()->value;
-		$employmentCount['Unemployed'] = Unitfactor::where('type', 'Unemployed')->first()->value;
-		//stbracket
-		$stbracketCount = [];
-		$A = Unitfactor::where('type', 'A')->first()->value;
-		$B = Unitfactor::where('type', 'B')->first()->value;
-		$C = Unitfactor::where('type', 'C')->first()->value;
-		$D = Unitfactor::where('type', 'D')->first()->value;
-		$E1 = Unitfactor::where('type', 'E1')->first()->value;
-		$E2 = Unitfactor::where('type', 'E2')->first()->value;
+		$rawCorrelation['stbracket'] = $this->corrStbracket($attrition);
+		if ($rawCorrelation['stbracket'] < 0)
+			$correlation['stbracket'] = -$rawCorrelation['stbracket'];
+		else
+			$correlation['stbracket'] = $rawCorrelation['stbracket'];
 
-		$total = $A +$B +$C +$D + $E1 + $E2;
+		$rawCorrelation['region'] = $this->corrRegion($attrition);
+		if ($rawCorrelation['region'] < 0)
+			$correlation['region'] = -$rawCorrelation['region'];
+		else
+			$correlation['region'] = $rawCorrelation['region'];
 
-		$stbracketCount['A'] = round(($A/$total)*100, 2);
-		$stbracketCount['B'] = round(($B/$total)*100, 2);
-		$stbracketCount['C'] = round(($C/$total)*100, 2);
-		$stbracketCount['D'] = round(($D/$total)*100, 2);
-		$stbracketCount['E1'] = round(($E1/$total)*100, 2);
-		$stbracketCount['E2'] = round(($E2/$total)*100, 2);
+		/*$rawCorrelation['units'] = $this->corrUnits($attrition);
+		if ($rawCorrelation['units'] < 0)
+			$correlation['units'] = -$rawCorrelation['units'];
+		else
+			$correlation['units'] = $rawCorrelation['units'];*/
 
-		/*///grade
-		$gradeCount['Passed'] = Unitfactor::where('type', 'Passed')->first()->value;
-		$gradeCount['Failed'] = Unitfactor::where('type', 'Failed')->first()->value;
-		//region
-		$regionCount['Luzon'] = Unitfactor::where('type', 'Luzon')->first()->value;
-		$regionCount['Visayas'] = Unitfactor::where('type', 'Visayas')->first()->value;
-		$regionCount['Mindanao'] = Unitfactor::where('type', 'Mindanao')->first()->value;
-		*/
+		$rawCorrelation['unemployment'] = $this->corrUnemployment($attrition);
+		if ($rawCorrelation['unemployment'] < 0)
+			$correlation['unemployment'] = -$rawCorrelation['unemployment'];
+		else
+			$correlation['unemployment'] = $rawCorrelation['unemployment'];
 
-		return View::make('correlation.correlation', compact(
-			'correlation',
-			'employmentCount',
-			//'gradeCount',
-			'stbracketCount'
-			//'regionCount'
-		));
+		$rawCorrelation['highgrades'] = $this->corrHighGrades($attrition);
+		if ($rawCorrelation['highgrades'] < 0)
+			$correlation['highgrades'] = -$rawCorrelation['highgrades'];
+		else
+			$correlation['highgrades'] = $rawCorrelation['highgrades'];
+
+		$rawCorrelation['overloading'] = $this->corrOverloading($attrition);
+		if ($rawCorrelation['overloading'] < 0)
+			$correlation['overloading'] = -$rawCorrelation['overloading'];
+		else
+			$correlation['overloading'] = $rawCorrelation['overloading'];
+
+		return View::make('correlation.correlation', compact('rawCorrelation', 'correlation'));
 	}
 
 	//Total Attrition Rate
@@ -78,20 +78,26 @@ class CorrelationController extends \BaseController {
 	//Get Correlation
 	public function getCorrelation($factor, $attrition) {
 		$batches = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009];
+		$sumx = 0;
+		$sumy = 0;
 		$sumxy = 0;
 		$sumx2 = 0;
 		$sumy2 = 0;
+		$n = 0;
 
 		foreach ($batches as $batch) {
+			$sumx = $sumx + $factor[$batch];
+			$sumy = $sumy + $attrition[$batch];
 			$sumxy = $sumxy + ($factor[$batch] * $attrition[$batch]);
 			$sumx2 = $sumx2 + pow($factor[$batch], 2);
 			$sumy2 = $sumy2 + pow($attrition[$batch], 2);
+			$n = $n + 1;
 		}
 
-		if ($sumx2 === 0 || $sumy2 === 0)
-			return 0;
-		else
-			return $sumxy / sqrt($sumx2 * $sumy2);
+		//return $sumxy / sqrt($sumx2 * $sumy2);
+
+		$correlation = (($n * $sumxy) - ($sumx * $sumy)) / sqrt((($n * $sumx2) - pow($sumx, 2)) * (($n * $sumy2) - pow($sumy, 2)));
+		return $correlation;
 	}
 
 	//Employment - Employed
@@ -106,6 +112,18 @@ class CorrelationController extends \BaseController {
 		return round($this->getCorrelation($rateEmployment, $attrition), 2);
 	}
 
+	//Unemployment - Unemployed students
+	public function corrUnemployment($attrition) {
+		$rateUnemployment = [];
+		$results = Correlation::getUnemployment();
+
+		foreach ($results as $result) {
+			$rateUnemployment[$result->batch] = $result->ratio;
+		}
+
+		return round($this->getCorrelation($rateUnemployment, $attrition), 2);
+	}
+
 	//Grades - Low Grades (3.00 and below)
 	public function corrGrades($attrition) {
 		$rateGrades = [];
@@ -116,6 +134,18 @@ class CorrelationController extends \BaseController {
 		}
 
 		return round($this->getCorrelation($rateGrades, $attrition), 2);
+	}
+
+	//Grades - High Grades (3.00 and below)
+	public function corrHighGrades($attrition) {
+		$rateHighGrades = [];
+		$results = Correlation::getHighGrades();
+
+		foreach ($results as $result) {
+			$rateHighGrades[$result->batch] = $result->ratio;
+		}
+
+		return round($this->getCorrelation($rateHighGrades, $attrition), 2);
 	}
 
 	//ST Bracket - Poor Students (D and below)
@@ -142,6 +172,29 @@ class CorrelationController extends \BaseController {
 		return round($this->getCorrelation($rateRegion, $attrition), 2);
 	}
 
+	//Units - Underloaded students
+	public function corrUnits($attrition) {
+		$rateUnits = [];
+		$results = Correlation::getUnits();
+
+		foreach ($results as $result) {
+			$rateUnits[$result->batch] = $result->ratio;
+		}
+
+		return round($this->getCorrelation($rateUnits, $attrition), 2);
+	}
+
+	//Overloading - Overloaded students
+	public function corrOverloading($attrition) {
+		$rateUnits = [];
+		$results = Correlation::getOverloading();
+
+		foreach ($results as $result) {
+			$rateUnits[$result->batch] = $result->ratio;
+		}
+
+		return round($this->getCorrelation($rateUnits, $attrition), 2);
+	}
 
 	/**
 	 * Show the form for creating a new resource.
