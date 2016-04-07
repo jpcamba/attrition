@@ -19,12 +19,12 @@ class DepartmentController extends \BaseController {
  		$departmentAveArray = [];
 		$departmentAveAttritionArray = [];
  		foreach($departmentlist as $department){
- 			//$collStudents = round($department->getAveStudents(), 2);
-			//$departmentAveArray[$department->unitname] = $collStudents;
+ 			$collStudents = round($department->getAveStudents(), 2);
+			$departmentAveArray[$department->unitname] = $collStudents;
 			//$deptAttrition = $department->getAveAttrition();
 			//$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
 
-			$departmentAveArray[$department->unitname] = $department->ave_students;
+			//$departmentAveArray[$department->unitname] = $department->ave_students;
 			$departmentAveAttritionArray[$department->unitname] = $department->ave_batch_attrition;
  		}
 
@@ -43,22 +43,25 @@ class DepartmentController extends \BaseController {
 		$departmentprograms = $department->programs()->where('degreelevel', 'U')->whereNotIn('programid', array(62, 66, 38, 22))->get();
 
 	    //ave students per year and ave difference
-	    $yearsArray = Year::all();
+		$programids = $department->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $yearsArray = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+
 	    $yearlyStudentAverage = [];
 	    //$yearlySemDifference = [];
 		$departmentProgramsAverage = [];
 	    foreach($yearsArray as $yearData){
-	        $aveStudents = round($department->getYearlyAveStudents($yearData->year), 2);
+	        $aveStudents = round($department->getYearlyAveStudents($yearData), 2);
 	        if($aveStudents > 1){
-	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
+	            $yearlyStudentAverage[$yearData] = $aveStudents;
 	        }
 	        //$semDiff = $department->getYearlySemDifference($yearData->year);
 	        //$yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
 		foreach($departmentprograms as $departmentprogram){
-			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
-			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
+			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
+			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
 		}
 
 

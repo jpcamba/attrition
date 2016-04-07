@@ -96,7 +96,7 @@
                             <div id="department-employment"></div>
                         </div>
                         <div class="col-md-4">
-                            <h4>Percentage of Dropouts with Failing GWAs</h4>
+                            <h4>Percentage of Dropouts with GWAs below 3.00</h4>
                             <div id="department-grade"></div>
                         </div>
                         <div class="col-md-4">
@@ -107,7 +107,7 @@
                     <br/><br/>
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>Percentage of Shiftees with Failing GWAs</h4>
+                            <h4>Percentage of Shiftees with GWAs below 3.00</h4>
                             <div id="department-shiftgrade"></div>
                         </div>
                         <div class="col-md-6">
@@ -116,6 +116,8 @@
                         </div>
                     </div>
                 </center>
+                <br/>
+                *For the computation of the percentage of STFAP Brackets, the numeric bracket '9' was included in the alphabetic bracket 'A' count. The numeric bracket '1' was included the alphabetic bracket 'E2' count.
             </div>
         </div>
     </div>

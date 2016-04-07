@@ -1,4 +1,4 @@
-//<?php
+<?php
 
 class CollegeController extends \BaseController {
 
@@ -23,12 +23,12 @@ class CollegeController extends \BaseController {
  		//Averaage students per program
  		$collegeAveArray = [];
  		foreach($collegelist as $college){
- 			//$collStudents = round($college->getAveStudents(), 2);
-			//$collegeAveArray[$college->unitname] = $collStudents;
+ 			$collStudents = round($college->getAveStudents(), 2);
+			$collegeAveArray[$college->unitname] = $collStudents;
 			//$collAttrition = $college->getAveAttrition();
 			//$collegeAveAttritionArray[$college->unitname] = $collAttrition;
 
-			$collegeAveArray[$college->unitname] = $college->ave_students;
+			//$collegeAveArray[$college->unitname] = $college->ave_students;
 			$collegeAveAttritionArray[$college->unitname] = $college->ave_batch_attrition;
  		}
 
@@ -50,22 +50,25 @@ class CollegeController extends \BaseController {
 						})->get();
 
 	    //ave students per year and ave difference
-	    $yearsArray = Year::all();
+		$programids = $college->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $yearsArray = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+
 	    $yearlyStudentAverage = [];
 	    //$yearlySemDifference = [];
 		$collegeDepartmentsAverage = [];
 	    foreach($yearsArray as $yearData){
-	        $aveStudents =  round($college->getYearlyAveStudents($yearData->year), 2);
+	        $aveStudents =  round($college->getYearlyAveStudents($yearData), 2);
 	        if($aveStudents > 1){
-	            $yearlyStudentAverage[$yearData->year] = $aveStudents;
+	            $yearlyStudentAverage[$yearData] = $aveStudents;
 	        }
 	        //$semDiff = $college->getYearlySemDifference($yearData->year);
 	        //$yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
-			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
-			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
+			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
 		}
 
 		//$aveAttrition = $college->getAveAttrition();
