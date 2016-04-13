@@ -16,7 +16,7 @@ class Program extends Eloquent {
     }
 
     public function getAveStudents(){
-        $years = Studentterm::whereIn('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $years = Studentterm::where('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $numberOfStudents = 0;
         $zeroStudents = 0;
         foreach($years as $year){
