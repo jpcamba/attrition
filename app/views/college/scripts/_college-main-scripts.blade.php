@@ -17,6 +17,8 @@
      ykeys: ['studentcount'],
      labels: ['Students'],
      hideHover: 'auto',
+     xLabelMargin: 10,
+     padding: 40,
      resize: true,
      parseTime: false
    });
@@ -28,6 +30,8 @@
     ykeys: ['attritionrate'],
     labels: ['Attrition Rate'],
     hideHover: 'auto',
+    xLabelMargin: 10,
+    padding: 40,
     resize: true,
     parseTime: false,
     barColors: ['#0BC9CD']

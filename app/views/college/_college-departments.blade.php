@@ -8,9 +8,13 @@
                 <center>
                     <h4>Average batch attrition for each department under the college</h4>
                     <div id="collegedepartments-ave-batch-attrition"></div>
+                    <br/>
+                    <div id="collegedepartments-ave-batch-attrition-legend"></div>
                     <br/><br/>
                     <h4>Average number of students per year for each department under the college</h4>
                     <div id="collegedepartments-ave-number-students"></div>
+                    <br/>
+                    <div id="collegedepartments-ave-number-students-legend"></div>
                 </center>
             </div>
         </div>

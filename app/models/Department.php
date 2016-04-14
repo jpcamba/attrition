@@ -24,16 +24,38 @@ class Department extends Eloquent {
         return $this->belongsTo('College', 'parentunitid');
     }
 
+    //remove outliers - from internet
+    function remove_outliers($dataset, $magnitude = 1) {
+      $count = count($dataset);
+      $mean = array_sum($dataset) / $count; // Calculate the mean
+      $deviation = sqrt(array_sum(array_map(array($this, 'sd_square'), $dataset, array_fill(0, $count, $mean))) / $count) * $magnitude; // Calculate standard deviation and times by magnitude
+
+      return array_filter($dataset, function($x) use ($mean, $deviation) { return ($x <= $mean + $deviation && $x >= $mean - $deviation); }); // Return filtered array of values that lie within $mean +- $deviation.
+    }
+
+    public function sd_square($x, $mean) {
+      return pow($x - $mean, 2);
+    }
+
+
     public function getAveStudents(){
         $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $years = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
-        $sumAve = 0;
+        $allYearsAve = [];
         foreach($years as $year){
-            $sumAve = $sumAve + $this->getYearlyAveStudents($year);
+            array_push($allYearsAve,  $this->getYearlyAveStudents($year));
         }
-        $totalAve = $sumAve/(count($years));
+
+        $filteredYearsAve = $this->remove_outliers($allYearsAve, 1);
+
+        $sumAve = 0;
+        foreach($filteredYearsAve as $yearAve){
+            $sumAve = $sumAve + $yearAve;
+        }
+        $totalAve = $sumAve/(count($filteredYearsAve));
+
         return round($totalAve, 2);
     }
 
@@ -189,7 +211,8 @@ class Department extends Eloquent {
         foreach ($batches as $batch) {
             $batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
-            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->where('program1years', '<', DB::raw('CAST(numyears AS numeric)'))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+
 			//$allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->groupBy('studentid')->get());
 
             if($allBatchStudents != 0){

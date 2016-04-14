@@ -68,7 +68,7 @@ class Studentdropout extends Eloquent {
     //Get count of batch students (Program)
     public static function getBatchDropoutsCountProgram($batch, $programid) {
         $batchEnd = $batch + 100000;
-        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->where('programid', $programid)->where('degreelevel', 'U')->count();
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->where('programid', $programid)->count();
     }
 
     //Get count of batch students (Department)

@@ -66,7 +66,7 @@ class ProgramController extends \BaseController {
 		$division = $program->getDivision();
 		$numYears = $program->getNumYears();
 
-		$employmentCount = $program->getEmploymentCount();
+		//$employmentCount = $program->getEmploymentCount();
 		$gradeCount = $program->getGradeCount();
 		$shiftGradeCount = $program->getShiftGradeCount();
 		$stbracketCount = $program->getSTBracketCount();
@@ -87,7 +87,7 @@ class ProgramController extends \BaseController {
 		 'batchShiftRate' => $batchShiftRate,
 		 'division' => $division,
 		 'numYears' => $numYears,
-		 'employmentCount' => $employmentCount,
+		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,

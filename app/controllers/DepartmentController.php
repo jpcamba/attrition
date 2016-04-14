@@ -19,12 +19,12 @@ class DepartmentController extends \BaseController {
  		$departmentAveArray = [];
 		$departmentAveAttritionArray = [];
  		foreach($departmentlist as $department){
- 			$collStudents = round($department->getAveStudents(), 2);
-			$departmentAveArray[$department->unitname] = $collStudents;
+ 			//$collStudents = round($department->getAveStudents(), 2);
+			//$departmentAveArray[$department->unitname] = $collStudents;
 			//$deptAttrition = $department->getAveAttrition();
 			//$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
 
-			//$departmentAveArray[$department->unitname] = $department->ave_students;
+			$departmentAveArray[$department->unitname] = $department->ave_students;
 			$departmentAveAttritionArray[$department->unitname] = $department->ave_batch_attrition;
  		}
 
@@ -60,8 +60,8 @@ class DepartmentController extends \BaseController {
 	    }
 
 		foreach($departmentprograms as $departmentprogram){
-			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
-			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
+			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
+			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
 		}
 
 
@@ -74,7 +74,7 @@ class DepartmentController extends \BaseController {
 		$aveAttrition = $department->ave_batch_attrition;
 		$aveShiftRate = $department->ave_batch_shift;
 
-		$employmentCount = $department->getEmploymentCount();
+		//$employmentCount = $department->getEmploymentCount();
 		$gradeCount = $department->getGradeCount();
 		$shiftGradeCount = $department->getShiftGradeCount();
 		$stbracketCount = $department->getSTBracketCount();
@@ -93,7 +93,7 @@ class DepartmentController extends \BaseController {
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'programsAttrition' => $programsAttrition,
-		 'employmentCount' => $employmentCount,
+		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,
