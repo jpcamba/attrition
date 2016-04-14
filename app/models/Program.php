@@ -16,7 +16,7 @@ class Program extends Eloquent {
     }
 
     public function getAveStudents(){
-        $years = Studentterm::whereIn('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $years = Studentterm::where('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $numberOfStudents = 0;
         $zeroStudents = 0;
         foreach($years as $year){
@@ -385,7 +385,7 @@ class Program extends Eloquent {
                 //$allBatchShiftees = $allBatchShiftees + $domShiftees;
             }
             else{
-                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('program2id', '!=', 38)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
             }
 
 			$batchShiftRate[$batch / 100000] = round(($allBatchShiftees/$allBatchStudents)*100, 2);
@@ -459,7 +459,7 @@ class Program extends Eloquent {
             $normal = $allStudents - ($allDropouts + $allShiftees);
         }
         else{
-            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->where('program2id', '!=', 38)->groupBy('studentid')->get());
             $normal = $allStudents - ($allDropouts + $allShiftees);
         }
 

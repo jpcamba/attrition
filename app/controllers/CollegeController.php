@@ -23,13 +23,14 @@ class CollegeController extends \BaseController {
  		//Averaage students per program
  		$collegeAveArray = [];
  		foreach($collegelist as $college){
- 			$collStudents = round($college->getAveStudents(), 2);
-			$collegeAveArray[$college->unitname] = $collStudents;
+			$unitname = substr_replace($college->unitname, "\n", 11, 0);
+ 			//$collStudents = round($college->getAveStudents(), 2);
+			//$collegeAveArray[$unitname] = $collStudents;
 			//$collAttrition = $college->getAveAttrition();
 			//$collegeAveAttritionArray[$college->unitname] = $collAttrition;
 
-			//$collegeAveArray[$college->unitname] = $college->ave_students;
-			$collegeAveAttritionArray[$college->unitname] = $college->ave_batch_attrition;
+			$collegeAveArray[$unitname] = $college->ave_students;
+			$collegeAveAttritionArray[$unitname] = $college->ave_batch_attrition;
  		}
 
  		//return page
@@ -67,8 +68,8 @@ class CollegeController extends \BaseController {
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
-			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
-			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
+			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
 		}
 
 		//$aveAttrition = $college->getAveAttrition();

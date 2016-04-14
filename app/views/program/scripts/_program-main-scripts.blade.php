@@ -4,10 +4,20 @@
     var programBatchAttrition = {{ json_encode($programBatchAttrition) }};
     var averageData = [];
     var attritionData = [];
+    var progAcronyms = {};
 
     for(var programTitle in programAveArray){
-        averageData.push({program: programTitle, studentcount: programAveArray[programTitle]});
-        attritionData.push({program: programTitle, attritionrate: programBatchAttrition[programTitle]});
+        var acronym = programTitle.replace("Bachelor Of Science In ", "");
+        acronym = acronym.replace("Bachelor Of Arts In ", "");
+        acronym = acronym.replace("(Area Studies)", ""); //case of social sciences
+        acronym = acronym.replace("Liberal Arts - ", ""); //case of intarmed
+        acronym = acronym.replace("Biochemistry", "B C"); //case of biochemistry
+
+        acronym = acronym.match(/\b\w/g).join('').toUpperCase();
+        progAcronyms[acronym] = { programname: programTitle };
+
+        averageData.push({program: acronym, progTitle: programTitle, studentcount: programAveArray[programTitle]});
+        attritionData.push({program: acronym, progTitle: programTitle, attritionrate: programBatchAttrition[programTitle]});
     }
 
     var programsAttrition = new Morris.Bar({
@@ -16,7 +26,12 @@
      xkey: 'program',
      ykeys: ['attritionrate'],
      labels: ['Attrition Rate'],
+     hoverCallback: function(index, options, content){
+         var data = options.data[index];
+        $(".morris-hover").html('<div><center> <b>' + data.progTitle + '</b> <br/> <font color="#0b62a4"> Attrition Rate: ' + data.attritionrate + '</font></center></div>');
+     },
      hideHover: 'auto',
+     xLabelMargin: 10,
      resize: true,
      barColors: ['#0BC9CD']
     });
@@ -27,14 +42,33 @@
      xkey: 'program',
      ykeys: ['studentcount'],
      labels: ['Students'],
+     hoverCallback: function(index, options, content){
+         var data = options.data[index];
+        $(".morris-hover").html('<div><center> <b>' + data.progTitle + '</b> <br/> <font color="#0b62a4"> Students: ' + data.studentcount + '</font></center></div>');
+     },
      hideHover: 'auto',
+     xLabelMargin: 10,
      resize: true
     });
 
-    /*programsAve.options.labels.forEach(function(label, i){
-      var legendItemE2 = $('<span></span>').text(label).css('color', programsAve.options.barColors[i])
-      $('#employment-yearly-dropouts-legend').append(legendItemE2)
-  });*/
+    //legend
+    var colors = ['#2D3047', '#1B998B'];
+    var i = 0;
+    for(var acr in progAcronyms){
+        if(i % 2 == 0){
+            var legendItem1 = $('<span></span>').text(acr.concat(" - ", progAcronyms[acr].programname)).css('color', colors[0]);
+            var legendItem2 = $('<span></span>').text(acr.concat(" - ", progAcronyms[acr].programname)).css('color', colors[1]);
+        }
+        else{
+            var legendItem1 = $('<span></span>').text(acr.concat(" - ", progAcronyms[acr].programname)).css('color', colors[1]);
+            var legendItem2 = $('<span></span>').text(acr.concat(" - ", progAcronyms[acr].programname)).css('color', colors[0]);
+        }
+        i++;
+        $('#program-ave-batch-attrition-legend').append(legendItem1);
+        $('#program-ave-batch-attrition-legend').append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        $('#program-ave-number-students-legend').append(legendItem2);
+        $('#program-ave-number-students-legend').append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    }
 
 
 </script>
