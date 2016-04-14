@@ -5,7 +5,7 @@
     var collegeDepartmentsAverage = {{ json_encode($collegeDepartmentsAverage) }};
     var batchAttrition = {{ json_encode($batchAttrition) }};
     var departmentsAttrition = {{ json_encode($departmentsAttrition) }};
-    var employmentCount = {{ json_encode($employmentCount) }};
+    //var employmentCount = {{-- json_encode($employmentCount)--}};
     var gradeCount = {{ json_encode($gradeCount) }};
     var shiftGradeCount = {{ json_encode($shiftGradeCount) }};
     var stbracketCount = {{ json_encode($stbracketCount) }};
@@ -17,7 +17,7 @@
     var collegeDepartments = [];
     var batchAttritionArray = [];
     var departmentsAttritionArray = [];
-    var employmentArray = [];
+    //var employmentArray = [];
     var gradeArray = [];
     var shiftGradeArray = [];
     //var regionArray = [];
@@ -44,9 +44,9 @@
         batchAttritionArray.push({batch: batchKey, attritionrate: batchAttrition[batchKey]});
     }
 
-    for(var employmentKey in employmentCount){
+    /*for(var employmentKey in employmentCount){
         employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
-    }
+    }*/
 
     for(var gradeKey in gradeCount){
         gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
@@ -127,11 +127,11 @@
      barColors: ['#0BC9CD']
     });
 
-    new Morris.Donut({
+    /*new Morris.Donut({
       element: 'college-employment',
       data: employmentArray,
       colors: ['#114B5F', '#028090']
-    });
+  });*/
 
     new Morris.Donut({
       element: 'college-grade',

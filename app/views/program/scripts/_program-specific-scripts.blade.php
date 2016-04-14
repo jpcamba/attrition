@@ -5,7 +5,7 @@
     var batchAttrition = {{ json_encode($batchAttrition) }};
     var batchShiftRate = {{ json_encode($batchShiftRate) }};
     var division = {{ json_encode($division) }};
-    var employmentCount = {{ json_encode($employmentCount) }};
+    //var employmentCount = {{-- json_encode($employmentCount) --}};
     var gradeCount = {{ json_encode($gradeCount) }};
     var shiftGradeCount = {{ json_encode($shiftGradeCount) }};
     var stbracketCount = {{ json_encode($stbracketCount) }};
@@ -17,7 +17,7 @@
     var attritionArray = [];
     var shiftArray = [];
     var divisionArray = [];
-    var employmentArray = [];
+    //var employmentArray = [];
     var gradeArray = [];
     var shiftGradeArray = [];
     //var regionArray = [];
@@ -38,9 +38,9 @@
         divisionArray.push({label: divKey, value: division[divKey]});
     }
 
-    for(var employmentKey in employmentCount){
+    /*for(var employmentKey in employmentCount){
         employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
-    }
+    }*/
 
     for(var gradeKey in gradeCount){
         gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
@@ -117,11 +117,11 @@
       colors: ['#8FBFE0', '#0BC9CD', '#1D8A99']
     });
 
-    new Morris.Donut({
+    /*new Morris.Donut({
       element: 'program-employment',
       data: employmentArray,
       colors: ['#114B5F', '#028090']
-    });
+  });*/
 
     new Morris.Donut({
       element: 'program-grade',

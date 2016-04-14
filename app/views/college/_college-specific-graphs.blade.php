@@ -93,15 +93,11 @@
                 <div id="deparment-factors"></div>
                 <center>
                     <div class="row">
-                        <div class="col-md-4">
-                            <h4>Percentage of Employed Dropouts</h4>
-                            <div id="college-employment"></div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <h4>Percentage of Dropouts with GWAs below 3.00</h4>
                             <div id="college-grade"></div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <h4>Percentage of STFAP Brackets of Dropouts</h4>
                             <div id="college-stbracket"></div>
                         </div>

@@ -74,7 +74,7 @@ class DepartmentController extends \BaseController {
 		$aveAttrition = $department->ave_batch_attrition;
 		$aveShiftRate = $department->ave_batch_shift;
 
-		$employmentCount = $department->getEmploymentCount();
+		//$employmentCount = $department->getEmploymentCount();
 		$gradeCount = $department->getGradeCount();
 		$shiftGradeCount = $department->getShiftGradeCount();
 		$stbracketCount = $department->getSTBracketCount();
@@ -93,7 +93,7 @@ class DepartmentController extends \BaseController {
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'programsAttrition' => $programsAttrition,
-		 'employmentCount' => $employmentCount,
+		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,

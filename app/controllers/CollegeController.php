@@ -81,7 +81,7 @@ class CollegeController extends \BaseController {
 		$batchAttrition = $college->getBatchAttrition();
 		$departmentsAttrition = $college->getDepartmentsAveBatchAttrition();
 
-		$employmentCount = $college->getEmploymentCount();
+		//$employmentCount = $college->getEmploymentCount();
 		$gradeCount = $college->getGradeCount();
 		$shiftGradeCount = $college->getShiftGradeCount();
 		$stbracketCount = $college->getSTBracketCount();
@@ -100,7 +100,7 @@ class CollegeController extends \BaseController {
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'departmentsAttrition' => $departmentsAttrition,
-		 'employmentCount' => $employmentCount,
+		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,

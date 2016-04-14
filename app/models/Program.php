@@ -15,9 +15,38 @@ class Program extends Eloquent {
         return $this->belongsTo('Department', 'unitid');
     }
 
+    //remove outliers - from internet
+    function remove_outliers($dataset, $magnitude = 1) {
+      $count = count($dataset);
+      $mean = array_sum($dataset) / $count; // Calculate the mean
+      $deviation = sqrt(array_sum(array_map(array($this, 'sd_square'), $dataset, array_fill(0, $count, $mean))) / $count) * $magnitude; // Calculate standard deviation and times by magnitude
+
+      return array_filter($dataset, function($x) use ($mean, $deviation) { return ($x <= $mean + $deviation && $x >= $mean - $deviation); }); // Return filtered array of values that lie within $mean +- $deviation.
+    }
+
+    public function sd_square($x, $mean) {
+      return pow($x - $mean, 2);
+    }
+
     public function getAveStudents(){
         $years = Studentterm::where('programid', $this->programid)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
-        $numberOfStudents = 0;
+
+        $allYearsAve = [];
+        foreach($years as $year){
+            array_push($allYearsAve,  $this->getYearlyAveStudents($year));
+        }
+
+        $filteredYearsAve = $this->remove_outliers($allYearsAve, 1);
+
+        $sumAve = 0;
+        foreach($filteredYearsAve as $yearAve){
+            $sumAve = $sumAve + $yearAve;
+        }
+        $totalAve = $sumAve/(count($filteredYearsAve));
+
+        return round($totalAve, 2);
+
+        /*$numberOfStudents = 0;
         $zeroStudents = 0;
         foreach($years as $year){
             $studentCount = $this->getYearlyAveStudents($year);
@@ -28,7 +57,7 @@ class Program extends Eloquent {
         }
         $totalAve = $numberOfStudents/(count($years)-$zeroStudents);
 
-        return round($totalAve, 2);
+        return round($totalAve, 2);*/
     }
 
     public function getYearlyAveStudents($year){
