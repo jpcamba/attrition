@@ -34,12 +34,6 @@ Route::group(array('prefix' => 'college'), function () {
 	Route::post('/view_college', 'CollegeController@showSpecificCollege');
 });
 
-//Correlation
-Route::resource('correlation', 'CorrelationController');
-Route::group(array('prefix' => 'correlation'), function() {
-	Route::get('/', 'CorrelationController@index');
-});
-
 //Department
 Route::resource('department', 'DepartmentController');
 Route::group(array('prefix' => 'department'), function () {
@@ -47,10 +41,12 @@ Route::group(array('prefix' => 'department'), function () {
 	Route::post('/view_department', 'DepartmentController@showSpecificDepartment');
 });
 
-
-//Prediction
-Route::group(array('prefix' => 'prediction'), function () {
-	Route::get('/', 'HomeController@showPrediction');
+//Correlation
+Route::resource('correlation', 'CorrelationController');
+Route::group(array('prefix' => 'correlation'), function() {
+	Route::get('/', 'CorrelationController@index');
+	Route::post('college', 'CorrelationController@showCollege');
+	Route::post('department', 'CorrelationController@showDepartment');
 });
 
 //Simulation
