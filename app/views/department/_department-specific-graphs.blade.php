@@ -58,6 +58,8 @@
                 <center>
                     <h4>Attrition rate for each batch</h4>
                     <div id="department-ave-batch-attrition"></div>
+                    <br/>
+                    Department attrition is affected by the number of students who left the department either by dropping out of the university or by shifting to another department.
                 </center>
             </div>
         </div>
@@ -74,8 +76,8 @@
                 <center>
                     <h4>Average number of students per year</h4>
                     <div id="department-yearly-number-students"></div>
-                    <!--<h4>Difference between semesters per year</h4>
-                    <div id="department-yearly-sem-difference"></div>-->
+                    <br/>
+                    The average number of students per year consists of all the undergraduate students in the department regardless of their batch.
                 </center>
             </div>
         </div>

@@ -9,6 +9,8 @@
     for(var departmentTitle in departmentAveArray){
         var acronym = departmentTitle.replace("of", "");
         acronym = acronym.replace("and", "");
+        acronym = acronym.replace(" - CD", ""); //for dentistry "Graduate Studies Department - CD"
+        acronym = acronym.replace("Department", "");
         acronym = acronym.match(/\b\w/g).join('').toUpperCase();
         deptAcronyms[acronym] = { unitname: departmentTitle };
 

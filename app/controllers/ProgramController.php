@@ -10,18 +10,18 @@ class ProgramController extends \BaseController {
 	 */
 	public function index()
 	{
-        $programlist = Program::where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->get();
+        $programlist = Program::where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38))->get();
 
 		//Averaage students per program
 		$programAveArray = [];
 		$programBatchAttrition = [];
 		foreach($programlist as $program){
-			//$progStudents = round($program->getAveStudents(), 2);
-			//$programAveArray[$program->programtitle] = $progStudents;
-			//$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
+			$progStudents = round($program->getAveStudents(), 2);
+			$programAveArray[$program->programtitle] = $progStudents;
+			$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
 
-			$programAveArray[$program->programtitle] = $program->ave_students;
-			$programBatchAttrition[$program->programtitle] = $program->ave_batch_attrition;
+			//$programAveArray[$program->programtitle] = $program->ave_students;
+			//$programBatchAttrition[$program->programtitle] = $program->ave_batch_attrition;
 		}
 
 		//return page
@@ -46,20 +46,20 @@ class ProgramController extends \BaseController {
 			if($aveStudents > 1){
 				$yearlyStudentAverage[$yearData] = $aveStudents;
 			}
-			$semDiff = $program->getYearlySemDifference($yearData);
-			$yearlySemDifference[$yearData] = $semDiff;
+			//$semDiff = $program->getYearlySemDifference($yearData);
+			//$yearlySemDifference[$yearData] = $semDiff;
 		}
 
-		//$aveYearsOfStay = $program->getAveYearsOfStay();
-		//$aveYearsBeforeDropout = $program->getAveYearsBeforeDropout();
-		//$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
-		//$aveAttrition = $program->getAveAttrition();
-		//$aveShiftRate = $program->getAveShiftRate();
-		$aveYearsOfStay = $program->years_stay;
-		$aveYearsBeforeDropout = $program->years_before_drop;
-		$aveYearsBeforeShifting = $program->years_before_shift;
-		$aveAttrition = $program->ave_batch_attrition;
-		$aveShiftRate = $program->ave_batch_shift;
+		$aveYearsOfStay = $program->getAveYearsOfStay();
+		$aveYearsBeforeDropout = $program->getAveYearsBeforeDropout();
+		$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
+		$aveAttrition = $program->getAveAttrition();
+		$aveShiftRate = $program->getAveShiftRate();
+		//$aveYearsOfStay = $program->years_stay;
+		//$aveYearsBeforeDropout = $program->years_before_drop;
+		//$aveYearsBeforeShifting = $program->years_before_shift;
+		//$aveAttrition = $program->ave_batch_attrition;
+		//$aveShiftRate = $program->ave_batch_shift;
 
 		$batchAttrition = $program->getBatchAttrition();
 		$batchShiftRate = $program->getBatchShiftRate();
@@ -78,7 +78,7 @@ class ProgramController extends \BaseController {
 		['program' => $program,
 		 'aveYearsOfStay' => $aveYearsOfStay,
 		 'yearlyStudentAverage' => $yearlyStudentAverage,
-		 'yearlySemDifference' => $yearlySemDifference,
+		 //'yearlySemDifference' => $yearlySemDifference,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveAttrition' => $aveAttrition,

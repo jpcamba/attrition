@@ -11,16 +11,16 @@ class CampusController extends \BaseController {
 	{
 		//up manila
 		$campus = Campus::where('unitid', 2)->first();
-		$yearlySemDifference = $campus->getSemDifference();
+		//$yearlySemDifference = $campus->getSemDifference();
 		$yearlyStudentAverage = $campus->getStudentAverage();
 		//$aveYearsOfStay = $this->getAverageYears();
-		//$aveAttrition = $campus->getAveAttrition();
-		$aveAttrition = $campus->ave_batch_attrition;
+		$aveAttrition = $campus->getAveAttrition();
+		//$aveAttrition = $campus->ave_batch_attrition;
 		$batchAttrition = $campus->getBatchAttrition();
 		$aveDropouts = $campus->getAveDropouts();
 		$batchDropouts = $campus->getBatchDropouts();
-		//$aveYearsBeforeDropout = $campus->getAveYearsBeforeDropout();
-		$aveYearsBeforeDropout = $campus->years_before_drop;
+		$aveYearsBeforeDropout = $campus->getAveYearsBeforeDropout();
+		//$aveYearsBeforeDropout = $campus->years_before_drop;
 
 		//transferred to correlation
 		//$employmentCount = $campus->getEmploymentCount();
@@ -31,7 +31,7 @@ class CampusController extends \BaseController {
 		//return page
 		return View::make('campus.campus',
 		['yearlyStudentAverage' => $yearlyStudentAverage,
-		'yearlySemDifference' => $yearlySemDifference,
+		//'yearlySemDifference' => $yearlySemDifference,
 		'aveAttrition' => $aveAttrition,
 		'batchAttrition' => $batchAttrition,
 		'aveDropouts' => $aveDropouts,

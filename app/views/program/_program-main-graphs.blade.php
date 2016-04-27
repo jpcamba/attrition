@@ -10,6 +10,8 @@
                     <div id="program-ave-batch-attrition"></div>
                     <br/>
                     <div id="program-ave-batch-attrition-legend"></div>
+                    <br/><br/>
+                    Program attrition is affected by the number of students who left the program either by dropping out of the university or by shifting to another program.
                 </center>
             </div>
         </div>
@@ -22,6 +24,8 @@
                     <h4>Average number of students per year for each program</h4>
                     <div id="program-ave-number-students"></div>
                     <br/><div id="program-ave-number-students-legend"></div>
+                    <br/><br/>
+                    The average number of students per year consists of all the undergraduate students in the program regardless of their batch.
                 </center>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <script>
 //program
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
-    var yearlySemDifference = {{ json_encode($yearlySemDifference) }};
+    //var yearlySemDifference = {{-- json_encode($yearlySemDifference) --}};
     var batchAttrition = {{ json_encode($batchAttrition) }};
     var batchShiftRate = {{ json_encode($batchShiftRate) }};
     var division = {{ json_encode($division) }};
@@ -13,7 +13,7 @@
     var shiftBracketCount = {{ json_encode($shiftBracketCount) }};
 
     var averageData = [];
-    var semDifference = [];
+    //var semDifference = [];
     var attritionArray = [];
     var shiftArray = [];
     var divisionArray = [];
@@ -26,7 +26,7 @@
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
-        semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
+        //semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
     }
 
     for(var batchKey in batchAttrition){
@@ -75,7 +75,7 @@
      parseTime: false
     });
 
-    new Morris.Line({
+    /*new Morris.Line({
      element: 'program-yearly-sem-difference',
      data: semDifference,
      xkey: 'year',
@@ -85,7 +85,7 @@
      resize: true,
      goals: [0],
      parseTime: false
-    });
+ });*/
 
     new Morris.Line({
      element: 'program-ave-attrition-batch',

@@ -7,10 +7,11 @@
                 <center>
                     <h4>Average Attrition Rate</h4>
                     <h1 id="campus-average-attrition"></h1>
-                    <br>
+                    <br/>
                     <h4>Attrition Rate per Batch</h4>
                     <div id="campus-batch-attrition"></div>
-                    <br>
+                    <br/>
+                    Campus attrition is affected by the number of students who dropped out of the university.
                 </center>
             </div>
         </div>
@@ -38,6 +39,8 @@
                     <div id="campus-batch-dropouts"></div>
                     <br>
                 </div>
+                </br>
+                Dropouts are students whose number of years of stay in the university is less than the number of years required by their programs.
             </center>
         </div>
     </div>
@@ -53,9 +56,7 @@
                     <h4>Average number of students per year</h4>
                     <div id="campus-number-students"></div>
                     </br>
-                    <h4>Difference between semesters per year</h4>
-                    <div id="campus-sem-difference"></div>
-                    </br>
+                    The average number of students per year consists of all the undergraduate students in the campus regardless of their batch.
                 </center>
             </div>
         </div>

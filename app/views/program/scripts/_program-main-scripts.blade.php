@@ -12,6 +12,7 @@
         acronym = acronym.replace("(Area Studies)", ""); //case of social sciences
         acronym = acronym.replace("Liberal Arts - ", ""); //case of intarmed
         acronym = acronym.replace("Biochemistry", "B C"); //case of biochemistry
+        acronym = acronym.replace("Doctor Of ", ""); //case of dentistry
 
         acronym = acronym.match(/\b\w/g).join('').toUpperCase();
         progAcronyms[acronym] = { programname: programTitle };
@@ -35,6 +36,7 @@
      resize: true,
      barColors: ['#0BC9CD']
     });
+
 
     var programsAve = new Morris.Bar({
      element: 'program-ave-number-students',

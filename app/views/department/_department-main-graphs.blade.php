@@ -10,6 +10,8 @@
                     <div id="department-ave-attrition-rate"></div>
                     <br/>
                     <div id="department-ave-attrition-rate-legend"></div>
+                    <br/><br/>
+                    Department attrition is affected by the number of students who left the department either by dropping out of the university or by shifting to another department.
                 </center>
             </div>
         </div>
@@ -28,6 +30,8 @@
                     <div id="department-ave-number-students"></div>
                     <br/>
                     <div id="department-ave-number-students-legend"></div>
+                    <br/><br/>
+                    The average number of students per year consists of all the undergraduate students in the department regardless of their batch.
                 </center>
             </div>
         </div>
