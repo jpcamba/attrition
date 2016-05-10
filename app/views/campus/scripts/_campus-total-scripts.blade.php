@@ -73,13 +73,13 @@
     });
 
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
-    var yearlySemDifference = {{ json_encode($yearlySemDifference) }};
+    //var yearlySemDifference = {{-- json_encode($yearlySemDifference) --}};
     var averageData = [];
-    var semDifference = [];
+    //var semDifference = [];
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
-        semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
+        //semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
     }
 
     new Morris.Area({
@@ -92,7 +92,7 @@
      resize: true
     });
 
-    new Morris.Line({
+    /*new Morris.Line({
      element: 'campus-sem-difference',
      data: semDifference,
      xkey: 'year',
@@ -101,7 +101,7 @@
      hideHover: 'auto',
      resize: true,
      goals: [0]
-     });
+ });*/
 
      /*new Morris.Donut({
       element: 'campus-employment',

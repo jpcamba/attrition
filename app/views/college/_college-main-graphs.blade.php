@@ -8,7 +8,10 @@
                 <center>
                     <h4>Average attrition rate for each college</h4>
                     <div id="college-ave-attrition-rate"></div>
+                    <br/>
+                    College attrition is affected by the number of students who left the college either by dropping out of the university or by shifting to another college.
                 </center>
+
             </div>
         </div>
     </div>
@@ -24,7 +27,10 @@
                 <center>
                     <h4>Average number of students per year for each college</h4>
                     <div id="college-ave-number-students"></div>
+                    <br/>
+                    The average number of students per year consists of all the undergraduate students in the college regardless of their batch.
                 </center>
+
             </div>
         </div>
     </div>

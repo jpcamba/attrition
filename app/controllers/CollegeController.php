@@ -10,7 +10,7 @@ class CollegeController extends \BaseController {
 	 public function index()
  	{
 		$departmentlist = Department::whereHas('programs', function($q){
-							$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->whereNotIn('programid', array(62, 66, 38));
 							$q->where('degreelevel', 'U');
 						})->get();
 
@@ -24,13 +24,17 @@ class CollegeController extends \BaseController {
  		$collegeAveArray = [];
  		foreach($collegelist as $college){
 			$unitname = substr_replace($college->unitname, "\n", 11, 0);
- 			//$collStudents = round($college->getAveStudents(), 2);
-			//$collegeAveArray[$unitname] = $collStudents;
-			//$collAttrition = $college->getAveAttrition();
-			//$collegeAveAttritionArray[$college->unitname] = $collAttrition;
+			//if colllege of allied medical professsions
+			if($college->unitid === 9){
+				$unitname = substr_replace($college->unitname, "\n", 18, 0);
+			}
+ 			$collStudents = round($college->getAveStudents(), 2);
+			$collegeAveArray[$unitname] = $collStudents;
+			$collAttrition = $college->getAveAttrition();
+			$collegeAveAttritionArray[$unitname] = $collAttrition;
 
-			$collegeAveArray[$unitname] = $college->ave_students;
-			$collegeAveAttritionArray[$unitname] = $college->ave_batch_attrition;
+			//$collegeAveArray[$unitname] = $college->ave_students;
+			//$collegeAveAttritionArray[$unitname] = $college->ave_batch_attrition;
  		}
 
  		//return page
@@ -46,12 +50,12 @@ class CollegeController extends \BaseController {
 	    $collegeIDInput = Input::get('college-dropdown');
 	    $college = College::find($collegeIDInput);
 		$collegedepartments = $college->departments()->whereHas('programs', function($q){
-							$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->whereNotIn('programid', array(62, 66, 38));
 							$q->where('degreelevel', 'U');
 						})->get();
 
 	    //ave students per year and ave difference
-		$programids = $college->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+		$programids = $college->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $yearsArray = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
@@ -68,16 +72,16 @@ class CollegeController extends \BaseController {
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
-			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
-			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
+			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
+			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
 		}
 
-		//$aveAttrition = $college->getAveAttrition();
-		//$aveShiftRate = $college->getAveShiftRate();
+		$aveAttrition = $college->getAveAttrition();
+		$aveShiftRate = $college->getAveShiftRate();
 		$aveYearsBeforeDropout = $college->getAveYearsBeforeDropout();
 		$aveYearsBeforeShifting = $college->getAveYearsBeforeShifting();
-		$aveAttrition = $college->ave_batch_attrition;
-		$aveShiftRate = $college->ave_batch_shift;
+		//$aveAttrition = $college->ave_batch_attrition;
+		//$aveShiftRate = $college->ave_batch_shift;
 		$batchAttrition = $college->getBatchAttrition();
 		$departmentsAttrition = $college->getDepartmentsAveBatchAttrition();
 

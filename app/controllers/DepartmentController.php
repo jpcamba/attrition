@@ -10,7 +10,7 @@ class DepartmentController extends \BaseController {
 	 public function index()
  	{
 		$departmentlist = Department::whereHas('programs', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
+    						$q->whereNotIn('programid', array(62, 66, 38));
 							$q->where('degreelevel', 'U');
 						})->get();
 
@@ -19,13 +19,13 @@ class DepartmentController extends \BaseController {
  		$departmentAveArray = [];
 		$departmentAveAttritionArray = [];
  		foreach($departmentlist as $department){
- 			//$collStudents = round($department->getAveStudents(), 2);
-			//$departmentAveArray[$department->unitname] = $collStudents;
-			//$deptAttrition = $department->getAveAttrition();
-			//$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
+ 			$collStudents = round($department->getAveStudents(), 2);
+			$departmentAveArray[$department->unitname] = $collStudents;
+			$deptAttrition = $department->getAveAttrition();
+			$departmentAveAttritionArray[$department->unitname] = $deptAttrition;
 
-			$departmentAveArray[$department->unitname] = $department->ave_students;
-			$departmentAveAttritionArray[$department->unitname] = $department->ave_batch_attrition;
+			//$departmentAveArray[$department->unitname] = $department->ave_students;
+			//$departmentAveAttritionArray[$department->unitname] = $department->ave_batch_attrition;
  		}
 
  		//return page
@@ -40,10 +40,10 @@ class DepartmentController extends \BaseController {
 	public function showSpecificDepartment(){
 	    $departmentIDInput = Input::get('department-dropdown');
 	    $department = Department::find($departmentIDInput);
-		$departmentprograms = $department->programs()->where('degreelevel', 'U')->whereNotIn('programid', array(62, 66, 38, 22))->get();
+		$departmentprograms = $department->programs()->where('degreelevel', 'U')->whereNotIn('programid', array(62, 66, 38))->get();
 
 	    //ave students per year and ave difference
-		$programids = $department->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+		$programids = $department->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $yearsArray = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
@@ -60,19 +60,19 @@ class DepartmentController extends \BaseController {
 	    }
 
 		foreach($departmentprograms as $departmentprogram){
-			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
-			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
+			$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->getAveStudents(), 2);
+			//$departmentProgramsAverage[$departmentprogram->programtitle] = round($departmentprogram->ave_students, 2);
 		}
 
 
 		$batchAttrition = $department->getBatchAttrition();
 		$programsAttrition = $department->getProgramsAveBatchAttrition();
-		//$aveAttrition = $department->getAveAttrition();
-		//$aveShiftRate = $department->getAveShiftRate();
+		$aveAttrition = $department->getAveAttrition();
+		$aveShiftRate = $department->getAveShiftRate();
 		$aveYearsBeforeDropout = $department->getAveYearsBeforeDropout();
 		$aveYearsBeforeShifting = $department->getAveYearsBeforeShifting();
-		$aveAttrition = $department->ave_batch_attrition;
-		$aveShiftRate = $department->ave_batch_shift;
+		//$aveAttrition = $department->ave_batch_attrition;
+		//$aveShiftRate = $department->ave_batch_shift;
 
 		//$employmentCount = $department->getEmploymentCount();
 		$gradeCount = $department->getGradeCount();

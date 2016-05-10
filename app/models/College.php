@@ -35,7 +35,7 @@ class College extends Eloquent {
 
 
     public function getAveStudents(){
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $years = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
@@ -56,7 +56,7 @@ class College extends Eloquent {
     }
 
     public function getYearlyAveStudents($year){
-        $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
 
         $studentsSem1 = Studentterm::where('aysem', strval($year).'1' )->whereIn('programid', $programs)->count();
 
@@ -80,7 +80,7 @@ class College extends Eloquent {
     }
 
     public function getYearlySemDifference($year){
-        $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
 
         $studentsSem1 = Studentterm::where('aysem', strval($year).'1' )->whereIn('programid', $programs)->count();
 
@@ -104,7 +104,7 @@ class College extends Eloquent {
     }
 
     public function getAveAttrition(){
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $max = 2009;
@@ -133,7 +133,7 @@ class College extends Eloquent {
 
     public function getBatchAttrition(){
         $batchAttrition = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $max = 2009;
@@ -144,15 +144,19 @@ class College extends Eloquent {
             }
         }
 
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+
+        $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
 
         foreach ($batches as $batch) {
             $batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
 			$allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
 
+            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+
             if($allBatchStudents != 0){
-                $batchAttrition[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+                $batchAttrition[$batch / 100000] = round((($allBatchDropouts + $allBatchShiftees) / $allBatchStudents) * 100, 2);
             }
             else{
                 $batchAttrition[$batch / 100000] = -1;
@@ -163,7 +167,7 @@ class College extends Eloquent {
     }
 
     public function getAveShiftRate() {
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $max = 2009;
@@ -193,7 +197,7 @@ class College extends Eloquent {
 
     public function getBatchShiftRate(){
         $batchShiftRate = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         $max = 2009;
@@ -204,7 +208,7 @@ class College extends Eloquent {
             }
         }
 
-        //$programids = $this->programs()->whereNotIn('programid', array(62, 66, 22, 38))->where('degreelevel', 'U')->lists('programid'); //include programid = 38 (doctor of medicine)
+        //$programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid'); //include programid = 38 (doctor of medicine)
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
 
         foreach ($batches as $batch) {
@@ -227,13 +231,13 @@ class College extends Eloquent {
     public function getDepartmentsAveBatchAttrition(){
         $departmentsAveAttrition = [];
         $departments = $this->departments()->whereHas('programs', function($q){
-							$q->whereNotIn('programid', array(62, 66, 38, 22));
+							$q->whereNotIn('programid', array(62, 66, 38));
 							$q->where('degreelevel', 'U');
 						})->get();
 
         foreach($departments as $department){
-            //$departmentsAveAttrition[$department->unitname] = $department->getAveAttrition();
-            $departmentsAveAttrition[$department->unitname] = $department->ave_batch_attrition;
+            $departmentsAveAttrition[$department->unitname] = $department->getAveAttrition();
+            //$departmentsAveAttrition[$department->unitname] = $department->ave_batch_attrition;
         }
 
         return $departmentsAveAttrition;
@@ -241,7 +245,7 @@ class College extends Eloquent {
 
     public function getEmploymentCount(){
         $employmentArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->get();
         $dropoutCount = count($collegeDropouts);
         $employed = 0;
@@ -272,7 +276,7 @@ class College extends Eloquent {
         $batchEnd = $batch + 100000;
 
         $employmentArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
         $dropoutCount = count($collegeDropouts);
         $employed = 0;
@@ -299,7 +303,7 @@ class College extends Eloquent {
 
     public function getGradeCount(){
         $gradeArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->get();
         $dropoutCount = count($collegeDropouts);
         $passed = 0;
@@ -324,7 +328,7 @@ class College extends Eloquent {
         $batchEnd = $batch + 100000;
 
         $gradeArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
         $dropoutCount = count($collegeDropouts);
         $passed = 0;
@@ -346,7 +350,7 @@ class College extends Eloquent {
 
     public function getSTBracketCount(){
         $bracketArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->get();
         $bracketA = 0;
         $bracketB = 0;
@@ -401,7 +405,7 @@ class College extends Eloquent {
         $batchEnd = $batch + 100000;
 
         $bracketArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
         $bracketA = 0;
         $bracketB = 0;
@@ -453,7 +457,7 @@ class College extends Eloquent {
 
     public function getRegionCount(){
         $regionArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->get();
         $luzon = 0;
         $visayas = 0;
@@ -495,7 +499,7 @@ class College extends Eloquent {
         $batchEnd = $batch + 100000;
 
         $regionArray = [];
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $collegeDropouts = Studentdropout::whereIn('lastprogramid', $programids)->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->get();
         $luzon = 0;
         $visayas = 0;
@@ -534,7 +538,7 @@ class College extends Eloquent {
 
     public function getShiftGradeCount(){
         //To get batches of program whithin 2000-2009
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
@@ -594,7 +598,7 @@ class College extends Eloquent {
 
         $gradeArray = [];
 
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
 
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
         $programShiftees = DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');;
@@ -626,7 +630,7 @@ class College extends Eloquent {
     public function getShiftSTBracketCount(){
         $bracketArray = [];
 
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
@@ -717,7 +721,7 @@ class College extends Eloquent {
 
         $bracketArray = [];
 
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
 
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
         $programShiftees = DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get();
@@ -780,7 +784,7 @@ class College extends Eloquent {
 
     public function getAveYearsBeforeDropout(){
         //Get list of dropouts who has this program as their last program before dropping out.
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
 
 
@@ -801,7 +805,7 @@ class College extends Eloquent {
 
     public function getAveYearsBeforeShifting(){
         //To get batches of program whithin 2000-2009
-        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 22))->where('degreelevel', 'U')->lists('programid');
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
         $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
             $max = 2013;

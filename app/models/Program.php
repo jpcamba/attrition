@@ -317,29 +317,48 @@ class Program extends Eloquent {
             }
         }
 
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
 		foreach ($batches as $batch) {
 			$batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
 			$allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('lastprogramid', $this->programid)->count();
 
-			$batchAttrition[$batch / 100000] = round(($allBatchDropouts/$allBatchStudents)*100, 2);
+            if($this->programid == 28){
+                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            }
+            else{
+                $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('program2id', '!=', 38)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            }
+
+			$batchAttrition[$batch / 100000] = round((($allBatchDropouts + $allBatchShiftees)/$allBatchStudents)*100, 2);
 		}
 
 		return $batchAttrition;
 	}
 
     public function getSpecificBatchAttrition($batch){ //format is year
+
+        $dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
+
         $batch = $batch*100000;
         $batchEnd = $batch + 100000;
 
         $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
         $allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('lastprogramid', $this->programid)->count();
 
+        if($this->programid == 28){
+            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+        }
+        else{
+            $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('program2id', '!=', 38)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+        }
+
         if($allBatchStudents == 0){
             $batchAttrition = -1; //no students of this batch for this program
         }
         else{
-            $batchAttrition = round(($allBatchDropouts/$allBatchStudents)*100, 2);
+            $batchAttrition =  round((($allBatchDropouts + $allBatchShiftees)/$allBatchStudents)*100, 2);
         }
         return $batchAttrition;
     }

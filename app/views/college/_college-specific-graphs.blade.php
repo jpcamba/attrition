@@ -4,7 +4,7 @@
             <div class="panel-body">
                 <center>
                     <h4>Average Attrition Rate</h4>
-                    Students from this college who dropped out
+                    Students from this college who dropped out or shifted out
                     <div id="college-ave-attrition"><h1>{{ $aveAttrition }} %</h1></div><br/>
                 </center>
             </div>
@@ -59,7 +59,10 @@
                 <center>
                     <h4>Attrition rate for each batch</h4>
                     <div id="college-ave-batch-attrition"></div>
+                    <br/>
+                    College attrition is affected by the number of students who left the college either by dropping out of the university or by shifting to another college.
                 </center>
+
             </div>
         </div>
     </div>
@@ -75,10 +78,10 @@
                 <center>
                     <h4>Average number of students per year</h4>
                     <div id="college-yearly-number-students"></div>
-                    </br></br>
-                    <!--<h4>Difference between semesters per year</h4>
-                    <div id="college-yearly-sem-difference"></div>-->
+                    <br/>
+                    The average number of students per year consists of all the undergraduate students in the college regardless of their batch.
                 </center>
+
             </div>
         </div>
     </div>
