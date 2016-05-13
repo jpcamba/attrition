@@ -7,3 +7,4 @@
 <li><a class="active-menu" href="/correlation"><i class="fa fa-qrcode"></i> Correlation</a></li>
 <li><a href="/simulation"><i class="fa fa-table"></i> Simulation</a></li>
 @stop
+ 

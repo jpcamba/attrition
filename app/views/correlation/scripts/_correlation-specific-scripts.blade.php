@@ -3,7 +3,7 @@
     var rawCorrelation = {{json_encode($rawCorrelation)}};
     var factorNames = {{json_encode($factorNames)}};
     var level = {{json_encode($level)}};
-    var levelName = {{json_encode($levelName)}}
+    var levelName = {{json_encode($levelName)}};
 
     var positive = [1, 2, 3, 4, 6, 9];
     var negative = [7, 8];

@@ -47,7 +47,7 @@ Route::group(array('prefix' => 'correlation'), function() {
 	Route::get('/', 'CorrelationController@index');
 	Route::post('college', 'CorrelationController@showCollege');
 	Route::post('department', 'CorrelationController@showDepartment');
-});
+}); 
 
 //Simulation
 Route::group(array('prefix' => 'simulation'), function () {

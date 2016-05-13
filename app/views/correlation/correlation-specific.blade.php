@@ -4,7 +4,7 @@
 @section('title')
 
 @parent
-@stop
+@stop 
 
 <!-- User Sidebar -->
 @include('correlation/_correlation-sidebar')

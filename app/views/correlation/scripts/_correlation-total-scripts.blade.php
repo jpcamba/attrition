@@ -7,7 +7,7 @@
     var programs = {{json_encode($programs)}};
     var collegeNames = {{json_encode($collegeNames)}};
     var departmentNames = {{json_encode($departmentNames)}};
-    var programNames = {{json_encode($programNames)}};
+    var programNames = {{json_encode($programNames)}}; 
 
     var positive = [1, 2, 3, 4, 6, 9];
     var negative = [7, 8];

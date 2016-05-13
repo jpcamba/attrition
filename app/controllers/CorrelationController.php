@@ -7,7 +7,7 @@ class CorrelationController extends \BaseController {
 	 * @return Response
 	 */
 	public function index() {
-		$correlation = [];
+		$correlation = []; 
 		$rawCorrelation = [];
 
 		//Factors dropdown + names
