@@ -50,12 +50,18 @@ Route::group(array('prefix' => 'correlation'), function() {
 }); 
 
 //Simulation
-Route::group(array('prefix' => 'simulation'), function () {
-	Route::get('employment', 'HomeController@showSimEmployment');
-	Route::get('housing', 'HomeController@showSimHousing');
-	Route::get('grades', 'HomeController@showSimGrades');
-	Route::get('stdiscount', 'HomeController@showSimStdiscount');
-	Route::get('units', 'HomeController@showSimUnits');
+Route::group(array('prefix' => 'simulation'), function() {
+	Route::get('/', 'SimulationController@index');
+	Route::get('employment', 'SimulationController@showEmployment');
+	Route::post('employment', 'SimulationController@postEmployment');
+	Route::get('grades', 'SimulationController@showGrades');
+	Route::post('grades', 'SimulationController@postGrades');
+	Route::get('region', 'SimulationController@showRegion');
+	Route::post('region', 'SimulationController@postRegion');
+	Route::get('stbracket', 'SimulationController@showStbracket');
+	Route::post('stbracket', 'SimulationController@postStbracket');
+	Route::get('units', 'SimulationController@showUnits');
+	Route::post('units', 'SimulationController@postUnits');
 });
 
 //Elements

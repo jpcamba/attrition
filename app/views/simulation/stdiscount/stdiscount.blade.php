@@ -7,24 +7,33 @@
 @stop
 
 <!-- User Sidebar -->
-@include('simulation/stdiscount/_stdiscount-sidebar')
+@include('simulation/_simulation-sidebar')
 
 {{-- Page content --}}
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            Simulation (ST Discount) <!--<small>Say something about this page</small>-->
+            Simulation of Attrition Using ST Bracket
         </h1>
     </div>
 </div>
 <!-- /. ROW  -->
 
+@if ($error)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                <strong>Invalid input.</strong> Sum of input values should be equal to 100%.
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-success">
-            Get estimates of <strong>Total Attrition Rate</strong> and <strong>Total Number of
-            Dropouts</strong> from user-inputted student <strong>ST Discount Bracket</strong> percentages.
+            Get estimate of <strong>Average Attrition Rate</strong> from user-inputted student <strong>ST Bracket</strong> percentages.
         </div>
     </div>
 </div>
@@ -37,191 +46,60 @@
                 Enter percentages of students for each ST Discount Bracket.
             </div>
             <div class="panel-body">
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <form role="form" id="nd-form">
+                {{Form::open(array('role' => 'form', 'action' => 'SimulationController@postStbracket'))}}
+                    <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="nd" class="form-control" placeholder="ND" style="height:100px">
+                                <input type="number" id="nd" name="nd" class="form-control" placeholder="ND" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <form role="form" id="pd33-form">
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="pd33" class="form-control" placeholder="PD 33" style="height:100px">
+                                <input type="number" id="pd33" name="pd33" class="form-control" placeholder="PD 33" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <form role="form" id="pd60-form">
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="pd60" class="form-control" placeholder="PD 60" style="height:100px">
+                                <input type="number" id="pd60" name="pd60" class="form-control" placeholder="PD 60" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-4">
-                        <form role="form" id="pd80-form">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="pd80" class="form-control" placeholder="PD 80" style="height:100px">
+                                <input type="number" id="pd80" name="pd80" class="form-control" placeholder="PD 80" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <form role="form" id="fd-form">
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="fd" class="form-control" placeholder="FD" style="height:100px">
+                                <input type="number" id="fd" name="fd" class="form-control" placeholder="FD" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <form role="form" id="fds-form">
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group input-group">
-                                <input type="number" id="fds" class="form-control" placeholder="FD with Stipend" style="height:100px">
+                                <input type="number" id="fds" name="fds" class="form-control" placeholder="FD with Stipend" style="height:100px">
                                 <span class="input-group-addon" style="height:100px">%</span>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <center>
-                            <a class="btn btn-success" id="simulate">Simulate</a>
+                            <button type="submit" class="btn btn-success" id="simulate">Simulate</button>
                         </center>
                     </div>
-                    <div class="col-md-6">
-                        <center>
-                            <button class="btn btn-danger" id="clear" onclick="clearForm()">Clear</button>
-                        </center>
-                    </div>
-                </div>
+                {{Form::close()}}
             </div>
         </div>
     <div>
 </div>
 
-<!-- User Values Panel -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">Showing Simulation for</div>
-            <div class="panel-body">
-                <div id="values"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Total Number of Dropouts/Attrition Rate Panel -->
-<div class="row">
-    <div class="col-md-6" id="result">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <center>
-                    <h4>Total Attrition Rate</h4>
-                    <h1>
-                        <div id="rate"></div>
-                    </h1>
-                </center>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <center>
-                    <h4>Total Number of Dropouts</h4>
-                    <h1>
-                        <div id="dropouts"></div>
-                    </h1>
-                </center>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Validator Modal -->
-<div class="modal fade" id="validator" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                Please make sure total is equal to 100%.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @stop
 
 @section('javascript')
-
-<script type="text/javascript">
-    //Refresh and show results
-    function showGraphs() {
-        //Total Rate
-        var rateRand = Math.floor(Math.random() * (100 - 0 + 1)) + 0;
-        $('#rate').empty();
-        $('#rate').append(rateRand + '%');
-        
-        //Total Dropouts
-        $('#dropouts').empty();
-        $('#dropouts').append(Math.floor(Math.random() * (3000 - 1000 + 1)) + 1000);
-    }
-
-    //On Simulate Button Click
-    $('#simulate').click(function() {
-        var nd = parseInt($('#nd').val(), 10);
-        var pd33 = parseInt($('#pd33').val(), 10);
-        var pd60 = parseInt($('#pd60').val(), 10);
-        var pd80 = parseInt($('#pd80').val(), 10);
-        var fd = parseInt($('#fd').val(), 10);
-        var fds = parseInt($('#fds').val(), 10);
-        var sum = nd + pd33 + pd60 + pd80 + fd + fds;
-
-        if (sum != 100) {
-            $('#validator').modal('show');
-        }
-
-        else {
-            $('#values').empty();
-
-            Morris.Donut({
-                element: 'values',
-                data: [
-                    {label: "ND", value: nd},
-                    {label: "PD 33", value: pd33},
-                    {label: "PD 60", value: pd60},
-                    {label: "PD 80", value: pd80},
-                    {label: "FD", value: fd},
-                    {label: "FD with Stipend", value: fds}
-                ]
-            });
-
-            showGraphs();
-            window.location.here = '#values';
-            window.location.here = '#values';
-            window.location.hash = '#values';
-        }
-    });
-
-    //Clear Form
-    function clearForm() {
-        document.getElementById('nd-form').reset();
-        document.getElementById('pd33-form').reset();
-        document.getElementById('pd60-form').reset();
-        document.getElementById('pd80-form').reset();
-        document.getElementById('fd-form').reset();
-        document.getElementById('fds-form').reset();
-    }
-</script>
 
 @stop
