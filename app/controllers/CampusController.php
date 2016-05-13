@@ -21,6 +21,7 @@ class CampusController extends \BaseController {
 		$batchDropouts = $campus->getBatchDropouts();
 		$aveYearsBeforeDropout = $campus->getAveYearsBeforeDropout();
 		//$aveYearsBeforeDropout = $campus->years_before_drop;
+		$batchDelayed = $campus->getBatchDelayed();
 
 		//transferred to correlation
 		//$employmentCount = $campus->getEmploymentCount();
@@ -36,7 +37,8 @@ class CampusController extends \BaseController {
 		'batchAttrition' => $batchAttrition,
 		'aveDropouts' => $aveDropouts,
 		'batchDropouts' => $batchDropouts,
-		'aveYearsBeforeDropout' => $aveYearsBeforeDropout
+		'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
+		'batchDelayed' => $batchDelayed
 		//'employmentCount' => $employmentCount,
 		//'gradeCount' => $gradeCount,
 		//'stbracketCount' => $stbracketCount,

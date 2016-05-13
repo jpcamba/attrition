@@ -57,9 +57,14 @@ class Studentterm extends Eloquent {
         return Studentterm::join('programs', 'programs.programid', '=', 'studentterms.programid')->select(DB::raw('COUNT(*)/3 as numYears'))->where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->where('studentterms.studentid', '>=', 200000000)->where('studentterms.studentid', '<', 201000000)->get();
     }
 
+    //Get all students
+    public static function getAllStudents() {
+        return Studentterm::select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>=', 200000000)->where('studentterms.studentid', '<', 201000000)->whereNotIn('programs.programid', array(62, 66))->groupBy('studentterms.studentid')->get();
+    }
+
     //Get count of all students
     public static function getTotalStudentsCount() {
-        return Studentterm::select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>=', 200000000)->where('studentterms.studentid', '<', 201000000)->count();
+        return Studentterm::select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>=', 200000000)->where('studentterms.studentid', '<', 201000000)->groupBy('studentterms.studentid')->count();
     }
 
     //Get batch students
