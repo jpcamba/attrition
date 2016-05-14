@@ -45,16 +45,17 @@ class SimulationController extends \BaseController {
 EOF
 );
 
-		if ($employed < $unemployed) {
+		if ($unemployed > $employed) {
 			$rScript = $rScript.$dirPath.(<<<EOF
 
-				data<-read.csv(paste(dataDirectory, 'all_unemployment.csv', sep=''), header = TRUE)
+				data<-read.csv(paste(dataDirectory, 'all_employment.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
 				predictY<-predict(model, data.frame(X = 
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
-			$rScript = $rScript.$unemployed;
+			$employed2 = 1 - $unemployed;
+			$rScript = $rScript.$employed2;
 			$rScript = $rScript.(<<<EOF
 				))
 				predictY
@@ -65,13 +66,14 @@ EOF
 		else {
 			$rScript = $rScript.$dirPath.(<<<EOF
 
-				data<-read.csv(paste(dataDirectory, 'all_employment.csv', sep=''), header = TRUE)
+				data<-read.csv(paste(dataDirectory, 'all_unemployment.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
 				predictY<-predict(model, data.frame(X = 
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
-			$rScript = $rScript.$employed;
+			$unemployed2 = 1 - $employed;
+			$rScript = $rScript.$unemployed2;
 			$rScript = $rScript.(<<<EOF
 				))
 				predictY
@@ -109,6 +111,7 @@ EOF
 		$input['lineof2'] = Input::get('lineof2');
 		$input['lineof3'] = Input::get('lineof3');
 		$input['lineof4'] = Input::get('lineof4');
+		$passing = ($input['lineof1'] + $input['lineof2']) / 100;
 		$failing = ($input['lineof3'] + $input['lineof4']) / 100;
 		$attrition = 0;
 		$error = '';
@@ -124,20 +127,43 @@ EOF
 			dataDirectory<-
 EOF
 );
-		$rScript = $rScript.$dirPath.(<<<EOF
+		
+		if ($passing > $failing) {
+			$rScript = $rScript.$dirPath.(<<<EOF
 
-			data<-read.csv(paste(dataDirectory, 'all_lowgrades.csv', sep=''), header = TRUE)
-			model<-svm(Y ~ X, data)
-			predictY<-predict(model, data.frame(X = 
+				data<-read.csv(paste(dataDirectory, 'all_lowgrades.csv', sep=''), header = TRUE)
+				model<-svm(Y ~ X, data)
+				predictY<-predict(model, data.frame(X = 
 EOF
 );
-		$rScript = str_replace(' ', '', $rScript);
-		$rScript = $rScript.$failing;
-		$rScript = $rScript.(<<<EOF
-			))
-			predictY
+			$rScript = str_replace(' ', '', $rScript);
+			$passing2 = 1 - $failing;
+			$rScript = $rScript.$passing2;
+			$rScript = $rScript.(<<<EOF
+				))
+				predictY
 EOF
 );
+		}
+
+		else {
+			$rScript = $rScript.$dirPath.(<<<EOF
+
+				data<-read.csv(paste(dataDirectory, 'all_highgrades.csv', sep=''), header = TRUE)
+				model<-svm(Y ~ X, data)
+				predictY<-predict(model, data.frame(X = 
+EOF
+);
+			$rScript = str_replace(' ', '', $rScript);
+			$failing2 = 1 - $passing;
+			$rScript = $rScript.$failing2;
+			$rScript = $rScript.(<<<EOF
+				))
+				predictY
+EOF
+);
+
+		}
 
 		fwrite($rFile, $rScript);
 		fclose($rFile);
@@ -302,7 +328,7 @@ EOF
 EOF
 );
 
-		if ($input['underload'] > ($input['regular'] + $input['overload'])) {
+		if ($input['underload'] >= ($input['regular'] + $input['overload'])) {
 			$rScript = $rScript.$dirPath.(<<<EOF
 
 				data<-read.csv(paste(dataDirectory, 'all_underloadingunits.csv', sep=''), header = TRUE)
