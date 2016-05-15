@@ -50,7 +50,7 @@ EOF
 
 				data<-read.csv(paste(dataDirectory, 'all_unemployment.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
-				predictY<-predict(model, data.frame(X = 
+				predictY<-predict(model, data.frame(X =
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
@@ -67,7 +67,7 @@ EOF
 
 				data<-read.csv(paste(dataDirectory, 'all_employment.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
-				predictY<-predict(model, data.frame(X = 
+				predictY<-predict(model, data.frame(X =
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
@@ -128,7 +128,7 @@ EOF
 
 			data<-read.csv(paste(dataDirectory, 'all_lowgrades.csv', sep=''), header = TRUE)
 			model<-svm(Y ~ X, data)
-			predictY<-predict(model, data.frame(X = 
+			predictY<-predict(model, data.frame(X =
 EOF
 );
 		$rScript = str_replace(' ', '', $rScript);
@@ -171,7 +171,7 @@ EOF
 		$attrition = 0;
 		$error = '';
 
-		$rPath = 'C:/Program Files/R/R-3.2.4revised/bin/i386';
+		$rPath = 'C:/Program Files/R/R-3.2.4revised/bin';
 		$pubPath = public_path();
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
@@ -186,7 +186,7 @@ EOF
 
 			data<-read.csv(paste(dataDirectory, 'all_region.csv', sep=''), header = TRUE)
 			model<-svm(Y ~ X, data)
-			predictY<-predict(model, data.frame(X = 
+			predictY<-predict(model, data.frame(X =
 EOF
 );
 		$rScript = str_replace(' ', '', $rScript);
@@ -246,7 +246,7 @@ EOF
 
 			data<-read.csv(paste(dataDirectory, 'all_stbracketab.csv', sep=''), header = TRUE)
 			model<-svm(Y ~ X, data)
-			predictY<-predict(model, data.frame(X = 
+			predictY<-predict(model, data.frame(X =
 EOF
 );
 		$rScript = str_replace(' ', '', $rScript);
@@ -307,7 +307,7 @@ EOF
 
 				data<-read.csv(paste(dataDirectory, 'all_underloadingunits.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
-				predictY<-predict(model, data.frame(X = 
+				predictY<-predict(model, data.frame(X =
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
@@ -319,7 +319,7 @@ EOF
 
 				data<-read.csv(paste(dataDirectory, 'all_overloadingunits.csv', sep=''), header = TRUE)
 				model<-svm(Y ~ X, data)
-				predictY<-predict(model, data.frame(X = 
+				predictY<-predict(model, data.frame(X =
 EOF
 );
 			$rScript = str_replace(' ', '', $rScript);
