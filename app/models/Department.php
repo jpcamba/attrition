@@ -158,8 +158,10 @@ class Department extends Eloquent {
 
             $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->where('program1years', '<', DB::raw('CAST(numyears AS numeric)'))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
 
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
+
             if($allBatchStudents != 0){
-                $batchAttrition[$batch / 100000] = round((($allBatchDropouts + $allBatchShiftees) / $allBatchStudents) * 100, 2);
+                $batchAttrition[$batch / 100000] = round((($allBatchDropouts + $allBatchShiftees + $allBatchDelayed) / $allBatchStudents) * 100, 2);
             }
             else{
                 $batchAttrition[$batch / 100000] = -1;

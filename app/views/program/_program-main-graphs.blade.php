@@ -11,7 +11,7 @@
                     <br/>
                     <div id="program-ave-batch-attrition-legend"></div>
                     <br/><br/>
-                    Program attrition is affected by the number of students who left the program either by dropping out of the university or by shifting to another program.
+                    Program attrition is affected by the number of students who left the program or batch by dropping out of the university, shifting to another program, or being delayed.
                 </center>
             </div>
         </div>

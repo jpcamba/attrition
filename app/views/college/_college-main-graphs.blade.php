@@ -9,7 +9,7 @@
                     <h4>Average attrition rate for each college</h4>
                     <div id="college-ave-attrition-rate"></div>
                     <br/>
-                    College attrition is affected by the number of students who left the college either by dropping out of the university or by shifting to another college.
+                    College attrition is affected by the number of students who left the college or batch by dropping out of the university, shifting to another college, or being delayed.
                 </center>
 
             </div>

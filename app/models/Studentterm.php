@@ -73,6 +73,19 @@ class Studentterm extends Eloquent {
         return Studentterm::select('studentterms.studentid')->join('programs', 'studentterms.programid', '=', 'programs.programid')->where('programs.degreelevel', 'U')->where('studentterms.studentid', '>=', $batch)->where('studentterms.studentid', '<', $batchEnd)->groupBy('studentterms.studentid')->orderBy('studentterms.studentid')->get();
     }
 
+    public static function countStudentSem($studentid, $programid) {
+		$aysems = Studentterm::select('aysem')->where('studentid', $studentid)->where('programid', $programid)->get();
+		$sems = 0;
+
+		foreach ($aysems as $aysem) {
+			$sem = substr($aysem->aysem, -1);
+			if ($sem === '1' || $sem === '2')
+				$sems = $sems + 1;
+		}
+
+		return $sems;
+	}
+
     //Get batch students (Program)
     public static function getBatchStudentsProgram($batch, $programid) {
         $batchEnd = $batch + 100000;

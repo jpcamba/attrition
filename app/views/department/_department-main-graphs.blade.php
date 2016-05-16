@@ -11,7 +11,7 @@
                     <br/>
                     <div id="department-ave-attrition-rate-legend"></div>
                     <br/><br/>
-                    Department attrition is affected by the number of students who left the department either by dropping out of the university or by shifting to another department.
+                    Department attrition is affected by the number of students who left the department or batch by dropping out of the university, shifting to another department, or being delayed.
                 </center>
             </div>
         </div>
