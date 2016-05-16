@@ -29,11 +29,27 @@ class Campus extends Eloquent {
 		foreach ($batches as $batch) {
 			$allBatchDropouts = Studentdropout::getBatchDropoutsCount($batch);
 			$allBatchStudents = Studentterm::getBatchStudentsCount($batch);
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCount($batch);
 
-			$batchAttrition[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+			$batchAttrition[$batch / 100000] = round((($allBatchDropouts + $allBatchDelayed) / $allBatchStudents) * 100, 2);
 		}
 
 		return $batchAttrition;
+	}
+
+    //Get average delay rate
+	public function getAveDelayed() {
+        //changed to rate
+		$sumDelayed = 0;
+		$batches = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009];
+		$batchDelayed = $this->getBatchDelayed();
+
+		foreach ($batches as $batch) {
+			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
+		}
+
+		$aveDelayed = round($sumDelayed / 10, 2);
+		return $aveDelayed;
 	}
 
     //Get batch delayed
@@ -42,7 +58,7 @@ class Campus extends Eloquent {
         $batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
 
         foreach ($batches as $batch) {
-            $delayedRaw = Studentdropout::getBatchDropouts($batch);
+            /*$delayedRaw = Studentdropout::getBatchDropouts($batch);
             $allBatchDelayed = 0;
 
             foreach ($delayedRaw as $delayRaw) {
@@ -52,8 +68,9 @@ class Campus extends Eloquent {
 
                 if ($semesters > $realYears * 2)
                     $allBatchDelayed = $allBatchDelayed + 1;
-            }
+            }*/
 
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCount($batch);
             $allBatchStudents = Studentterm::getBatchStudentsCount($batch);
 
             $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
@@ -62,8 +79,9 @@ class Campus extends Eloquent {
         return $batchDelayed;
     }
 
-	//Get average number of dropouts
+	//Get average number of dropouts (rate)
 	public function getAveDropouts() {
+        //changed to rate
 		$sumDropouts = 0;
 		$batches = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009];
 		$batchDropouts = $this->getBatchDropouts();
@@ -72,17 +90,19 @@ class Campus extends Eloquent {
 			$sumDropouts = $sumDropouts + $batchDropouts[$batch];
 		}
 
-		$aveAttrition = round($sumDropouts / 10, 0);
+		$aveAttrition = round($sumDropouts / 10, 2);
 		return $aveAttrition;
 	}
 
-	//Get batch number of dropouts
+	//Get batch number of dropouts (rate)
 	public function getBatchDropouts() {
 		$batchDropouts = [];
 		$batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
 
 		foreach ($batches as $batch) {
-			$batchDropouts[$batch / 100000] = Studentdropout::getBatchDropoutsCount($batch);
+            $allBatchStudents = Studentterm::getBatchStudentsCount($batch);
+            $allBatchDropouts = Studentdropout::getBatchDropoutsCount($batch);
+			$batchDropouts[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
 		}
 
 		return $batchDropouts;

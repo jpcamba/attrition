@@ -67,10 +67,34 @@
         data: batchDropouts,
         xkey: 'batch',
         ykeys: ['dropouts'],
-        labels: ['Dropouts'],
+        labels: ['Dropout Rate'],
         hideHover: 'auto',
         resize: true
     });
+
+    //Average Delayed
+    $('#campus-average-delayed').empty();
+    $('#campus-average-delayed').append({{json_encode($aveDelayed)}});
+
+    //Batch
+    var batchDelayedRaw = {{json_encode($batchDelayed)}};
+    var batchDelayed = [];
+
+    for (var batchKey in batchDelayedRaw) {
+        batchDelayed.push({batch: batchKey, delayed: batchDelayedRaw[batchKey]});
+    }
+
+    new Morris.Line({
+        element: 'campus-batch-delayed',
+        data: batchDelayed,
+        xkey: 'batch',
+        ykeys: ['delayed'],
+        labels: ['Delayed Rate'],
+        hideHover: 'auto',
+        resize: true
+    });
+
+    //student count
 
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
     //var yearlySemDifference = {{-- json_encode($yearlySemDifference) --}};

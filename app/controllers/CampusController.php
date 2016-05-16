@@ -9,6 +9,7 @@ class CampusController extends \BaseController {
 	 */
 	public function index()
 	{
+
 		//up manila
 		$campus = Campus::where('unitid', 2)->first();
 		//$yearlySemDifference = $campus->getSemDifference();
@@ -21,6 +22,7 @@ class CampusController extends \BaseController {
 		$batchDropouts = $campus->getBatchDropouts();
 		$aveYearsBeforeDropout = $campus->getAveYearsBeforeDropout();
 		//$aveYearsBeforeDropout = $campus->years_before_drop;
+		$aveDelayed = $campus->getAveDelayed();
 		$batchDelayed = $campus->getBatchDelayed();
 
 		//transferred to correlation
@@ -38,6 +40,7 @@ class CampusController extends \BaseController {
 		'aveDropouts' => $aveDropouts,
 		'batchDropouts' => $batchDropouts,
 		'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
+		'aveDelayed' => $aveDelayed,
 		'batchDelayed' => $batchDelayed
 		//'employmentCount' => $employmentCount,
 		//'gradeCount' => $gradeCount,
