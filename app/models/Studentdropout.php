@@ -84,4 +84,24 @@ class Studentdropout extends Eloquent {
         $programids = Studentdropout::getCollPrograms($collegeid);
         return count(Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->get());
     }
+
+    //Get batch students (Program)
+    public static function getBatchDropoutsProgram($batch, $programid) {
+        $batchEnd = $batch + 100000;
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->where('programid', $programid)->get();
+    }
+
+    //Get batch students (Department)
+    public static function getBatchDropoutsDepartment($batch, $departmentid) {
+        $batchEnd = $batch + 100000;
+        $programids = Studentdropout::getDeptPrograms($departmentid);
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->get();
+    }
+
+    //Get batch students (College)
+    public static function getBatchDropoutsCollege($batch, $collegeid) {
+        $batchEnd = $batch + 100000;
+        $programids = Studentdropout::getCollPrograms($collegeid);
+        return Studentdropout::select('studentid')->where('studentid', '>=', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->get();
+    }
 }
