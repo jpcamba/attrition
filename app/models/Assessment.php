@@ -46,8 +46,12 @@ class Assessment extends Eloquent {
 
         foreach ($semesters as $semester) {
             if (substr($semester->aysem, -1) === '1' || substr($semester->aysem, -1) === '2') {
-                $totalUnits = $totalUnits + $semester->total_units;
-                $totalSemesters++;
+                $units = $semester->total_units;
+
+                if ($units > 0 && $units <= 21) {
+                    $totalUnits = $totalUnits + $units;
+                    $totalSemesters = $totalSemesters + 1;
+                }
             }
         }
 
@@ -72,8 +76,13 @@ class Assessment extends Eloquent {
         foreach ($semesters as $semester) {
             $semesterAysem = $semester->aysem;
             if (in_array($semesterAysem, $aysems) && (substr($semesterAysem, -1) === '1' || substr($semesterAysem, -1) === '2')) {
-                $totalUnits = $totalUnits + $semester->total_units;
-                $totalSemesters++;
+
+                $units = $semester->total_units;
+
+                if ($units > 0 && $units <= 21) {
+                    $totalUnits = $totalUnits + $units;
+                    $totalSemesters++;
+                }
             }
         }
 
@@ -99,8 +108,13 @@ class Assessment extends Eloquent {
         foreach ($semesters as $semester) {
             $semesterAysem = $semester->aysem;
             if (in_array($semesterAysem, $aysems) && (substr($semesterAysem, -1) === '1' || substr($semesterAysem, -1) === '2')) {
-                $totalUnits = $totalUnits + $semester->total_units;
-                $totalSemesters++;
+
+                $units = $semester->total_units;
+
+                if ($units > 0 && $units <= 21) {
+                    $totalUnits = $totalUnits + $units;
+                    $totalSemesters = $totalSemesters + 1;
+                }
             }
         }
 
@@ -126,8 +140,13 @@ class Assessment extends Eloquent {
         foreach ($semesters as $semester) {
             $semesterAysem = $semester->aysem;
             if (in_array($semesterAysem, $aysems) && (substr($semesterAysem, -1) === '1' || substr($semesterAysem, -1) === '2')) {
-                $totalUnits = $totalUnits + $semester->total_units;
-                $totalSemesters++;
+
+                $units = $semester->total_units;
+
+                if ($units > 0 && $units <= 21) {
+                    $totalUnits = $totalUnits + $units;
+                    $totalSemesters = $totalSemesters + 1;
+                }
             }
         }
 

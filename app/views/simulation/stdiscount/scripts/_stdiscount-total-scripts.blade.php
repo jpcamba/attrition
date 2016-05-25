@@ -22,6 +22,7 @@
     //Attrition Results Chart
     var attrition = {{json_encode($attrition)}};
     var retention = 100 - attrition;
+    retention = Math.round((retention + 0.00001) * 100) / 100;
 
     Morris.Donut({
         element: 'attrition',
