@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCorrelationsTable extends Migration {
+class RereateCorrelationsTable extends Migration {
 
 	/**
 	 * Run the migrations.
