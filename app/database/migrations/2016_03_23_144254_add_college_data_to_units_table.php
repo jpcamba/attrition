@@ -25,7 +25,7 @@ class AddCollegeDataToUnitsTable extends Migration {
 		$collegelist = array_unique($collegelist);
 
 		foreach($collegelist as $college){
-			$college->ave_batch_ attrition = $college->getAveAttrition();
+			$college->ave_batch_attrition = $college->getAveAttrition();
 			$college->ave_batch_shift = $college->getAveShiftRate();
 			$college->ave_students = $college->getAveStudents();
 			$college->save(['timestamps' => false]);
