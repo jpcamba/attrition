@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterCollegeDropoutsInCorrelationsTable extends Migration {
+class RealterCollegeDropoutsInCorrelationsTable extends Migration {
 
 	/**
 	 * Run the migrations.
