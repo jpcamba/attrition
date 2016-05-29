@@ -58,18 +58,6 @@ class Campus extends Eloquent {
         $batches = [200000000, 200100000, 200200000, 200300000, 200400000, 200500000, 200600000, 200700000, 200800000, 200900000];
 
         foreach ($batches as $batch) {
-            /*$delayedRaw = Studentdropout::getBatchDropouts($batch);
-            $allBatchDelayed = 0;
-
-            foreach ($delayedRaw as $delayRaw) {
-                $studentid = $delayRaw->studentid;
-                $semesters = Studentdropout::select('semesters')->where('studentid', $studentid)->first()->semesters;
-                $realYears = Program::select('numyears')->where('programid', Studentdropout::select('programid')->where('studentid', $studentid)->first()->programid)->first()->numyears;
-
-                if ($semesters > $realYears * 2)
-                    $allBatchDelayed = $allBatchDelayed + 1;
-            }*/
-
             $allBatchDelayed = Studentdelayed::getBatchDelayedCount($batch);
             $allBatchStudents = Studentterm::getBatchStudentsCount($batch);
 

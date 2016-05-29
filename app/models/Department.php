@@ -232,6 +232,51 @@ class Department extends Eloquent {
 		return $batchShiftRate;
     }
 
+    public function getAveDelayedRate(){
+        $sumDelayed = 0;
+
+        //get batches
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+		$batchDelayed = $this->getBatchDelayed();
+
+		foreach ($batches as $batch) {
+			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
+		}
+
+		$aveDelayed = round($sumDelayed / 10, 2);
+		return $aveDelayed;
+    }
+
+    public function getBatchDelayedRate(){
+        $batchDelayedRate = [];
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        foreach ($batches as $batch) {
+            $allBatchStudents = Studentterm::getBatchStudentsCountDepartment($batch, $this->unitid);
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
+            $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
+        }
+    }
+
     public function getProgramsAveBatchAttrition(){
         $programsAveAttrition = [];
         $programs = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->get();
