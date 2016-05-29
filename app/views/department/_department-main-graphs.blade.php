@@ -13,6 +13,31 @@
                     <br/><br/>
                     Department attrition is affected by the number of students who left the department or batch by dropping out of the university, shifting to another department, or being delayed.
                 </center>
+
+        		@foreach($departmentlist as $department){
+        			{{$deptlist[$department->unitname] = $department}}
+        		}
+                @endforeach
+
+                @foreach ($deptlist as $department)
+                {
+                    {{$attr[$department->unitname] = $department->getAveAttrition()}}
+                }
+                @endforeach
+                {{array_multisort($attr, SORT_DESC, $deptlist)}} <br/><br/>
+
+                @foreach($deptlist as $department)
+                    {{ $department->unitname }} & {{ $department->getAveAttrition() }}\% \\ <br/>
+                @endforeach
+                <br/>
+
+                @foreach($deptlist as $department)
+                    {{ $department->unitname }}
+                    &  {{ $department->getAveDropoutRate() }}\%
+                    &  {{ $department->getAveShiftRate() }}\%
+                    &  {{ $department->getAveDelayedRate() }}\% \\ <br/>
+                @endforeach
+
             </div>
         </div>
     </div>
