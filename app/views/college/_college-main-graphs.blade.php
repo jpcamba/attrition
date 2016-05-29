@@ -11,6 +11,28 @@
                     <br/>
                     College attrition is affected by the number of students who left the college or batch by dropping out of the university, shifting to another college, or being delayed.
                 </center>
+
+
+                @foreach ($collegelist as $college)
+                {
+                    {{$attr[$college->unitname] = $college->getAveAttrition()}}
+                }
+                @endforeach
+                {{array_multisort($attr, SORT_DESC, $collegelist)}} <br/><br/>
+
+                @foreach($collegelist as $college)
+                    {{ $college->unitname }} &  {{ $college->getAveAttrition() }}\% \\ <br/>
+                @endforeach
+                <br/>
+
+                @foreach($collegelist as $college)
+                    {{ $college->unitname }}
+                    &  {{ $college->getAveDropoutRate() }}\%
+                    &  {{ $college->getAveShiftRate() }}\%
+                    &  {{ $college->getAveDelayedRate() }}\% \\ <br/>
+                @endforeach
+
+
             </div>
         </div>
     </div>
