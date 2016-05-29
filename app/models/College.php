@@ -245,13 +245,13 @@ class College extends Eloquent {
             }
         }
 
-		$batchDelayed = $this->getBatchDelayed();
+		$batchDelayed = $this->getBatchDelayedRate();
 
 		foreach ($batches as $batch) {
-			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
+			$sumDelayed = $sumDelayed + $batchDelayed[$batch / 100000];
 		}
 
-		$aveDelayed = round($sumDelayed / 10, 2);
+		$aveDelayed = round($sumDelayed / count($batches), 2);
 		return $aveDelayed;
     }
 
@@ -269,10 +269,63 @@ class College extends Eloquent {
         }
 
         foreach ($batches as $batch) {
-            $allBatchStudents = Studentterm::getBatchStudentsCountCollege($batch, $this->unitid);
+            $batchEnd = $batch + 100000;
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
             $allBatchDelayed = Studentdelayed::getBatchDelayedCountCollege($batch, $this->unitid);
-            $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
+            $batchDelayedRate[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
         }
+
+        return $batchDelayedRate;
+    }
+
+    public function getAveDropoutRate(){
+        $sumDropout = 0;
+
+        //get batches
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+		$batchDropout = $this->getBatchDropoutRate();
+
+		foreach ($batches as $batch) {
+			$sumDropout = $sumDropout + $batchDropout[$batch / 100000];
+		}
+
+		$aveDropout = round($sumDropout / count($batches), 2);
+		return $aveDropout;
+    }
+
+    public function getBatchDropoutRate(){
+        $batchDropoutRate = [];
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        foreach ($batches as $batch) {
+            $batchEnd = $batch + 100000;
+
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
+			$allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
+
+            $batchDropoutRate[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+        }
+
+        return $batchDropoutRate;
     }
 
     public function getDepartmentsAveBatchAttrition(){

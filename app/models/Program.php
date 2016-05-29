@@ -430,8 +430,6 @@ class Program extends Eloquent {
 
             if($this->programid == 28){
                 $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
-                //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-                //$allBatchShiftees = $allBatchShiftees + $domShiftees;
             }
             else{
                 $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->where('program2id', '!=', 38)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
@@ -467,18 +465,19 @@ class Program extends Eloquent {
             }
         }
 
-		$batchDelayed = $this->getBatchDelayed();
+        $batchDelayed = $this->getBatchDelayedRate();
 
-		foreach ($batches as $batch) {
-			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
-		}
+        foreach ($batches as $batch) {
+            $sumDelayed = $sumDelayed + $batchDelayed[$batch / 100000];
+        }
 
-		$aveDelayed = round($sumDelayed / 10, 2);
-		return $aveDelayed;
+        $aveDelayed = round($sumDelayed / count($batches), 2);
+        return $aveDelayed;
     }
 
     public function getBatchDelayedRate(){
         $batchDelayedRate = [];
+
         //To get batches of program whithin 2000-2009
         $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
         if($this->revisionyear > 2009){
@@ -499,14 +498,85 @@ class Program extends Eloquent {
                 array_push($batches, ($progYear*100000));
             }
         }
-        
+
         foreach ($batches as $batch) {
-            $allBatchStudents = Studentterm::getBatchStudentsCountDepartment($batch, $this->unitid);
-            $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
-            $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
+            $batchEnd = $batch + 100000;
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCountProgram($batch, $this->programid);
+            $batchDelayedRate[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
         }
+
+        return $batchDelayedRate;
     }
 
+    public function getAveDropoutRate(){
+        $sumDropout = 0;
+
+        ///To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $batchDropout = $this->getBatchDropoutRate();
+
+        foreach ($batches as $batch) {
+            $sumDropout = $sumDropout + $batchDropout[$batch / 100000];
+        }
+
+        $aveDropout = round($sumDropout / count($batches), 2);
+        return $aveDropout;
+    }
+
+    public function getBatchDropoutRate(){
+        $batchDropoutRate = [];
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        foreach ($batches as $batch) {
+            $batchEnd = $batch + 100000;
+
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('programid', $this->programid)->groupBy('studentid')->get());
+            $allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('lastprogramid', $this->programid)->count();
+
+            $batchDropoutRate[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+        }
+
+        return $batchDropoutRate;
+    }
 
     public function getSpecificBatchShiftRate($batch){//format of batch is year ex. 2012
         $batch = $batch*100000;

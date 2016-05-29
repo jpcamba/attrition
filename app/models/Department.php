@@ -121,7 +121,7 @@ class Department extends Eloquent {
         $batchAttrs = $this->getBatchAttrition();
         $sumAttrition = 0;
         $noData = 0;
-		foreach ($batches as $batch) {
+        foreach ($batches as $batch) {
             $attrData = $batchAttrs[$batch / 100000];
             if($attrData != -1){
                 $sumAttrition = $sumAttrition + ($batchAttrs[$batch / 100000]/100);
@@ -129,9 +129,9 @@ class Department extends Eloquent {
             else{
                 $noData++;
             }
-		}
-		$aveAttrition = round(($sumAttrition / (count($batches) - $noData)) * 100, 2);
-		return $aveAttrition;
+        }
+        $aveAttrition = round(($sumAttrition / (count($batches) - $noData)) * 100, 2);
+        return $aveAttrition;
     }
 
     public function getBatchAttrition(){
@@ -154,9 +154,9 @@ class Department extends Eloquent {
         foreach ($batches as $batch) {
             $batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
-			$allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
+            $allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
 
-            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->where('program1years', '<', DB::raw('CAST(numyears AS numeric)'))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
 
             $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
 
@@ -166,9 +166,9 @@ class Department extends Eloquent {
             else{
                 $batchAttrition[$batch / 100000] = -1;
             }
-		}
+        }
 
-		return $batchAttrition;
+        return $batchAttrition;
     }
 
     public function getAveShiftRate() {
@@ -186,18 +186,18 @@ class Department extends Eloquent {
         $batchShifts = $this->getBatchShiftRate();
         $sumShiftRate = 0;
         $noData = 0;
-		foreach ($batches as $batch) {
+        foreach ($batches as $batch) {
             $attrData = $batchShifts[$batch / 100000];
             if($attrData != -1){
-			     $sumShiftRate = $sumShiftRate +  ($batchShifts[$batch / 100000]/100);
+                 $sumShiftRate = $sumShiftRate +  ($batchShifts[$batch / 100000]/100);
             }
             else{
                 $noData++;
             }
-		}
+        }
 
-		$aveShiftRate = round(($sumShiftRate / (count($batches) - $noData)) * 100, 2);
-		return $aveShiftRate;
+        $aveShiftRate = round(($sumShiftRate / (count($batches) - $noData)) * 100, 2);
+        return $aveShiftRate;
     }
 
     public function getBatchShiftRate(){
@@ -213,13 +213,14 @@ class Department extends Eloquent {
             }
         }
 
+        //$programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid'); //include programid = 38 (doctor of medicine)
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
+
         foreach ($batches as $batch) {
             $batchEnd = $batch + 100000;
             $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
-            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->where('program1years', '<', DB::raw('CAST(numyears AS numeric)'))->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
-
-			//$allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->groupBy('studentid')->get());
+            $allBatchShiftees = count(DB::table('studentshifts')->join('programs', 'program1id', '=', 'programid')->select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->whereRaw('program1years < CAST(numyears AS numeric)')->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
+            //$allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('program1id', $programids)->whereNotIn('program2id',  $programids)->where('program2id', '!=', 38)->groupBy('studentid')->get());
 
             if($allBatchStudents != 0){
                 $batchShiftRate[$batch / 100000] = round(($allBatchShiftees / $allBatchStudents) * 100, 2);
@@ -227,9 +228,9 @@ class Department extends Eloquent {
             else{
                 $batchShiftRate[$batch / 100000] = -1;
             }
-		}
+        }
 
-		return $batchShiftRate;
+        return $batchShiftRate;
     }
 
     public function getAveDelayedRate(){
@@ -247,14 +248,14 @@ class Department extends Eloquent {
             }
         }
 
-		$batchDelayed = $this->getBatchDelayed();
+        $batchDelayed = $this->getBatchDelayedRate();
 
-		foreach ($batches as $batch) {
-			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
-		}
+        foreach ($batches as $batch) {
+            $sumDelayed = $sumDelayed + $batchDelayed[$batch / 100000];
+        }
 
-		$aveDelayed = round($sumDelayed / 10, 2);
-		return $aveDelayed;
+        $aveDelayed = round($sumDelayed / count($batches), 2);
+        return $aveDelayed;
     }
 
     public function getBatchDelayedRate(){
@@ -271,10 +272,63 @@ class Department extends Eloquent {
         }
 
         foreach ($batches as $batch) {
-            $allBatchStudents = Studentterm::getBatchStudentsCountDepartment($batch, $this->unitid);
+            $batchEnd = $batch + 100000;
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
             $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
-            $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
+            $batchDelayedRate[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
         }
+
+        return $batchDelayedRate;
+    }
+
+    public function getAveDropoutRate(){
+        $sumDropout = 0;
+
+        //get batches
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        $batchDropout = $this->getBatchDropoutRate();
+
+        foreach ($batches as $batch) {
+            $sumDropout = $sumDropout + $batchDropout[$batch / 100000];
+        }
+
+        $aveDropout = round($sumDropout / count($batches), 2);
+        return $aveDropout;
+    }
+
+    public function getBatchDropoutRate(){
+        $batchDropoutRate = [];
+        $programids = $this->programs()->whereNotIn('programid', array(62, 66, 38))->where('degreelevel', 'U')->lists('programid');
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::whereIn('programid', $programids)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        $max = 2009;
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+        foreach ($batches as $batch) {
+            $batchEnd = $batch + 100000;
+
+            $allBatchStudents = count(Studentterm::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('programid', $programids)->groupBy('studentid')->get());
+            $allBatchDropouts = Studentdropout::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->whereIn('lastprogramid', $programids)->count();
+
+            $batchDropoutRate[$batch / 100000] = round(($allBatchDropouts / $allBatchStudents) * 100, 2);
+        }
+
+        return $batchDropoutRate;
     }
 
     public function getProgramsAveBatchAttrition(){
