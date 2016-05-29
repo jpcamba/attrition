@@ -443,6 +443,71 @@ class Program extends Eloquent {
 		return $batchShiftRate;
 	}
 
+    public function getAveDelayedRate(){
+        $sumDelayed = 0;
+
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+
+		$batchDelayed = $this->getBatchDelayed();
+
+		foreach ($batches as $batch) {
+			$sumDelayed = $sumDelayed + $batchDelayed[$batch];
+		}
+
+		$aveDelayed = round($sumDelayed / 10, 2);
+		return $aveDelayed;
+    }
+
+    public function getBatchDelayedRate(){
+        $batchDelayedRate = [];
+        //To get batches of program whithin 2000-2009
+        $progYears = Studentterm::where('programid', $this->programid)->groupBy('year')->orderBy('year', 'asc')->lists('year');
+        if($this->revisionyear > 2009){
+            $max = 2012;
+        }
+        else{
+            if($this->programid == 28){
+                $max = 2013 - 4;
+            }
+            else{
+                $max = 2013 - $this->numyears;
+            }
+        }
+
+        $batches = [];
+        foreach($progYears as $progYear){
+            if(($progYear > 1999) && ($progYear < ($max + 1))){
+                array_push($batches, ($progYear*100000));
+            }
+        }
+        
+        foreach ($batches as $batch) {
+            $allBatchStudents = Studentterm::getBatchStudentsCountDepartment($batch, $this->unitid);
+            $allBatchDelayed = Studentdelayed::getBatchDelayedCountDepartment($batch, $this->unitid);
+            $batchDelayed[$batch / 100000] = round(($allBatchDelayed / $allBatchStudents) * 100, 2);
+        }
+    }
+
+
     public function getSpecificBatchShiftRate($batch){//format of batch is year ex. 2012
         $batch = $batch*100000;
         $batchEnd = $batch + 100000;
