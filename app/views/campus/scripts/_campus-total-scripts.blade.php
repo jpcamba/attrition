@@ -8,37 +8,9 @@
     var batchAttritionRaw = {{json_encode($batchAttrition)}};
     var batchAttrition = [];
 
-    /*var employmentCount = {{-- json_encode($employmentCount) --}};
-    var gradeCount = {{-- json_encode($gradeCount) --}};
-    var stbracketCount = {{-- json_encode($stbracketCount) --}};
-    var regionCount = {{-- json_encode($regionCount) --}};
-    var employmentArray = [];
-    var gradeArray = [];
-    var regionArray = [];
-    var stbracketArray = [];*/
-
-
     for (var batchKey in batchAttritionRaw) {
         batchAttrition.push({batch: batchKey, attritionrate: batchAttritionRaw[batchKey]});
     }
-
-    /*for(var employmentKey in employmentCount){
-        employmentArray.push({label: employmentKey, value: employmentCount[employmentKey]});
-    }
-
-    for(var gradeKey in gradeCount){
-        gradeArray.push({label: gradeKey, value: gradeCount[gradeKey]});
-    }
-
-    for(var stbracketKey in stbracketCount){
-        stbracketArray.push({label: stbracketKey, value: stbracketCount[stbracketKey]});
-    }
-
-    for(var regionKey in regionCount){
-        regionArray.push({label: regionKey, value: regionCount[regionKey]});
-    }*/
-
-
 
     new Morris.Line({
         element: 'campus-batch-attrition',
@@ -95,15 +67,11 @@
     });
 
     //student count
-
     var yearlyStudentAverage = {{ json_encode($yearlyStudentAverage) }};
-    //var yearlySemDifference = {{-- json_encode($yearlySemDifference) --}};
     var averageData = [];
-    //var semDifference = [];
 
     for(var yearKey in yearlyStudentAverage){
         averageData.push({year: yearKey, studentcount: yearlyStudentAverage[yearKey]});
-        //semDifference.push({year: yearKey, studentdifference: yearlySemDifference[yearKey]});
     }
 
     new Morris.Area({
@@ -115,52 +83,5 @@
      hideHover: 'auto',
      resize: true
     });
-
-    /*new Morris.Line({
-     element: 'campus-sem-difference',
-     data: semDifference,
-     xkey: 'year',
-     ykeys: ['studentdifference'],
-     labels: ['Students'],
-     hideHover: 'auto',
-     resize: true,
-     goals: [0]
- });*/
-
-     /*new Morris.Donut({
-      element: 'campus-employment',
-      data: employmentArray,
-      colors: ['#114B5F', '#028090']
-    });
-
-    new Morris.Donut({
-      element: 'campus-grade',
-      data: gradeArray,
-      colors: ['#114B5F', '#028090']
-    });
-
-    new Morris.Bar({
-     element: 'campus-stbracket',
-     data: stbracketArray,
-     xkey: 'label',
-     ykeys: ['value'],
-     labels: ['Students'],
-     hideHover: 'auto',
-     resize: true,
-     barColors: ['#07BEB8', '#3DCCC7', '#68D8D6', '#9CEAEF', '#C4FFF9']
-    });
-
-    new Morris.Bar({
-     element: 'campus-region',
-     data: regionArray,
-     xkey: 'label',
-     ykeys: ['value'],
-     labels: ['Students'],
-     hideHover: 'auto',
-     resize: true,
-     barColors: ['#07BEB8', '#3DCCC7', '#68D8D6']
-     });*/
-
-
 
 </script>

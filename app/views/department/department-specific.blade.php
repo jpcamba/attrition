@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            {{ $department->unitname }} <!--<small>Say something about this page</small>-->
+            {{ $department->unitname }} 
         </h1>
     </div>
 </div>

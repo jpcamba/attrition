@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            {{ $program->programtitle }} <!--<small>Say something about this page</small>-->
+            {{ $program->programtitle }} 
         </h1>
     </div>
 </div>

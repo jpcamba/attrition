@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            Program <!--<small>Say something about this page</small>-->
+            Program
         </h1>
     </div>
 </div>

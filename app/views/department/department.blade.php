@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            Department <!--<small>Say something about this page</small>-->
+            Department 
         </h1>
     </div>
 </div>

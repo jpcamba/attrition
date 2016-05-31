@@ -15,7 +15,7 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">
-            Campus <!--<small>Say something about this page</small>-->
+            Campus 
         </h1>
     </div>
 </div>
