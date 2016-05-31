@@ -12,29 +12,18 @@ class CampusController extends \BaseController {
 
 		//up manila
 		$campus = Campus::where('unitid', 2)->first();
-		//$yearlySemDifference = $campus->getSemDifference();
 		$yearlyStudentAverage = $campus->getStudentAverage();
-		//$aveYearsOfStay = $this->getAverageYears();
 		$aveAttrition = $campus->getAveAttrition();
-		//$aveAttrition = $campus->ave_batch_attrition;
 		$batchAttrition = $campus->getBatchAttrition();
 		$aveDropouts = $campus->getAveDropouts();
 		$batchDropouts = $campus->getBatchDropouts();
 		$aveYearsBeforeDropout = $campus->getAveYearsBeforeDropout();
-		//$aveYearsBeforeDropout = $campus->years_before_drop;
 		$aveDelayed = $campus->getAveDelayed();
 		$batchDelayed = $campus->getBatchDelayed();
-
-		//transferred to correlation
-		//$employmentCount = $campus->getEmploymentCount();
-		//$gradeCount = $campus->getGradeCount();
-		//$stbracketCount = $campus->getSTBracketCount();
-		//$regionCount = $campus->getRegionCount();
 
 		//return page
 		return View::make('campus.campus',
 		['yearlyStudentAverage' => $yearlyStudentAverage,
-		//'yearlySemDifference' => $yearlySemDifference,
 		'aveAttrition' => $aveAttrition,
 		'batchAttrition' => $batchAttrition,
 		'aveDropouts' => $aveDropouts,
@@ -42,13 +31,6 @@ class CampusController extends \BaseController {
 		'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		'aveDelayed' => $aveDelayed,
 		'batchDelayed' => $batchDelayed
-		//'employmentCount' => $employmentCount,
-		//'gradeCount' => $gradeCount,
-		//'stbracketCount' => $stbracketCount,
-		//'regionCount' => $regionCount
-		//'studenttermsArray' => $studenttermsArray
-		//'aveYearsOfStay' => $aveYearsOfStay,
-		//'students' => $students
 		]);
 	}
 

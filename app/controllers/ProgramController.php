@@ -19,9 +19,6 @@ class ProgramController extends \BaseController {
 			$progStudents = round($program->getAveStudents(), 2);
 			$programAveArray[$program->programtitle] = $progStudents;
 			$programBatchAttrition[$program->programtitle] = $program->getAveAttrition();
-
-			//$programAveArray[$program->programtitle] = $program->ave_students;
-			//$programBatchAttrition[$program->programtitle] = $program->ave_batch_attrition;
 		}
 
 		//return page
@@ -46,8 +43,6 @@ class ProgramController extends \BaseController {
 			if($aveStudents > 1){
 				$yearlyStudentAverage[$yearData] = $aveStudents;
 			}
-			//$semDiff = $program->getYearlySemDifference($yearData);
-			//$yearlySemDifference[$yearData] = $semDiff;
 		}
 
 		$aveYearsOfStay = $program->getAveYearsOfStay();
@@ -55,22 +50,15 @@ class ProgramController extends \BaseController {
 		$aveYearsBeforeShifting = $program->getAveYearsBeforeShifting();
 		$aveAttrition = $program->getAveAttrition();
 		$aveShiftRate = $program->getAveShiftRate();
-		//$aveYearsOfStay = $program->years_stay;
-		//$aveYearsBeforeDropout = $program->years_before_drop;
-		//$aveYearsBeforeShifting = $program->years_before_shift;
-		//$aveAttrition = $program->ave_batch_attrition;
-		//$aveShiftRate = $program->ave_batch_shift;
 
 		$batchAttrition = $program->getBatchAttrition();
 		$batchShiftRate = $program->getBatchShiftRate();
 		$division = $program->getDivision();
 		$numYears = $program->getNumYears();
 
-		//$employmentCount = $program->getEmploymentCount();
 		$gradeCount = $program->getGradeCount();
 		$shiftGradeCount = $program->getShiftGradeCount();
 		$stbracketCount = $program->getSTBracketCount();
-		//$regionCount = $program->getRegionCount();
 		$shiftBracketCount = $program->getShiftSTBracketCount();
 
 
@@ -78,7 +66,6 @@ class ProgramController extends \BaseController {
 		['program' => $program,
 		 'aveYearsOfStay' => $aveYearsOfStay,
 		 'yearlyStudentAverage' => $yearlyStudentAverage,
-		 //'yearlySemDifference' => $yearlySemDifference,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveAttrition' => $aveAttrition,
@@ -87,11 +74,9 @@ class ProgramController extends \BaseController {
 		 'batchShiftRate' => $batchShiftRate,
 		 'division' => $division,
 		 'numYears' => $numYears,
-		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,
-		 //'regionCount' => $regionCount,
 		 'shiftBracketCount' => $shiftBracketCount
 		]);
 

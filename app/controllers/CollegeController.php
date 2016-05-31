@@ -20,7 +20,7 @@ class CollegeController extends \BaseController {
 		}
 		$collegelist = array_unique($collegelist);
 
- 		//Averaage students per program
+ 		//Average students per program
  		$collegeAveArray = [];
  		foreach($collegelist as $college){
 			$unitname = substr_replace($college->unitname, "\n", 11, 0);
@@ -32,9 +32,6 @@ class CollegeController extends \BaseController {
 			$collegeAveArray[$unitname] = $collStudents;
 			$collAttrition = $college->getAveAttrition();
 			$collegeAveAttritionArray[$unitname] = $collAttrition;
-
-			//$collegeAveArray[$unitname] = $college->ave_students;
-			//$collegeAveAttritionArray[$unitname] = $college->ave_batch_attrition;
  		}
 
  		//return page
@@ -60,42 +57,33 @@ class CollegeController extends \BaseController {
         $yearsArray = Studentterm::whereIn('programid', $programids)->where('year', '>', 1999)->where('year', '<', 2014)->groupBy('year')->orderBy('year', 'asc')->lists('year');
 
 	    $yearlyStudentAverage = [];
-	    //$yearlySemDifference = [];
 		$collegeDepartmentsAverage = [];
 	    foreach($yearsArray as $yearData){
 	        $aveStudents =  round($college->getYearlyAveStudents($yearData), 2);
 	        if($aveStudents > 1){
 	            $yearlyStudentAverage[$yearData] = $aveStudents;
 	        }
-	        //$semDiff = $college->getYearlySemDifference($yearData->year);
-	        //$yearlySemDifference[$yearData->year] = $semDiff;
 	    }
 
 		foreach($collegedepartments as $collegedepartment){
 			$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->getAveStudents(), 2);
-			//$collegeDepartmentsAverage[$collegedepartment->unitname] = round($collegedepartment->ave_students, 2);
 		}
 
 		$aveAttrition = $college->getAveAttrition();
 		$aveShiftRate = $college->getAveShiftRate();
 		$aveYearsBeforeDropout = $college->getAveYearsBeforeDropout();
 		$aveYearsBeforeShifting = $college->getAveYearsBeforeShifting();
-		//$aveAttrition = $college->ave_batch_attrition;
-		//$aveShiftRate = $college->ave_batch_shift;
 		$batchAttrition = $college->getBatchAttrition();
 		$departmentsAttrition = $college->getDepartmentsAveBatchAttrition();
 
-		//$employmentCount = $college->getEmploymentCount();
 		$gradeCount = $college->getGradeCount();
 		$shiftGradeCount = $college->getShiftGradeCount();
 		$stbracketCount = $college->getSTBracketCount();
-		//$regionCount = $college->getRegionCount();
 		$shiftBracketCount = $college->getShiftSTBracketCount();
 
 	    return View::make('college.college-specific',
 	    ['college' => $college,
 	     'yearlyStudentAverage' => $yearlyStudentAverage,
-	     //'yearlySemDifference' => $yearlySemDifference,
 		 'collegedepartments' => $collegedepartments,
 		 'collegeDepartmentsAverage' => $collegeDepartmentsAverage,
 		 'aveAttrition' => $aveAttrition,
@@ -104,11 +92,9 @@ class CollegeController extends \BaseController {
 		 'aveYearsBeforeDropout' => $aveYearsBeforeDropout,
 		 'aveYearsBeforeShifting' => $aveYearsBeforeShifting,
 		 'departmentsAttrition' => $departmentsAttrition,
-		 //'employmentCount' => $employmentCount,
 		 'gradeCount' => $gradeCount,
 		 'shiftGradeCount' => $shiftGradeCount,
 		 'stbracketCount' => $stbracketCount,
-		 //'regionCount' => $regionCount,
 		 'shiftBracketCount' => $shiftBracketCount
 	    ]);
 	}
