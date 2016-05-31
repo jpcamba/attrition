@@ -184,9 +184,6 @@ class Program extends Eloquent {
     }
 
     public function getAveYearsBeforeShifting(){
-        //Get list of dropouts who has this program as their last program before dropping out. Remove them from computation.
-        //$dropouts = DB::table('studentdropouts')->where('lastprogramid', $this->programid)->lists('studentid');
-
         //Get list of students from shift table whose progam 1 is this program and whose program1years are less than numyears of program. place their studentids in an array.
 
         //To get batches of program whithin 2000-2009
@@ -217,11 +214,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $shiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', '=', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->get();
-            //$domShiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->whereNotIn('studentid', $dropouts)->where('program1id', '=', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->get();
-
-            //foreach($domShiftees as $domShiftee) {
-            //    array_push($shiftees, $domShiftee);
-            //}
         }
         else{
             $shiftees = DB::table('studentshifts')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', '=', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->get();
@@ -588,8 +580,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
-            //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-            //$allBatchShiftees = $allBatchShiftees + $domShiftees;
         }
         else{
             $allBatchShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $batch)->where('studentid', '<', $batchEnd)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
@@ -638,8 +628,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $allShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->get());
-            //$domShiftees = count(Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->get());
-            //$allShiftees = $allShiftees + $domShiftees;
             $normal = $allStudents - ($allDropouts + $allShiftees);
         }
         else{
@@ -981,12 +969,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
-            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
-
-            //foreach($domShiftees as $shiftee){
-            //    array_push($programShiftees, $shiftee);
-            //}
-
         }
         else{
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
@@ -1027,10 +1009,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
-            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
-            //foreach($domShiftees as $shiftee){
-            //    array_push($programShiftees, $shiftee);
-            //}
 
         }
         else{
@@ -1093,11 +1071,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
-            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
-            //foreach($domShiftees as $shiftee){
-            //    array_push($programShiftees, $shiftee);
-            //}
-
         }
         else{
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)->whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
@@ -1169,11 +1142,6 @@ class Program extends Eloquent {
 
         if($this->programid == 28){
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '!=', 38)->where('program1years', '<=', $this->numyears)>whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');
-            //$domShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program2id', '=', 38)->where(DB::raw('program1years + program2years'), '<', 4)->groupBy('studentid')->lists('studentid');
-            //foreach($domShiftees as $shiftee){
-            //    array_push($programShiftees, $shiftee);
-            //}
-
         }
         else{
             $programShiftees = Studentshift::select('studentid')->where('studentid', '>', $min)->where('studentid', '<', $max)->where('program1id', $this->programid)->where('program1years', '<', $this->numyears)>whereNotIn('studentid', $dropouts)->groupBy('studentid')->lists('studentid');

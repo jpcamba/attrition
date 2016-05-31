@@ -210,7 +210,6 @@ class College extends Eloquent {
             }
         }
 
-        //$programids = $this->programs()->whereNotIn('programid', array(62, 66, 38, 117))->where('degreelevel', 'U')->lists('programid'); //include programid = 38 (doctor of medicine)
         $dropouts = DB::table('studentdropouts')->whereIn('lastprogramid', $programids)->lists('studentid');
 
         foreach ($batches as $batch) {
@@ -336,7 +335,6 @@ class College extends Eloquent {
 
         foreach($departments as $department){
             $departmentsAveAttrition[$department->unitname] = $department->getAveAttrition();
-            //$departmentsAveAttrition[$department->unitname] = $department->ave_batch_attrition;
         }
 
         return $departmentsAveAttrition;

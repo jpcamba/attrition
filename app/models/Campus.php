@@ -99,7 +99,6 @@ class Campus extends Eloquent {
 	//Get average number of students per year
 	public function getStudentAverage() {
 		$yearsArray = Year::where('year','>', 1999)->where('year', '<', 2014)->get();
-		//$yearsArray = Year::all();
 		$yearlyStudentAverage = [];
 
 		foreach($yearsArray as $yearData){
@@ -112,7 +111,6 @@ class Campus extends Eloquent {
 	//Get semester difference
 	public function getSemDifference() {
 		$yearsArray = Year::where('year','>', 1998)->get();
-		//$yearsArray = Year::all();
 		$yearlySemDifference = [];
 		foreach($yearsArray as $yearData){
 			$yearlySemDifference[$yearData->year] = $yearData->getSemDifference();
@@ -276,8 +274,6 @@ class Campus extends Eloquent {
         foreach($collegeDropouts as $dropout){
             $results = Studentterm::select('stfapbracket')->where('studentid', $dropout->studentid)->whereIn('programid', $programids)->groupBy('stfapbracket')->lists('stfapbracket');
             $results = array_unique($results);
-            //var_dump('Dropout: '. $dropout->studentid);
-            //var_dump($results);
             foreach ($results as $result){
                 switch($result){
                     case (strpos($result, 'A') !== false || strpos($result, '9') !== false):
