@@ -15,7 +15,6 @@ class CreateAysemIndexInStudenttermsTable extends Migration {
 		Schema::table('studentterms', function(Blueprint $table)
 		{
 			//
-			//DB::statement("CREATE INDEX test1_id_index ON test1 (id);");
 			$table->index('aysem', 'aysem_index');
 		});
 	}

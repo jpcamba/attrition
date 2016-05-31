@@ -12,8 +12,6 @@ class CreateDegreeIndexAndProgramidIndexInProgramsTable extends Migration {
 	 */
 	public function up()
 	{
-		//DB::statement('ALTER TABLE programs DROP CONSTRAINT degree_index;');
-
 		Schema::table('programs', function(Blueprint $table)
 		{
 			//

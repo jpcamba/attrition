@@ -23,16 +23,6 @@ class AddColumnsToProgramsTable extends Migration {
 			$table->decimal('ave_students')->nullable();
 		});
 
-		/*$programlist = Program::where('programs.degreelevel', 'U')->whereNotIn('programs.programid', array(62, 66, 38, 22))->get();
-		foreach($programlist as $program){
-			$program->years_stay = $program->getAveYearsOfStay();
-			$program->years_before_shift = $program->getAveYearsBeforeShifting();
-			$program->years_before_drop = $program->getAveYearsBeforeDropout();
-			$program->ave_batch_attrition = $program->getAveAttrition();
-			$program->ave_batch_shift = $program->getAveShiftRate();
-			$program->ave_students = $program->getAveStudents();
-			$program->save(['timestamps' => false]);
-		}*/
 	}
 
 

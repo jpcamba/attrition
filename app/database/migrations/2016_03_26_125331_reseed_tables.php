@@ -27,7 +27,6 @@ class ReseedTables extends Migration {
 
 
 		//department
-
 		$departmentlist = Department::whereHas('programs', function($q){
     						$q->whereNotIn('programid', array(62, 66, 38, 22));
 							$q->where('degreelevel', 'U');
@@ -69,7 +68,7 @@ class ReseedTables extends Migration {
 	 */
 	public function down()
 	{
-	
+
 
 
 	}

@@ -20,17 +20,6 @@ class AddColumnsToUnitsTable extends Migration {
 			$table->decimal('ave_students')->nullable();
 		});
 
-		/*$departmentlist = Department::whereHas('programs', function($q){
-    						$q->whereNotIn('programid', array(62, 66, 38, 22));
-							$q->where('degreelevel', 'U');
-						})->get();
-
-		foreach($departmentlist as $department){
-			$department->ave_batch_attrition = $department->getAveAttrition();
-			$department->ave_batch_shift = $department->getAveShiftRate();
-			$department->ave_students = $department->getAveStudents();
-			$department->save(['timestamps' => false]);
-		}*/
 	}
 
 	/**

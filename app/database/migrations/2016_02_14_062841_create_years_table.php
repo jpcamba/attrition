@@ -37,7 +37,6 @@ class CreateYearsTable extends Migration {
 				$yearObj = new Year;
 				$yearObj->year = $currentYear;
 				$yearObj->save();
-				//DB::table('years')->insert(array('year' => $currentYear));
 				$prevYear = 0;
 			}
 		}

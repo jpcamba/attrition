@@ -35,7 +35,7 @@ class CreateUnitfactorsTable extends Migration {
 		$employmentFactor->type = "Employed";
 		$employmentFactor->value = $employmentArray['Employed'];
 		$employmentFactor->save();
-		//employed
+		//unemployed
 		$employmentFactor = new Unitfactor;
 		$employmentFactor->unitid = 2;
 		$employmentFactor->factorid = 1;
