@@ -43,7 +43,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Enter percentages of students for each Employment Type.
+                Enter percentages of students for each Unit Range.
             </div>
             <div class="panel-body">
                 {{Form::open(array('role' => 'form', 'action' => 'SimulationController@postUnits'))}}
