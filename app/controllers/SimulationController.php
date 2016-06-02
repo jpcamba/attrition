@@ -198,7 +198,7 @@ EOF
 		$attrition = 0;
 		$error = '';
 
-		$rPath = 'C:/Program Files/R/R-3.2.4revised/bin';
+		$rPath = '/usr/bin';
 		$pubPath = public_path();
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
