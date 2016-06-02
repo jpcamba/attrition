@@ -38,9 +38,9 @@ class SimulationController extends \BaseController {
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
 
-		$rFile = fopen($pubPath.'\\simulation-others\\scripts\\simulation.R', 'w');
+		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071)
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3")
 			dataDirectory<-
 EOF
 );
@@ -121,9 +121,9 @@ EOF
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
 
-		$rFile = fopen($pubPath.'\\simulation-others\\scripts\\simulation.R', 'w');
+		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071)
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3"))
 			dataDirectory<-
 EOF
 );
@@ -203,9 +203,9 @@ EOF
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
 
-		$rFile = fopen($pubPath.'\\simulation-others\\scripts\\simulation.R', 'w');
+		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071)
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3")
 			dataDirectory<-
 EOF
 );
@@ -263,9 +263,9 @@ EOF
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
 
-		$rFile = fopen($pubPath.'\\simulation-others\\scripts\\simulation.R', 'w');
+		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071)
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3")
 			dataDirectory<-
 EOF
 );
@@ -322,9 +322,9 @@ EOF
 		$pubPath = str_replace('\\', '/', $pubPath);
 		$dirPath = '\''.$pubPath.'/simulation-others/data/\'';
 
-		$rFile = fopen($pubPath.'\\simulation-others\\scripts\\simulation.R', 'w');
+		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071)
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3")
 			dataDirectory<-
 EOF
 );
