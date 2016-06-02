@@ -123,7 +123,7 @@ EOF
 
 		$rFile = fopen($pubPath.'/simulation-others/scripts/simulation.R', 'w');
 		$rScript = (<<<EOF
-			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3"))
+			library(e1071, lib.loc="/home/student/R/i686-pc-linux-gnu-library/3.3")
 			dataDirectory<-
 EOF
 );
